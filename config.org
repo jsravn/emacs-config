@@ -1,0 +1,1307 @@
+#+TITLE: Doom Emacs Configuration
+#+AUTHOR: jsravn
+#+PROPERTY: header-args:emacs-lisp :tangle yes :cache yes :results silent :comments link
+#+HTML_HEAD: <link rel='shortcut icon' type='image/png' href='https://www.gnu.org/software/emacs/favicon.png'>
+
+* Intro
+This is my foray into the world of literate Emacs configuration. I think I may have finally lost it. But let's give it a
+shot!
+
+I use [[https://github.com/hlissner/doom-emacs][doom-emacs]] as my core Emacs distribution. Doom loads its configuration from three files in =~/.config/doom=:
+- init.el :: Doom modules to enable.
+- config.el :: User configuration.
+- packages.el :: Custom packages to load.
+
+=config.org= is what generates all of these, and is what you are viewing. It lives in my [[https://github.com/jsravn/dotfiles/tree/master/private_dot_config/doom][dotfiles]].
+
+* General configuration
+** File variables
+This configures the file variables for =config.el= and =init.el=. Apparently [[https://nullprogram.com/blog/2016/12/22/][enabling lexical binding]] makes them faster to
+process.
+
+#+BEGIN_SRC emacs-lisp
+;;; ~/.config/doom/config.el -*- lexical-binding: t; -*-
+#+END_SRC
+
+#+BEGIN_SRC emacs-lisp :tangle "init.el"
+;;; ~/.config/doom/init.el -*- lexical-binding: t; -*-
+#+END_SRC
+
+** Personal information
+This contains various bits about myself that Emacs likes to use in various modules.
+
+#+BEGIN_SRC emacs-lisp
+(setq user-full-name "James Ravn"
+      user-mail-address "james@r-vn.org"
+      calendar-latitude 51.508166
+      calendar-longitude -0.075971
+      calendar-location-name "London, UK")
+#+END_SRC
+
+** Visual Settings
+This tweaks the visuals to my liking.
+
+*** Theme
+Use the default doom-one theme, and the very nice [[https://www.fsd.it/shop/fonts/pragmatapro/][PragmataPro]] font.
+
+#+BEGIN_SRC emacs-lisp
+(setq doom-theme 'doom-one
+      doom-font (font-spec :family "PragmataPro Liga" :size 16)
+      doom-variable-pitch-font (font-spec :family "sans" :size 14)
+      doom-big-font (font-spec :family "PragmataPro Liga" :size 20)
+      doom-unicode-font (font-spec :family "Noto Color Emoji" :size 16)
+      +pretty-code-pragmata-pro-font-name "PragmataPro Liga")
+
+#+END_SRC
+
+*** Mixed pitch mode
+Enable =mixed-pitch-mode= for some text modes. Also ensure it preserves the variable pitch height rather than inheriting from
+the default face.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook! (org-mode gfm-mode markdown-mode) #'mixed-pitch-mode)
+(setq mixed-pitch-set-height t)
+#+END_SRC
+
+*** Maximize
+Maximize the frame when doom starts. I prefer it always opening up this way. Note this has no real effect if using a
+tiling WM.
+
+#+BEGIN_SRC emacs-lisp
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+#+END_SRC
+
+** Editor behavior
+This tweaks the general editor behavior to my liking.
+
+*** Deletion
+Delete files to the local Trash folder, e.g. =~/.local/share/Trash= on Linux.
+
+#+BEGIN_SRC emacs-lisp
+(setq delete-by-moving-to-trash t)
+#+END_SRC
+
+Make undo more fine-grained.
+
+#+BEGIN_SRC emacs-lisp
+(setq evil-want-fine-undo t)
+#+END_SRC
+
+*** Auto-save
+I want Emacs to auto-save files I'm working on to avoid the tedium of manual saving all the time. Auto save can be
+obnoxious if done incorrectly, so I want it to only save when safe.
+
+First I use the built-in auto-save functionality to save the buffer after some idle time.
+
+#+BEGIN_SRC emacs-lisp
+(auto-save-visited-mode t)
+#+END_SRC
+
+And like other modern editors, I want Emacs to save the buffer when the focus changes. To avoid weird issues, such as
+when interacting with popups, I only save when swapping between file buffers and when the frame loses focus.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook! '(doom-switch-buffer-hook
+             doom-switch-window-hook)
+  (if (buffer-file-name) (save-some-buffers t))) ; avoid saving when switching to a non-file buffer
+(add-function :after after-focus-change-function
+              (lambda () (save-some-buffers t)))
+#+END_SRC
+
+*** Line wrapping
+Fill column primarily affects how Emacs breaks lines in ~auto-fill-mode~. The default is 80. I set it to 120 which is a
+bit nicer for modern screens. I also enable a fill column indicator for non-text modes (it looks bad in text modes due
+to variable pitch fonts).
+
+#+BEGIN_SRC emacs-lisp
+(setq-default fill-column 120)
+(add-hook! '(text-mode-hook prog-mode-hook conf-mode-hook)
+           #'display-fill-column-indicator-mode)
+#+END_SRC
+
+Also I disable ~auto-fill-mode~ by default. I prefer to enable it only when needed, as it doesn't play nicely with many
+of the text files I work on. Instead I use ~+word-wrap-mode~ which is equivalent to using =SPC t w= by default. _Disable
+this for now as I've come to like auto-fill mode as the default._
+
+#+BEGIN_SRC emacs-lisp
+;; (remove-hook 'text-mode-hook #'auto-fill-mode)
+;; (add-hook 'text-mode-hook #'+word-wrap-mode)
+#+END_SRC
+
+*** Window splitting
+These changes makes window splitting a bit nicer.
+
+First, I want focus to change to newly created windows.
+
+#+BEGIN_SRC emacs-lisp
+(setq evil-vsplit-window-right t
+      evil-split-window-below t)
+#+END_SRC
+
+Also, Emacs automatically splits windows if it thinks there is enough room. I find the default of 160 too aggressive, so
+I increase it to make Emacs more conservative.
+
+#+BEGIN_SRC emacs-lisp
+(setq split-width-threshold 240)
+#+END_SRC
+
+*** Clipboard and Copy/Paste
+I want to integrate Emacs with the system clipboard. All copy/paste goes into and takes from the system clipboard. This allows
+easy copying in other applications and pasting into Emacs via =p= or similar.
+
+#+BEGIN_SRC emacs-lisp
+(setq select-enable-clipboard t)
+#+END_SRC
+
+And allow pasting from system clipboard with the typical Linux =C-S-v= while in insert mode:
+
+#+BEGIN_SRC emacs-lisp
+(map!
+ :i "C-S-v" #'yank)
+#+END_SRC
+*** Which-key
+Reduce the popup delay for =which-key=.
+
+#+BEGIN_SRC emacs-lisp
+(setq which-key-idle-delay 0.5)
+#+END_SRC
+
+** Authinfo
+Sensitive credentials are stored in a gpg encrypted auth file. I prefer to only use =~/.authinfo.gpg=, rather than doom's default of =~/.emacs.d/.local/etc/authinfo.gpg= .
+
+#+BEGIN_SRC emacs-lisp
+(setq auth-sources '("~/.authinfo.gpg"))
+#+END_SRC
+
+* Packages
+This section defines the custom packages for =packages.el=.
+
+=packages.el= should not be byte-compiled.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+;; -*- no-byte-compile: t; -*-
+#+END_SRC
+
+** Package loading
+:PROPERTIES:
+:header-args:emacs-lisp: :tangle "packages.el" :comments link
+:END:
+
+Use the ~package!~ macro for each package. Afterwards run ~doom refresh~ on the command line. Everything in this section
+goes into =packges.el=.
+
+*** atomic-chrome
+=atomic-chrome= provides integration with [[https://atom.io/packages/atomic-chrome][atomic chrome]] extension. This lets me use Emacs to edit browser text
+boxes! It's very handy for large Github comments.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! atomic-chrome)
+#+END_SRC
+
+*** org-roam
+=org-roam= is included by default in doom. I like to use the latest version - so I pin it to a more recent one.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! org-roam :pin "4af4d2e4d5f18422fe0f90d5d83fe4c10ef1a20f")
+#+END_SRC
+
+*** lsp-mode
+
+Use the latest LSP.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(unpin! lsp-mode)
+#+END_SRC
+
+*** mu4e-alert
+
+Mail notifications. Used for ~doom-modeline-m4ue~.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! mu4e-alert)
+#+END_SRC
+
+*** org-msg
+
+Send HTML mail with org-mode. Better than the buggy/unsupported =org-mu4e-compose-mode=.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! org-msg)
+#+END_SRC
+
+*** org-alert
+Used to generate system notifications from org agendas.
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! org-alert)
+#+END_SRC
+
+***  caddyfile-mode
+
+https://github.com/Schnouki/caddyfile-mode
+
+#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+(package! caddyfile-mode)
+#+END_SRC
+
+** Package configuration
+For configuring packages that are loaded in =packages.el=.
+
+*** atomic-chrome configuration
+Enable [[*atomic-chrome][atomic-chrome]] integration.
+
+#+BEGIN_SRC emacs-lisp
+(use-package! atomic-chrome
+  :after-call focus-out-hook
+  :config
+  (setq atomic-chrome-default-major-mode 'markdown-mode
+        atomic-chrome-buffer-open-style 'frame)
+  (atomic-chrome-start-server))
+#+END_SRC
+*** caddyfile-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package caddyfile-mode
+  :mode (("Caddyfile\\'" . caddyfile-mode)
+         ("Corefile\\'" . caddyfile-mode)
+         ("caddy\\.conf\\'" . caddyfile-mode)))
+#+END_SRC
+
+* Modules
+This section configures the doom modules. Languages have their own [[*Languages][dedicated section]].
+
+** Enable modules (init.el)
+
+This section generates =init.el= and is where I enable the doom modules I want. See [[https://github.com/hlissner/doom-emacs/blob/develop/init.example.el][init.example.el]] for all possible
+options.
+
+#+BEGIN_SRC emacs-lisp :tangle "init.el"
+(doom!
+       :completion
+       (company
+        +childframe)
+       (ivy
+        +fuzzy
+        +icons)
+
+       :ui
+       deft
+       doom
+       doom-dashboard
+       hl-todo
+       indent-guides
+       (modeline)
+       nav-flash
+       ophints
+       (popup
+        +all
+        +defaults)
+       (pretty-code
+        +pragmata-pro)
+       treemacs
+       vc-gutter
+       vi-tilde-fringe
+       window-select
+       workspaces
+       zen
+
+       :editor
+       (evil +everywhere)
+       fold
+       format
+       multiple-cursors
+       rotate-text
+       snippets
+       word-wrap
+
+       :emacs
+       dired
+       electric
+       vc
+
+       :term
+       vterm
+
+       :checkers
+       syntax
+       spell
+
+       :tools
+       ansible
+       docker
+       (debugger +lsp)
+       direnv
+       editorconfig
+       (eval
+        +overlay)
+       (lookup
+        +docsets
+        +dictionary)
+       (lsp +peek)
+       (magit +forge)
+       make
+       terraform
+
+       :lang
+       (clojure
+        +cider
+        +lsp)
+       common-lisp
+       data
+       emacs-lisp
+       (go +lsp)
+       (java +lsp)
+       javascript
+       markdown
+       nix
+       (org
+        +dragndrop
+        +journal
+        +roam)
+       (python
+        +lsp +pyenv)
+       (scala +lsp)
+       sh
+       scheme
+       (yaml +lsp)
+
+       :email
+       mu4e
+
+       :config
+       literate
+       (default +bindings +smartparens))
+#+END_SRC
+
+** Core configuration
+*** Projects
+Set the search directories for projectile to auto-discovery projects.
+
+#+BEGIN_SRC emacs-lisp
+(setq projectile-project-search-path '("~/devel/" "~/sky" "~/gatech"))
+#+END_SRC
+
+Clear the projectile cache when swapping branches in =magit= which will likely change the files in the project.
+
+#+BEGIN_SRC emacs-lisp
+(defun +private/projectile-invalidate-cache (&rest _args)
+  (projectile-invalidate-cache nil))
+(advice-add 'magit-checkout
+            :after #'+private/projectile-invalidate-cache)
+(advice-add 'magit-branch-and-checkout
+            :after #'+private/projectile-invalidate-cache)
+#+END_SRC
+
+***  Smart parentheses
+
+Add convenient global binding for jumping outside of parenthesis. This replaces the default binding of ~upcase-word~,
+which I have never used.
+
+#+BEGIN_SRC emacs-lisp
+(map!
+ :ni "M-u"   #'sp-up-sexp)
+#+END_SRC
+
+** UI configuration
+*** Workspaces
+By default doom loads a project into the main workspace if it's empty. I don't like this behavior - I prefer to reserve
+the main workspace for ad hoc editing of files. So always open up a new workspace when opening up a project.
+
+#+BEGIN_SRC emacs-lisp
+(setq +workspaces-on-switch-project-behavior t)
+#+END_SRC
+
+Add =SPC TAB ,= to switch to the last workspace, similar to switching to the last buffer.
+
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      (:prefix-map ("TAB" . "workspace")
+        :desc "Switch to last workspace"  ","   #'+workspace/other
+       ))
+
+#+END_SRC
+
+*** Zen
+Get rid of the change in font. I use zen mode for code, so I want to keep my normal font. Also enable the mode-line, and
+set a width more appropriate for a modern screen size.
+
+#+BEGIN_SRC emacs-lisp
+(after! writeroom-mode
+  (setq +zen-text-scale 0
+        +zen-mixed-pitch-modes nil
+        writeroom-mode-line t
+        writeroom-width 160))
+#+END_SRC
+
+*** Treemacs
+Enable follow-mode so the treemacs cursor follows the buffer file. Also increase the default width to show more stuff.
+
+#+BEGIN_SRC emacs-lisp
+(after! treemacs
+  (treemacs-follow-mode 1)
+  (setq treemacs-width 40))
+#+END_SRC
+** Completion
+Fix company causing minibuffer region to disappear (e.g. lsp ask root dialogue).
+
+#+BEGIN_SRC emacs-lisp
+(after! company
+  (remove-hook 'evil-normal-state-entry-hook #'company-abort))
+#+END_SRC
+** Checkers configuration
+*** Flyspell
+Flyspell can create a lot of lag in large buffers. Make it as lazy as possible.
+
+#+BEGIN_SRC emacs-lisp
+(after! flyspell (flyspell-lazy-mode 1))
+#+END_SRC
+
+** Email configuration (mu4e)
+I am experimenting with =mu4e= for my email configuration. I'm using it with mbsync as the backend for syncing emails. Note as of 1.4, the root maildir is set via the ~mu init~ command so it is unnecessary to set it.
+
+**** Prerequisites
+First run mbsync for the first time to download all mail. Then set up =mu=:
+
+#+BEGIN_SRC sh :tangle no
+touch ~/Mail/r-vn.org/Spam/.noindex
+mu init --maildir ~/Mail --my-address james@r-vn.org
+#+END_SRC
+
+**** Configuration
+First, use doom's handy function for setting up an [[https://www.djcbsoftware.nl/code/mu/mu4e/Contexts.html#Contexts][mu4e context]].
+
+#+BEGIN_SRC emacs-lisp
+(set-email-account!
+ "r-vn.org"
+ '((mu4e-sent-folder       . "/r-vn.org/Sent")
+   (mu4e-drafts-folder     . "/r-vn.org/Drafts")
+   (mu4e-trash-folder      . "/r-vn.org/Trash")
+   (mu4e-refile-folder     . "/r-vn.org/Archive")
+   (smtpmail-smtp-user     . "james@r-vn.org")
+   (mu4e-maildir-shortcuts .
+                           ((:maildir "/r-vn.org/INBOX"   :key ?i)
+                            (:maildir "/r-vn.org/Archive" :key ?a)
+                            (:maildir "/r-vn.org/Trash"   :key ?t)
+                            (:maildir "/r-vn.org/Sent"    :key ?s)))
+   (smtpmail-smtp-server . "smtp.fastmail.com")
+   (smtpmail-stream-type . ssl)
+   (smtpmail-smtp-service . 465)
+   (smtpmail-default-smtp-server . "smtp.fastmail.com"))
+ t)
+#+END_SRC
+
+Tweak the general configuration.
+
+#+BEGIN_SRC emacs-lisp
+(after! mu4e
+  (setq mu4e-attachment-dir "~/Downloads"   ; Attachments in standard place.
+        mu4e-headers-include-related nil    ; Only show messages which match the current filter.
+        mu4e-headers-fields                 ; Header columns.
+        '((:human-date . 12)
+          (:flags . 6)
+          (:from . 25)
+          (:subject))
+        mu4e-update-interval 300))          ; Check for mail every 5 minutes.
+#+END_SRC
+
+Compose mails with =org-msg=.
+
+#+BEGIN_SRC emacs-lisp
+(remove-hook 'mu4e-compose-mode-hook #'org-mu4e-compose-org-mode) ; Don't use org-mu4e.
+
+(use-package org-msg
+  :after (org mu4e)
+  :hook (mu4e-main-mode . org-msg-mode)
+  :config
+  (setq org-msg-options "html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"
+	      org-msg-startup "hidestars indent inlineimages"
+	      org-msg-greeting-fmt "\nHi %s,\n\n"
+	      org-msg-greeting-name-limit 3
+	      org-msg-text-plain-alternative t
+        org-msg-signature "
+
+Regards,
+
+,#+begin_signature
+-- James
+,#+end_signature"))
+#+END_SRC
+
+Bind mail to =SPC o m=.
+
+#+BEGIN_SRC emacs-lisp
+(map!
+ :leader
+ :prefix "o"
+ :desc "Mail" "m" #'=mu4e)
+#+END_SRC
+
+=mu4e= uses =shr= to render HTML to text. Let's tweak its colors so it's a bit easier to see with doom's dark background.
+
+#+BEGIN_SRC emacs-lisp
+(setq shr-color-visible-luminance-min 80)
+#+END_SRC
+
+Set up mu4e-alert for notifications in the modeline.
+
+#+BEGIN_SRC emacs-lisp
+(setq doom-modeline-mu4e t)
+(use-package! mu4e-alert
+  :after mu4e
+  :config
+  (mu4e-alert-enable-mode-line-display))
+#+END_SRC
+
+** Tools configuration
+*** Language Server Protocol (LSP)
+Add some useful binds.
+
+#+BEGIN_SRC emacs-lisp
+(map! :leader
+      (:prefix "c"
+       :desc "LSP Parameters" "p" #'lsp-signature-activate))
+#+END_SRC
+
+Disable the auto root guessing that doom enables by default, but doesn't work very well in my experience. With this
+disabled LSP will prompt for the project root when opening a new LSP recognized file. This adds a little
+inconvenience, but saves a lot of trouble with golang projects.
+
+#+BEGIN_SRC emacs-lisp
+(setq lsp-auto-guess-root nil)
+#+END_SRC
+
+Disable symbol highlighting which is just obnoxious, especially in =gopls= where it seems to highlight a lot of things.
+This could probably be made more usable with a more subtle highlight color.
+
+#+BEGIN_SRC emacs-lisp
+(setq lsp-enable-symbol-highlighting nil)
+#+END_SRC
+
+Disable auto-linking which seems [[https://github.com/hlissner/doom-emacs/issues/2911][fundamentally broken]] as it breaks other buffers.
+
+#+BEGIN_SRC emacs-lisp
+(setq lsp-enable-links nil)
+#+END_SRC
+
+Don't display a giant signature block whenever typing in a function call. This seems to cause a lot of window glitches.
+Just display the function.
+
+#+BEGIN_SRC emacs-lisp
+(setq lsp-signature-auto-activate t
+      lsp-signature-render-documentation nil)
+#+END_SRC
+
+Disable the not so great =lsp-mode= snippets which insert optional parameters and other nonsense.
+
+#+BEGIN_SRC emacs-lisp
+(setq lsp-enable-snippet nil)
+#+END_SRC
+
+Turn on [[https://github.com/emacs-lsp/lsp-mode/wiki/Debugging][LSP Debugging]]. Enable only when needed.
+
+#+BEGIN_SRC emacs-lisp
+;(setq lsp-log-io t)
+#+END_SRC
+
+*** Magit
+Prefer offering remote branches when prompting for a branch selection.
+
+#+BEGIN_SRC emacs-lisp
+(setq magit-prefer-remote-upstream t)
+#+END_SRC
+
+Limit the number of topics that forge displays. I find the default a bit too large.
+
+#+BEGIN_SRC emacs-lisp
+(setq forge-topic-list-limit '(30 . 5))
+#+END_SRC
+
+* Languages
+This section configures language major modes.
+
+** Golang
+Tweak the hover documentation of =gopls= so it shows more information when using ~+lookup/documentation~.
+
+#+BEGIN_SRC emacs-lisp
+(setq lsp-gopls-hover-kind "FullDocumentation")
+#+END_SRC
+
+** Org Mode
+This section tweaks =org-mode= to my own specific needs and workflow. There is a lot of custom stuff here, so
+modify/adapt/use as you find useful.
+
+The most important thing is to tell org-mode where my org files are.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-directory "~/Dropbox/Notes/")
+#+END_SRC
+
+*** General settings
+General settings for org-mode interaction.
+
+**** Editor
+Allow ~imenu~ to nest fully in org-mode to quickly jump to any heading.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-imenu-depth 6)
+#+END_SRC
+
+**** Visuals
+Make headings appear larger.
+
+#+BEGIN_SRC emacs-lisp
+(custom-set-faces!
+  '(outline-1 :weight extra-bold :height 1.12)
+  '(outline-2 :weight bold :height 1.10)
+  '(outline-3 :weight bold :height 1.08)
+  '(outline-4 :weight semi-bold :height 1.06)
+  '(outline-5 :weight semi-bold :height 1.04)
+  '(outline-6 :weight semi-bold :height 1.02)
+  '(outline-8 :weight semi-bold)
+  '(outline-9 :weight semi-bold))
+#+END_SRC
+
+Make org-mode symbols look nicer than the defaults. Shamelessly stolen from
+[[https://github.com/hlissner/doom-emacs-private/blob/master/config.el]].
+
+#+BEGIN_SRC emacs-lisp
+(setq
+ org-ellipsis " ▼ "
+ org-superstar-headline-bullets-list '("☰" "☱" "☲" "☳" "☴" "☵" "☶" "☷" "☷" "☷" "☷"))
+#+END_SRC
+
+**** Archiving
+I prefer to archive tasks into a sub-folder. Also, I want to keep any inherited tags so information is not lost, as I
+frequently archive sub-trees.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-archive-location (concat org-directory ".archive/%s::"))
+(after! org (setq org-archive-subtree-add-inherited-tags t))
+#+END_SRC
+
+**** Download
+=org-download= makes it easy to download images directly into org files.
+
+I configure it to use my preferred capture method depending on OS.
+
+#+BEGIN_SRC emacs-lisp
+(after! org-download
+  (setq org-download-screenshot-method
+        (cond (IS-MAC "screencapture -i %s")
+              (IS-LINUX "~/.config/sway/capture.sh %s"))))
+#+END_SRC
+**** Exporting (General)
+Export more than the default 2 levels. I want all the levels!
+
+#+BEGIN_SRC emacs-lisp
+(after! org (setq org-export-headline-levels 6))
+#+END_SRC
+
+**** Exporting to HTML
+Let's make HTML look nicer. This is all taken from [[https://tecosaur.github.io/emacs-config/config.html#OrgModeVisuals][tecosaur's org-mode config]], which is based on [[https://github.com/fniessen/org-html-themes][fniessen/org-html-themes]].
+
+#+BEGIN_SRC emacs-lisp
+(defun jsravn--org-inline-css-hook (exporter)
+  "Insert custom inline css to automatically set the
+   background of code to whatever theme I'm using's background"
+  (when (eq exporter 'html)
+    (setq
+     org-html-head-extra
+     (concat
+      (if (s-contains-p "<!––tec/custom-head-start-->" org-html-head-extra)
+          (s-replace-regexp "<!––tec/custom-head-start-->.*<!––tec/custom-head-end-->" "" org-html-head-extra)
+        org-html-head-extra)
+      (format "<!––tec/custom-head-start-->
+<style type=\"text/css\">
+   :root {
+      --theme-bg: %s;
+      --theme-bg-alt: %s;
+      --theme-base0: %s;
+      --theme-base1: %s;
+      --theme-base2: %s;
+      --theme-base3: %s;
+      --theme-base4: %s;
+      --theme-base5: %s;
+      --theme-base6: %s;
+      --theme-base7: %s;
+      --theme-base8: %s;
+      --theme-fg: %s;
+      --theme-fg-alt: %s;
+      --theme-grey: %s;
+      --theme-red: %s;
+      --theme-orange: %s;
+      --theme-green: %s;
+      --theme-teal: %s;
+      --theme-yellow: %s;
+      --theme-blue: %s;
+      --theme-dark-blue: %s;
+      --theme-magenta: %s;
+      --theme-violet: %s;
+      --theme-cyan: %s;
+      --theme-dark-cyan: %s;
+   }
+</style>"
+              (doom-color 'bg)
+              (doom-color 'bg-alt)
+              (doom-color 'base0)
+              (doom-color 'base1)
+              (doom-color 'base2)
+              (doom-color 'base3)
+              (doom-color 'base4)
+              (doom-color 'base5)
+              (doom-color 'base6)
+              (doom-color 'base7)
+              (doom-color 'base8)
+              (doom-color 'fg)
+              (doom-color 'fg-alt)
+              (doom-color 'grey)
+              (doom-color 'red)
+              (doom-color 'orange)
+              (doom-color 'green)
+              (doom-color 'teal)
+              (doom-color 'yellow)
+              (doom-color 'blue)
+              (doom-color 'dark-blue)
+              (doom-color 'magenta)
+              (doom-color 'violet)
+              (doom-color 'cyan)
+              (doom-color 'dark-cyan))
+      "
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css'/>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css'/>
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js'></script>
+
+<style>
+   pre.src {
+     background-color: var(--theme-bg);
+     color: var(--theme-fg);
+     scrollbar-color:#bbb6#9992;
+     scrollbar-width: thin;
+     margin: 0;
+     border: none;
+   }
+   div.org-src-container {
+     border-radius: 12px;
+     overflow: hidden;
+     margin-bottom: 24px;
+     margin-top: 1px;
+     border: 1px solid#e1e4e5;
+   }
+   pre.src::before {
+     background-color:#6666;
+     top: 8px;
+     border: none;
+     border-radius: 5px;
+     line-height: 1;
+     border: 2px solid var(--theme-bg);
+     opacity: 0;
+     transition: opacity 200ms;
+   }
+   pre.src:hover::before { opacity: 1; }
+   pre.src:active::before { opacity: 0; }
+
+   pre.example {
+     border-radius: 12px;
+     background: var(--theme-bg-alt);
+     color: var(--theme-fg);
+   }
+
+   code {
+     border-radius: 5px;
+     background:#e8e8e8;
+     font-size: 80%;
+   }
+
+   kbd {
+     display: inline-block;
+     padding: 3px 5px;
+     font: 80% SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+     line-height: normal;
+     line-height: 10px;
+     color:#444d56;
+     vertical-align: middle;
+     background-color:#fafbfc;
+     border: 1px solid#d1d5da;
+     border-radius: 3px;
+     box-shadow: inset 0 -1px 0#d1d5da;
+   }
+
+   table {
+     max-width: 100%;
+     overflow-x: auto;
+     display: block;
+     border-top: none;
+   }
+
+   a {
+       text-decoration: none;
+       background-image: linear-gradient(#d8dce9, #d8dce9);
+       background-position: 0% 100%;
+       background-repeat: no-repeat;
+       background-size: 0% 2px;
+       transition: background-size .3s;
+   }
+   \#table-of-contents a {
+       background-image: none;
+   }
+   a:hover, a:focus {
+       background-size: 100% 2px;
+   }
+   a[href^='#'] { font-variant-numeric: oldstyle-nums; }
+   a[href^='#']:visited { color:#3091d1; }
+
+   li .checkbox {
+       display: inline-block;
+       width: 0.9em;
+       height: 0.9em;
+       border-radius: 3px;
+       margin: 3px;
+       top: 4px;
+       position: relative;
+   }
+   li.on > .checkbox { background: var(--theme-green); box-shadow: 0 0 2px var(--theme-green); }
+   li.trans > .checkbox { background: var(--theme-orange); box-shadow: 0 0 2px var(--theme-orange); }
+   li.off > .checkbox { background: var(--theme-red); box-shadow: 0 0 2px var(--theme-red); }
+   li.on > .checkbox::after {
+     content: '';
+     height: 0.45em;
+     width: 0.225em;
+     -webkit-transform-origin: left top;
+     transform-origin: left top;
+     transform: scaleX(-1) rotate(135deg);
+     border-right: 2.8px solid#fff;
+     border-top: 2.8px solid#fff;
+     opacity: 0.9;
+     left: 0.10em;
+     top: 0.45em;
+     position: absolute;
+   }
+   li.trans > .checkbox::after {
+       content: '';
+       font-weight: bold;
+       font-size: 1.6em;
+       position: absolute;
+       top: 0.23em;
+       left: 0.09em;
+       width: 0.35em;
+       height: 0.12em;
+       background:#fff;
+       opacity: 0.9;
+       border-radius: 0.1em;
+   }
+   li.off > .checkbox::after {
+    content: '✖';
+    color:#fff;
+    opacity: 0.9;
+    position: relative;
+    top: -0.40rem;
+    left: 0.17em;
+    font-size: 0.75em;
+  }
+
+   span.timestamp {
+       color: #003280;
+       background: #647CFF44;
+       border-radius: 3px;
+       line-height: 1.25;
+   }
+
+   \#table-of-contents { overflow-y: auto; }
+   blockquote p { margin: 8px 0px 16px 0px; }
+   \#postamble .date { color: var(--theme-green); }
+
+   ::-webkit-scrollbar { width: 10px; height: 8px; }
+   ::-webkit-scrollbar-track { background:#9992; }
+   ::-webkit-scrollbar-thumb { background:#ccc; border-radius: 10px; }
+   ::-webkit-scrollbar-thumb:hover { background:#888; }
+</style>
+<!––tec/custom-head-end-->
+"
+      ))))
+
+(add-hook 'org-export-before-processing-hook 'jsravn--org-inline-css-hook)
+#+END_SRC
+
+And tweak the markup classes.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-html-text-markup-alist
+      '((bold . "<b>%s</b>")
+        (code . "<code>%s</code>")
+        (italic . "<i>%s</i>")
+        (strike-through . "<del>%s</del>")
+        (underline . "<span class=\"underline\">%s</span>")
+        (verbatim . "<kbd>%s</kbd>")))
+#+END_SRC
+
+And use nicer check boxes. _This doesn't work._
+
+#+BEGIN_SRC emacs-lisp
+;; (after! org
+;;   (appendq! org-html-checkbox-types
+;;             '((html-span .
+;;                          ((on . "<span class='checkbox'></span>")
+;;                           (off . "<span class='checkbox'></span>")
+;;                           (trans . "<span class='checkbox'></span>")))))
+;;   (setq org-html-checkbox-type 'html-span))
+#+END_SRC
+
+**** Exporting to Beamer
+Use a different theme.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-beamer-theme "[progressbar=foot]metropolis")
+#+END_SRC
+
+And divide presentation into subheadings.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-beamer-frame-level 2)
+#+END_SRC
+
+**** Exporting to GFM
+GFM exports to markdown. Let's enable it.
+
+#+BEGIN_SRC emacs-lisp
+(eval-after-load "org"
+  '(require 'ox-gfm nil t))
+#+END_SRC
+
+*** Task management
+I follow my own take on GTD for task management. The task management is independent of notes, and the task files are kept
+in the main ~org-directory~. The files are:
+
+- inbox.org    :: Captures go here for later filing. I use =beorg= on my phone to capture things quickly on the fly.
+- todo.org     :: The primary TODO list, with all actively worked on projects and TODO items.
+- ticklers.org :: Periodic reminders and tasks to be worked on later.
+- someday.org  :: I'll do these things one day, maybe.
+
+Each file is organized into a heading per context like this:
+
+- * Home :@home:
+- * Work :@work:
+- * OMSCS :@omscs:
+
+By using headlines in each folder, I can simply refile tasks under the appropriate heading and they'll automatically
+inherit the context tag. It also makes it easier to focus on tasks for a specific context, GTD style, when in the org
+file.
+
+My high level task process then is:
+1. Once or twice a day, open up the all agenda (=SPC o A A=).
+2. Refile everything in the inbox section appropriately.
+3. Anything in the schedule that needs doing is moved from =ticklers.org= to =todo.org= which removes it from the schedule.
+4. Whenever I need to see what task to pick up, I open up the context specific agenda. E.g. =SPC o A h= for =@home=.
+5. Finished tasks are archived (=d A= in agenda, or =SPC m A= in org-mode). If they are recurring tasks, they are refiled back to =ticklers.org=.
+
+**** Capture templates
+These are my custom templates for capturing new tasks quickly to the inbox.
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (setq org-capture-templates
+        `(("t" "Todo [inbox]" entry
+           (file ,(concat org-directory "inbox.org"))
+           "* TODO %i%?")
+          ("e" "Event [inbox]" entry
+           (file ,(concat org-directory "inbox.org"))
+           "* %i%? \n %U")
+          ("n" "Note [inbox]" entry
+           (file ,(concat org-directory "inbox.org"))
+           "* %?")
+          ("s" "Shopping [todo]" checkitem
+           (file+olp ,(concat org-directory "someday.org") "Home" "Shopping")
+           "- [ ] %?"))))
+#+END_SRC
+**** Task settings
+Define the =TODO= states and also mark complete items with the current time.
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (setq
+   org-todo-keywords '((sequence "TODO(t)" "WAITING(w)" "|" "DONE(d)" "CANCELLED(c)"))
+   org-log-done 'time))
+#+END_SRC
+
+**** Contexts
+I use tags to primarily set contexts, following the GTD process. I have =@work=, =@home=, and =@omscs=. I configure
+tag selection, =C-c C-c=, to quickly pick one of these contexts.
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (setq
+   org-tag-alist '(("@work" . ?w) ("@home" . ?h) ("@omscs" . ?o))
+   org-fast-tag-selection-single-key t))
+#+END_SRC
+
+**** Refile targets
+Define targets for potential refile. This is part of my GTD system and allows quickly moving tasks between the core task
+files.
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (setq
+   org-refile-targets '(("~/Dropbox/Notes/todo.org" :maxlevel . 2)
+                        ("~/Dropbox/Notes/someday.org" :maxlevel . 1)
+                        ("~/Dropbox/Notes/tickler.org" :maxlevel . 2)
+                        ("~/Dropbox/Notes/notes.org" :maxlevel . 2))))
+#+END_SRC
+
+**** Habits
+Enable org-habit to allow special scheduled items for helping me create habits. To use, create a recurring =SCHEDULED= item with
+the =STYLE= property (=C-x C-p=) set to =habit=.  See [[https://orgmode.org/manual/Tracking-your-habits.html][Tracking your habits]] for more details.
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (add-to-list 'org-modules 'org-habit t))
+#+END_SRC
+
+**** Custom Agendas
+The agendas are my central view on tasks. There are separate subsections for each agenda view, defined as a function.
+
+#+BEGIN_SRC emacs-lisp
+(after! org
+  (setq org-agenda-custom-commands
+        (list (jsravn--all-agenda)
+              (jsravn--agenda "home")
+              (jsravn--agenda "work")
+              (jsravn--agenda "omscs"))))
+#+END_SRC
+
+Also, give me two weeks warning of impending deadlines.
+
+#+BEGIN_SRC emacs-lisp
+(after! org (setq org-deadline-warning-days 14))
+#+END_SRC
+
+***** All Agenda Function
+This is my all agenda function. It shows everything going on in my task system.
+
+#+BEGIN_SRC emacs-lisp
+(defun jsravn--all-agenda ()
+  "Custom all agenda."
+  `("A" "All agenda"
+    ((todo "" ((org-agenda-files '("~/Dropbox/Notes/inbox.org"))
+               (org-agenda-overriding-header "Inbox")))
+     (tags "-{.*}" ((org-agenda-files '("~/Dropbox/Notes/todo.org"
+                                        "~/Dropbox/Notes/tickler.org"
+                                        "~/Dropbox/Notes/someday.org"))
+                    (org-agenda-overriding-header "Untagged")))
+     (agenda "" ((org-agenda-span 7)
+                 (org-agenda-start-day "-1d")
+                 (org-agenda-files '("~/Dropbox/Notes/tickler.org"
+                                     "~/Dropbox/Notes/todo.org"))
+                 (org-agenda-skip-function #'jsravn--skip-scheduled-if-in-todo)))
+     ,(jsravn--tags-todo "@home" "Home")
+     ,(jsravn--tags-todo "@work" "Work")
+     ,(jsravn--tags-todo "@omscs" "OMSCS"))))
+#+END_SRC
+
+***** Context Agenda Function
+This is my per-context agenda function. It is a slimmed down version of the [[*All Agenda Function][All Agenda Function]] that scopes to a
+context, like =@home=.
+
+#+BEGIN_SRC emacs-lisp
+(defun jsravn--agenda (scope)
+  "Custom scoped agenda."
+  (let ((key (substring scope 0 1))
+        (title (concat (upcase-initials scope) "agenda"))
+        (tag (concat "@" scope)))
+    `(,key ,title
+           ((agenda "" ((org-agenda-span 7)
+                        (org-agenda-start-day "-1d")
+                        (org-agenda-files '("~/Dropbox/Notes/tickler.org"
+                                            "~/Dropbox/Notes/todo.org"))
+                        (org-agenda-skip-function #'jsravn--skip-scheduled-if-in-todo)))
+            ,(jsravn--tags-todo (concat tag "/!TODO") "Todo")
+            ,(jsravn--tags-todo (concat tag "/!WAITING") "Waiting"))
+           ((org-agenda-tag-filter-preset '(,(concat "+" tag)))))))
+#+END_SRC
+
+***** Agenda Support Functions
+I have a few support functions for the agendas.
+
+This is a custom ~tags-todo~ view which only shows the first TODO in a subheading, aka project.
+
+#+BEGIN_SRC emacs-lisp
+(defun jsravn--tags-todo (tags header)
+  "Customized tags-todo view which only shows the first TODO in a subheading."
+  `(tags-todo ,tags ((org-agenda-files '("~/Dropbox/Notes/todo.org"))
+                     (org-agenda-overriding-header ,header)
+                     (org-agenda-skip-function #'jsravn--skip-all-siblings-but-first))))
+
+(defun jsravn--skip-all-siblings-but-first ()
+  "Skip all but the first non-done entry that is inside a subheading."
+  (when (> (car (org-heading-components)) 2)
+    (let (should-skip-entry)
+      (save-excursion
+        (while (and (not should-skip-entry) (org-goto-sibling t))
+          (when (string= "TODO" (org-get-todo-state))
+            (setq should-skip-entry t))))
+      (when should-skip-entry
+        (or (outline-next-heading) (goto-char (point-max)))))))
+#+END_SRC
+
+This a custom filter that skips any =SCHEDULED= items which have already been filed in my =todo.org=.
+
+#+BEGIN_SRC emacs-lisp
+(defun jsravn--skip-scheduled-if-in-todo ()
+  "Skip scheduled items that have been moved to todo.org."
+  (when (and (string= "todo.org" (file-name-nondirectory (buffer-file-name)))
+             (org-entry-get nil "SCHEDULED"))
+    (or (outline-next-heading) (goto-char (point-max)))))
+#+END_SRC
+
+**** Agenda Searches
+Agenda search is usually accessed via =SPC o A s= and allows quick searching of all task files.
+
+I like to include archived tasks in the search.
+
+#+BEGIN_SRC emacs-lisp
+(after! org (setq org-agenda-text-search-extra-files '(agenda-archives)))
+#+END_SRC
+
+Also use the more intuitive boolean search method, where each word is searched independently rather than being treated
+as a single phrase. A single phrase can be forced by enclosing in quotations.
+
+#+BEGIN_SRC emacs-lisp
+(after! org (setq org-agenda-search-view-always-boolean t))
+#+END_SRC
+
+*** Notes
+I use org-roam, deft, and org-journal to manage my notes.
+
+**** org-roam
+I use [[https://org-roam.readthedocs.io/en/master/][org-roam]] to organize my notes. =org-roam= is scoped to a single folder which contains all the org files that roam
+should create metadata for. I prefer to keep my notes separate from my task system, so I put this into a dedicated
+sub-folder inside the org directory.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-roam-directory (concat org-directory "roam/"))
+#+END_SRC
+
+Change the default capture template. Specifically, place the title before the date so it's easy to locate the file
+outside of orgmode such as on a mobile device.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-roam-capture-templates
+      '(("d" "default" plain (function org-roam-capture--get-point)
+         "%?"
+         :file-name "${slug}-%<%Y%m%d%H%M%S>"
+         :head "#+TITLE: ${title}\n"
+         :unnarrowed t)))
+#+END_SRC
+
+I'm also experimenting with deft as the interface for org-roam. I'm still undecided whether it is useful - I find myself
+just using the normal =projectile-find-file= interface.
+
+#+BEGIN_SRC emacs-lisp
+(setq deft-directory org-roam-directory)
+#+END_SRC
+
+I don't want the org-roam buffer closing on =C-w C-o=.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-roam-buffer-no-delete-other-windows t)
+#+END_SRC
+
+And I want the org-roam buffer to open automatically when I visit a roam file.
+
+#+BEGIN_SRC emacs-lisp
+(defun jsravn--open-org-roam ()
+  "Called by `org-mode-hook' to call `org-roam' if the current buffer is a roam file."
+  (remove-hook 'window-configuration-change-hook #'jsravn--open-org-roam)
+  (when (org-roam--org-roam-file-p)
+    (unless (eq 'visible (org-roam--current-visibility)) (org-roam))))
+
+(after! org-roam
+  (add-hook 'org-mode-hook
+            (lambda ()
+              (add-hook 'window-configuration-change-hook #'jsravn--open-org-roam))))
+#+END_SRC
+
+**** org-journal
+Set up org-journal to integrate with org-roam.
+
+#+BEGIN_SRC emacs-lisp
+(setq org-journal-date-prefix "#+TITLE: "
+      org-journal-date-format "%A, %d %B %Y"
+      org-journal-file-format "%Y-%m-%d.org"
+      org-journal-dir org-roam-directory)
+#+END_SRC
+*** Calendar
+I am experimenting with =org-caldav= to sync my org files with calendars. Much of this is taken from [[https://www.reddit.com/r/orgmode/comments/8rl8ep/making_orgcaldav_useable/][this reddit post]].
+Unfortunately it's very slow and blocks Emacs completely while syncing. It also doesn't support recurring events.
+
+#+BEGIN_SRC emacs-lisp
+;; (use-package! org-caldav
+;;   :after org
+;;   :init
+;;   ;; Configure my calendars.
+;;   (setq org-caldav-url "https://caldav.fastmail.com/dav/calendars/user/james@r-vn.org"
+;;         org-caldav-calendars
+;;         `((:calendar-id "0a220cb3-0ee8-49a9-af76-15c60bde70da"
+;;            :files ,(list (concat org-directory "cal-personal.org"))
+;;            :inbox ,(concat org-directory "cal-personal.org"))
+;;           (:calendar-id "071a3712-0213-4dac-a421-a79dc1760517"
+;;            :files ,(list (concat org-directory "cal-family.org"))
+;;            :inbox ,(concat org-directory "cal-family.org"))
+;;           (:calendar-id "4a92bcb6-a731-418c-89a3-97b86c0c51e5"
+;;            :files ,(list (concat org-directory "cal-holidayuk.org"))
+;;            :inbox ,(concat org-directory "cal-holidayuk.org"))))
+
+;;   ;; Configure caldav.
+;;   (let ((caldav-dir (concat org-directory ".org-caldav/")))
+;;     (setq org-caldav-backup-file (concat caldav-dir "org-caldav-backup.org")
+;;           org-caldav-save-directory caldav-dir
+;;           org-caldav-show-sync-results nil))
+
+;;   :config
+;;   ;; Configure icalendar.
+;;   (setq org-icalendar-alarm-time 1
+;;         org-icalendar-include-todo t
+;;         org-icalendar-timezone "Europe/London"
+;;         org-icalendar-use-deadline '(event-if-todo event-if-not-todo todo-due)
+;;         org-icalendar-use-scheduled '(todo-start event-if-todo event-if-not-todo))
+
+;;   (map! :map org-mode-map
+;;         :localleader
+;;         :desc "Sync calendars" "C" #'org-caldav-sync))
+
+#+END_SRC
+*** Alerts
+Experiment using =org-alert= to get notified of impending deadlines. _Not working_
+
+#+BEGIN_SRC emacs-lisp
+;; (use-package! org-alert
+;;   :after org
+;;   :init
+;;   (setq alert-default-style 'libnotify                  ; Use system notifications.
+;;         org-alert-headline-regexp "\\(Deadline:.+\\)"   ; Only notify for deadlines.
+;;         org-alert-interval 7200)                        ; Check/alert bihourly.
+;;   :config
+;;   (add-hook 'emacs-startup-hook #'org-alert-enable))
+#+END_SRC
+
+** YAML
+Add Kubernetes schemas.
+
+#+BEGIN_SRC emacs-lisp
+(setq lsp-yaml-schemas (make-hash-table))
+(puthash "kubernetes" ["resources.yaml"
+                       "resources/*"
+                       "pod.yaml"
+                       "deployment.yaml"
+                       "serviceaccount.yaml"
+                       "clusterrole.yaml"
+                       "role.yaml"
+                       "clusterrolebinding.yaml"
+                       "rolebinding.yaml"
+                       "configmap.yaml"
+                       "service.yaml"]
+         lsp-yaml-schemas)
+(puthash "http://json.schemastore.org/kustomization" ["kustomization.yaml"] lsp-yaml-schemas)
+#+END_SRC
