@@ -94,6 +94,7 @@ obnoxious if done incorrectly, so I want it to only save when safe.
 First I use the built-in auto-save functionality to save the buffer after some idle time.
 
 #+BEGIN_SRC emacs-lisp
+(setq auto-save-visited-interval 5) ; Save after 30s of idle time.
 (auto-save-visited-mode t)
 #+END_SRC
 
@@ -285,7 +286,7 @@ options.
         +icons)
 
        :ui
-       deft
+       ;;deft
        doom
        doom-dashboard
        hl-todo
@@ -296,8 +297,8 @@ options.
        (popup
         +all
         +defaults)
-       ;; (pretty-code
-       ;;  +pragmata-pro)
+       (pretty-code
+        +pragmata-pro)
        treemacs
        vc-gutter
        vi-tilde-fringe
@@ -562,45 +563,28 @@ Add some useful binds.
        :desc "LSP Parameters" "p" #'lsp-signature-activate))
 #+END_SRC
 
-Disable the auto root guessing that doom enables by default, but doesn't work very well in my experience. With this
-disabled LSP will prompt for the project root when opening a new LSP recognized file. This adds a little
-inconvenience, but saves a lot of trouble with golang projects.
+And tweak the LSP settings.
 
 #+BEGIN_SRC emacs-lisp
-(setq lsp-auto-guess-root nil)
-#+END_SRC
-
-Disable symbol highlighting which is just obnoxious, especially in =gopls= where it seems to highlight a lot of things.
-This could probably be made more usable with a more subtle highlight color.
-
-#+BEGIN_SRC emacs-lisp
-(setq lsp-enable-symbol-highlighting nil)
-#+END_SRC
-
-Disable auto-linking which seems [[https://github.com/hlissner/doom-emacs/issues/2911][fundamentally broken]] as it breaks other buffers.
-
-#+BEGIN_SRC emacs-lisp
-(setq lsp-enable-links nil)
-#+END_SRC
-
-Don't display a giant signature block whenever typing in a function call. This seems to cause a lot of window glitches.
-Just display the function.
-
-#+BEGIN_SRC emacs-lisp
-(setq lsp-signature-auto-activate t
-      lsp-signature-render-documentation nil)
-#+END_SRC
-
-Disable the not so great =lsp-mode= snippets which insert optional parameters and other nonsense.
-
-#+BEGIN_SRC emacs-lisp
-(setq lsp-enable-snippet nil)
+(setq lsp-auto-guess-root nil                ; Causes problems esp. with golang projects misguessing the root.
+      lsp-enable-symbol-highlighting nil     ; Lots of highlighting that is distracting.
+      lsp-signature-auto-activate t          ; Show signature of current function.
+      lsp-signature-render-documentation nil ; Only show single line of function.
+      lsp-enable-snippet nil                 ; Disable auto parameter insertions.
+      lsp-flycheck-live-reporting t)         ; Update buffer live with LSP diagnostics.
 #+END_SRC
 
 Turn on [[https://github.com/emacs-lsp/lsp-mode/wiki/Debugging][LSP Debugging]]. Enable only when needed.
 
 #+BEGIN_SRC emacs-lisp
 ;(setq lsp-log-io t)
+#+END_SRC
+
+Debug =onChange= events.
+
+#+BEGIN_SRC emacs-lisp
+(load! "integration-test" doom-private-dir)
+(advice-add 'lsp--send-notification :before 'lsp-notify-wrapper)
 #+END_SRC
 
 *** Magit

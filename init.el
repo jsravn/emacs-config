@@ -12,7 +12,7 @@
         +icons)
 
        :ui
-       deft
+       ;;deft
        doom
        doom-dashboard
        hl-todo
@@ -23,8 +23,8 @@
        (popup
         +all
         +defaults)
-       ;; (pretty-code
-       ;;  +pragmata-pro)
+       (pretty-code
+        +pragmata-pro)
        treemacs
        vc-gutter
        vi-tilde-fringe
