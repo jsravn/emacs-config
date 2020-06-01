@@ -94,7 +94,7 @@ obnoxious if done incorrectly, so I want it to only save when safe.
 First I use the built-in auto-save functionality to save the buffer after some idle time.
 
 #+BEGIN_SRC emacs-lisp
-(setq auto-save-visited-interval 5) ; Save after 30s of idle time.
+(setq auto-save-visited-interval 30) ; Save after 30s of idle time.
 (auto-save-visited-mode t)
 #+END_SRC
 
@@ -219,7 +219,7 @@ Use the latest LSP.
 Mail notifications. Used for ~doom-modeline-m4ue~.
 
 #+BEGIN_SRC emacs-lisp :tangle "packages.el"
-(package! mu4e-alert)
+;(package! mu4e-alert)
 #+END_SRC
 
 *** org-msg
@@ -286,12 +286,11 @@ options.
         +icons)
 
        :ui
-       ;;deft
        doom
        doom-dashboard
        hl-todo
        indent-guides
-       (modeline)
+       (modeline +light)
        nav-flash
        ophints
        (popup
@@ -344,6 +343,7 @@ options.
        terraform
 
        :lang
+       (cc +lsp)
        (clojure
         +cider
         +lsp)
@@ -441,6 +441,14 @@ Enable follow-mode so the treemacs cursor follows the buffer file. Also increase
 (after! treemacs
   (treemacs-follow-mode 1)
   (setq treemacs-width 40))
+#+END_SRC
+
+*** Pretty-code
+
+Just use pretty-code for the ligatures - so disable the symbol translation.
+
+#+BEGIN_SRC emacs-lisp
+(setq +pretty-code-symbols nil)
 #+END_SRC
 ** Completion
 Fix company causing minibuffer region to disappear (e.g. lsp ask root dialogue).
@@ -546,11 +554,11 @@ Bind mail to =SPC o m=.
 Set up mu4e-alert for notifications in the modeline.
 
 #+BEGIN_SRC emacs-lisp
-(setq doom-modeline-mu4e t)
-(use-package! mu4e-alert
-  :after mu4e
-  :config
-  (mu4e-alert-enable-mode-line-display))
+;; (setq doom-modeline-mu4e t)
+;; (use-package! mu4e-alert
+;;   :after mu4e
+;;   :config
+;;   (mu4e-alert-enable-mode-line-display))
 #+END_SRC
 
 ** Tools configuration
@@ -580,11 +588,45 @@ Turn on [[https://github.com/emacs-lsp/lsp-mode/wiki/Debugging][LSP Debugging]].
 ;(setq lsp-log-io t)
 #+END_SRC
 
-Debug =onChange= events.
+Debug =onChange= events. Enable only when needed.
 
 #+BEGIN_SRC emacs-lisp
-(load! "integration-test" doom-private-dir)
+(defun lsp-notify-wrapper (params)
+  (let ((lsp--virtual-buffer-mappings (ht)))
+    (pcase (plist-get params :method)
+      (`"textDocument/didChange"
+       (setq my/params params)
+       (-let [(&plist :params
+                      (&plist :textDocument (&plist :uri :version)
+                              :contentChanges [(&plist :range (&plist :start :end )
+                                                       :text)]))
+              params]
+         (with-current-buffer (get-buffer-create (format "*%s*" (f-filename (lsp--uri-to-path uri))))
+           (let ((start-point (if start
+                                  (lsp--position-to-point (ht ("line" (plist-get start :line))
+                                                              ("character" (plist-get start :character))))
+                                (point-min)))
+                 (end-point (if end
+                                (lsp--position-to-point (ht ("line" (plist-get end :line))
+                                                            ("character" (plist-get end :character))))
+                              (point-max))))
+             ;; (display-buffer-in-side-window (current-buffer) ())
+             (delete-region start-point end-point)
+             (goto-char start-point)
+             (insert text)))))
+      (`"textDocument/didOpen"
+       (-let [(&plist :params (&plist :textDocument
+                                      (&plist :uri
+                                              :version
+                                              :text)))
+              params]
+         (with-current-buffer (get-buffer-create (format "*%s*" (f-filename (lsp--uri-to-path uri))))
+           ;; (display-buffer-in-side-window (current-buffer) ())
+
+           (delete-region (point-min) (point-max))
+           (insert (or text ""))))))))
 (advice-add 'lsp--send-notification :before 'lsp-notify-wrapper)
+
 #+END_SRC
 
 *** Magit

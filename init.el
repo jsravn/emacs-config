@@ -12,12 +12,11 @@
         +icons)
 
        :ui
-       ;;deft
        doom
        doom-dashboard
        hl-todo
        indent-guides
-       (modeline)
+       (modeline +light)
        nav-flash
        ophints
        (popup
@@ -70,6 +69,7 @@
        terraform
 
        :lang
+       (cc +lsp)
        (clojure
         +cider
         +lsp)

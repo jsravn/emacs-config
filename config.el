@@ -37,7 +37,7 @@
 ;; Deletion:2 ends here
 
 ;; [[file:~/.config/doom/config.org::*Auto-save][Auto-save:1]]
-(setq auto-save-visited-interval 5) ; Save after 30s of idle time.
+(setq auto-save-visited-interval 30) ; Save after 30s of idle time.
 (auto-save-visited-mode t)
 ;; Auto-save:1 ends here
 
@@ -145,6 +145,10 @@
   (setq treemacs-width 40))
 ;; Treemacs:1 ends here
 
+;; [[file:~/.config/doom/config.org::*Pretty-code][Pretty-code:1]]
+(setq +pretty-code-symbols nil)
+;; Pretty-code:1 ends here
+
 ;; [[file:~/.config/doom/config.org::*Completion][Completion:1]]
 (after! company
   (remove-hook 'evil-normal-state-entry-hook #'company-abort))
@@ -219,11 +223,11 @@ Regards,
 ;; Configuration:5 ends here
 
 ;; [[file:~/.config/doom/config.org::*Configuration][Configuration:6]]
-(setq doom-modeline-mu4e t)
-(use-package! mu4e-alert
-  :after mu4e
-  :config
-  (mu4e-alert-enable-mode-line-display))
+;; (setq doom-modeline-mu4e t)
+;; (use-package! mu4e-alert
+;;   :after mu4e
+;;   :config
+;;   (mu4e-alert-enable-mode-line-display))
 ;; Configuration:6 ends here
 
 ;; [[file:~/.config/doom/config.org::*Language Server Protocol (LSP)][Language Server Protocol (LSP):1]]
@@ -246,7 +250,40 @@ Regards,
 ;; Language Server Protocol (LSP):3 ends here
 
 ;; [[file:~/.config/doom/config.org::*Language Server Protocol (LSP)][Language Server Protocol (LSP):4]]
-(load! "integration-test" doom-private-dir)
+(defun lsp-notify-wrapper (params)
+  (let ((lsp--virtual-buffer-mappings (ht)))
+    (pcase (plist-get params :method)
+      (`"textDocument/didChange"
+       (setq my/params params)
+       (-let [(&plist :params
+                      (&plist :textDocument (&plist :uri :version)
+                              :contentChanges [(&plist :range (&plist :start :end )
+                                                       :text)]))
+              params]
+         (with-current-buffer (get-buffer-create (format "*%s*" (f-filename (lsp--uri-to-path uri))))
+           (let ((start-point (if start
+                                  (lsp--position-to-point (ht ("line" (plist-get start :line))
+                                                              ("character" (plist-get start :character))))
+                                (point-min)))
+                 (end-point (if end
+                                (lsp--position-to-point (ht ("line" (plist-get end :line))
+                                                            ("character" (plist-get end :character))))
+                              (point-max))))
+             ;; (display-buffer-in-side-window (current-buffer) ())
+             (delete-region start-point end-point)
+             (goto-char start-point)
+             (insert text)))))
+      (`"textDocument/didOpen"
+       (-let [(&plist :params (&plist :textDocument
+                                      (&plist :uri
+                                              :version
+                                              :text)))
+              params]
+         (with-current-buffer (get-buffer-create (format "*%s*" (f-filename (lsp--uri-to-path uri))))
+           ;; (display-buffer-in-side-window (current-buffer) ())
+
+           (delete-region (point-min) (point-max))
+           (insert (or text ""))))))))
 (advice-add 'lsp--send-notification :before 'lsp-notify-wrapper)
 ;; Language Server Protocol (LSP):4 ends here
 

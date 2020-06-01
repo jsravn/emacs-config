@@ -15,7 +15,7 @@
 ;; lsp-mode:1 ends here
 
 ;; [[file:~/.config/doom/config.org::*mu4e-alert][mu4e-alert:1]]
-(package! mu4e-alert)
+;(package! mu4e-alert)
 ;; mu4e-alert:1 ends here
 
 ;; [[file:~/.config/doom/config.org::*org-msg][org-msg:1]]
