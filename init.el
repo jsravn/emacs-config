@@ -55,7 +55,7 @@
        :tools
        ansible
        docker
-       (debugger +lsp)
+       ;(debugger +lsp)
        direnv
        editorconfig
        (eval

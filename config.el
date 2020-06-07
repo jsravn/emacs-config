@@ -28,6 +28,10 @@
 (add-to-list 'default-frame-alist '(fullscreen . maximized))
 ;; Maximize:1 ends here
 
+;; [[file:~/.config/doom/config.org::*Editor behavior][Editor behavior:1]]
+(remove-hook 'doom-first-buffer-hook #'ws-butler-global-mode)
+;; Editor behavior:1 ends here
+
 ;; [[file:~/.config/doom/config.org::*Deletion][Deletion:1]]
 (setq delete-by-moving-to-trash t)
 ;; Deletion:1 ends here
@@ -204,7 +208,7 @@
 	      org-msg-text-plain-alternative t
         org-msg-signature "
 
-Regards,
+Kind regards,
 
 #+begin_signature
 -- James

@@ -74,6 +74,12 @@ tiling WM.
 ** Editor behavior
 This tweaks the general editor behavior to my liking.
 
+Disable =ws-butler= mode in case it is causing LSP errors.
+
+#+BEGIN_SRC emacs-lisp
+(remove-hook 'doom-first-buffer-hook #'ws-butler-global-mode)
+#+END_SRC
+
 *** Deletion
 Delete files to the local Trash folder, e.g. =~/.local/share/Trash= on Linux.
 
@@ -329,7 +335,7 @@ options.
        :tools
        ansible
        docker
-       (debugger +lsp)
+       ;(debugger +lsp)
        direnv
        editorconfig
        (eval
@@ -529,7 +535,7 @@ Compose mails with =org-msg=.
 	      org-msg-text-plain-alternative t
         org-msg-signature "
 
-Regards,
+Kind regards,
 
 ,#+begin_signature
 -- James
