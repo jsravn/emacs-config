@@ -16,7 +16,7 @@
        doom-dashboard
        hl-todo
        indent-guides
-       (modeline +light)
+       (modeline)
        nav-flash
        ophints
        (popup
@@ -46,7 +46,7 @@
        vc
 
        :term
-       term
+       vterm
 
        :checkers
        syntax
