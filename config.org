@@ -78,6 +78,8 @@ Disable =ws-butler= mode in case it is causing LSP errors.
 
 #+BEGIN_SRC emacs-lisp
 (remove-hook 'doom-first-buffer-hook #'ws-butler-global-mode)
+(after! editorconfig
+    (setq editorconfig-trim-whitespaces-mode nil))
 #+END_SRC
 
 *** Deletion
@@ -358,7 +360,7 @@ options.
        emacs-lisp
        (go +lsp)
        (java +lsp)
-       javascript
+       (javascript +lsp)
        markdown
        nix
        (org
@@ -367,7 +369,6 @@ options.
         +roam)
        (python
         +lsp +pyenv)
-       (scala +lsp)
        sh
        scheme
        (yaml +lsp)
@@ -407,6 +408,14 @@ which I have never used.
 #+BEGIN_SRC emacs-lisp
 (map!
  :ni "M-u"   #'sp-up-sexp)
+#+END_SRC
+
+*** Dired
+
+Disable evil things in dired so we get dired keybindings.
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'dired-mode-hook #'turn-off-evil-snipe-mode)
 #+END_SRC
 
 ** UI configuration
@@ -585,7 +594,7 @@ And tweak the LSP settings.
       lsp-signature-auto-activate t          ; Show signature of current function.
       lsp-signature-render-documentation nil ; Only show single line of function.
       lsp-enable-snippet nil                 ; Disable auto parameter insertions.
-      lsp-flycheck-live-reporting t)         ; Update buffer live with LSP diagnostics.
+      flycheck-check-syntax-automatically '(save idle-change new-line mode-enabled)) ; Restore lsp-mode flycheck behavior.
 #+END_SRC
 
 Turn on [[https://github.com/emacs-lsp/lsp-mode/wiki/Debugging][LSP Debugging]]. Enable only when needed.
@@ -1116,7 +1125,7 @@ This is my all agenda function. It shows everything going on in my task system.
 (defun jsravn--all-agenda ()
   "Custom all agenda."
   `("A" "All agenda"
-    ((todo "" ((org-agenda-files '("~/Dropbox/Notes/inbox.org"))
+    ((todo "" ((org-agenda-files '("~/Dropbox/Notes/inbox.org" "~/Dropbox/Notes/roam/inbox.org"))
                (org-agenda-overriding-header "Inbox")))
      (tags "-{.*}" ((org-agenda-files '("~/Dropbox/Notes/todo.org"
                                         "~/Dropbox/Notes/tickler.org"
@@ -1222,7 +1231,7 @@ outside of orgmode such as on a mobile device.
 (setq org-roam-capture-templates
       '(("d" "default" plain (function org-roam-capture--get-point)
          "%?"
-         :file-name "${slug}-%<%Y%m%d%H%M%S>"
+         :file-name "${slug}"
          :head "#+TITLE: ${title}\n"
          :unnarrowed t)))
 #+END_SRC

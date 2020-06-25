@@ -1,8 +1,8 @@
-;; [[file:~/.config/doom/config.org::*File variables][File variables:2]]
+;; [[file:config.org::*File variables][File variables:2]]
 ;;; ~/.config/doom/init.el -*- lexical-binding: t; -*-
 ;; File variables:2 ends here
 
-;; [[file:~/.config/doom/config.org::*Enable modules (init.el)][Enable modules (init.el):1]]
+;; [[file:config.org::*Enable modules (init.el)][Enable modules (init.el):1]]
 (doom!
        :completion
        (company
@@ -78,7 +78,7 @@
        emacs-lisp
        (go +lsp)
        (java +lsp)
-       javascript
+       (javascript +lsp)
        markdown
        nix
        (org
@@ -87,7 +87,6 @@
         +roam)
        (python
         +lsp +pyenv)
-       (scala +lsp)
        sh
        scheme
        (yaml +lsp)
