@@ -8,7 +8,8 @@
        (company
         +childframe)
        (ivy
-        +fuzzy
+        ;+fuzzy     ;; very slow on large projects, so disabled
+        +prescient  ;; alternative to +fuzzy, faster but less pretty
         +icons)
 
        :ui
