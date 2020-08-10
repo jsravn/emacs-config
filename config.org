@@ -253,6 +253,12 @@ https://github.com/Schnouki/caddyfile-mode
 (package! caddyfile-mode)
 #+END_SRC
 
+*** protobuf-mode
+
+#+BEGIN_SRC emacs-lisp
+(package! protobuf-mode)
+#+END_SRC
+
 ** Package configuration
 For configuring packages that are loaded in =packages.el=.
 
@@ -1272,8 +1278,10 @@ Set up org-journal to integrate with org-roam.
 (setq org-journal-date-prefix "#+TITLE: "
       org-journal-date-format "%A, %d %B %Y"
       org-journal-file-format "%Y-%m-%d.org"
+      org-journal-time-prefix "* "
       org-journal-dir org-roam-directory)
 #+END_SRC
+
 *** Calendar
 I am experimenting with =org-caldav= to sync my org files with calendars. Much of this is taken from [[https://www.reddit.com/r/orgmode/comments/8rl8ep/making_orgcaldav_useable/][this reddit post]].
 Unfortunately it's very slow and blocks Emacs completely while syncing. It also doesn't support recurring events.
