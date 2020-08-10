@@ -373,7 +373,8 @@ options.
        (org
         +dragndrop
         +journal
-        +roam)
+        +roam
+        +pretty)
        (python
         +lsp +pyenv)
        sh

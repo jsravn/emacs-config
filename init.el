@@ -1,8 +1,8 @@
-;; [[file:~/.config/doom/config.org::*File variables][File variables:2]]
+;; [[file:/tmp/config.org.9WUHSm::*File variables][File variables:2]]
 ;;; ~/.config/doom/init.el -*- lexical-binding: t; -*-
 ;; File variables:2 ends here
 
-;; [[file:~/.config/doom/config.org::*Enable modules (init.el)][Enable modules (init.el):1]]
+;; [[file:/tmp/config.org.9WUHSm::*Enable modules (init.el)][Enable modules (init.el):1]]
 (doom!
        :completion
        (company
@@ -85,7 +85,8 @@
        (org
         +dragndrop
         +journal
-        +roam)
+        +roam
+        +pretty)
        (python
         +lsp +pyenv)
        sh
