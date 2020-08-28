@@ -614,41 +614,41 @@ Turn on [[https://github.com/emacs-lsp/lsp-mode/wiki/Debugging][LSP Debugging]].
 Debug =onChange= events. Enable only when needed.
 
 #+BEGIN_SRC emacs-lisp
-(defun lsp-notify-wrapper (params)
-  (let ((lsp--virtual-buffer-mappings (ht)))
-    (pcase (plist-get params :method)
-      (`"textDocument/didChange"
-       (setq my/params params)
-       (-let [(&plist :params
-                      (&plist :textDocument (&plist :uri :version)
-                              :contentChanges [(&plist :range (&plist :start :end )
-                                                       :text)]))
-              params]
-         (with-current-buffer (get-buffer-create (format "*%s*" (f-filename (lsp--uri-to-path uri))))
-           (let ((start-point (if start
-                                  (lsp--position-to-point (ht ("line" (plist-get start :line))
-                                                              ("character" (plist-get start :character))))
-                                (point-min)))
-                 (end-point (if end
-                                (lsp--position-to-point (ht ("line" (plist-get end :line))
-                                                            ("character" (plist-get end :character))))
-                              (point-max))))
-             ;; (display-buffer-in-side-window (current-buffer) ())
-             (delete-region start-point end-point)
-             (goto-char start-point)
-             (insert text)))))
-      (`"textDocument/didOpen"
-       (-let [(&plist :params (&plist :textDocument
-                                      (&plist :uri
-                                              :version
-                                              :text)))
-              params]
-         (with-current-buffer (get-buffer-create (format "*%s*" (f-filename (lsp--uri-to-path uri))))
-           ;; (display-buffer-in-side-window (current-buffer) ())
+;; (defun lsp-notify-wrapper (params)
+;;   (let ((lsp--virtual-buffer-mappings (ht)))
+;;     (pcase (plist-get params :method)
+;;       (`"textDocument/didChange"
+;;        (setq my/params params)
+;;        (-let [(&plist :params
+;;                       (&plist :textDocument (&plist :uri :version)
+;;                               :contentChanges [(&plist :range (&plist :start :end )
+;;                                                        :text)]))
+;;               params]
+;;          (with-current-buffer (get-buffer-create (format "*%s*" (f-filename (lsp--uri-to-path uri))))
+;;            (let ((start-point (if start
+;;                                   (lsp--position-to-point (ht ("line" (plist-get start :line))
+;;                                                               ("character" (plist-get start :character))))
+;;                                 (point-min)))
+;;                  (end-point (if end
+;;                                 (lsp--position-to-point (ht ("line" (plist-get end :line))
+;;                                                             ("character" (plist-get end :character))))
+;;                               (point-max))))
+;;              ;; (display-buffer-in-side-window (current-buffer) ())
+;;              (delete-region start-point end-point)
+;;              (goto-char start-point)
+;;              (insert text)))))
+;;       (`"textDocument/didOpen"
+;;        (-let [(&plist :params (&plist :textDocument
+;;                                       (&plist :uri
+;;                                               :version
+;;                                               :text)))
+;;               params]
+;;          (with-current-buffer (get-buffer-create (format "*%s*" (f-filename (lsp--uri-to-path uri))))
+;;            ;; (display-buffer-in-side-window (current-buffer) ())
 
-           (delete-region (point-min) (point-max))
-           (insert (or text ""))))))))
-(advice-add 'lsp--send-notification :before 'lsp-notify-wrapper)
+;;            (delete-region (point-min) (point-max))
+;;            (insert (or text ""))))))))
+;; (advice-add 'lsp--send-notification :before 'lsp-notify-wrapper)
 
 #+END_SRC
 
@@ -662,7 +662,14 @@ Prefer offering remote branches when prompting for a branch selection.
 Limit the number of topics that forge displays. I find the default a bit too large.
 
 #+BEGIN_SRC emacs-lisp
-(setq forge-topic-list-limit '(30 . 5))
+(setq forge-topic-list-limit '(30 . 6))
+#+END_SRC
+
+Disable showing tags in ref views - it slows them down substantially.
+
+#+BEGIN_SRC emacs-lisp
+(after! magit-refs
+  (remove-hook 'magit-refs-sections-hook 'magit-insert-tags))
 #+END_SRC
 
 * Languages
