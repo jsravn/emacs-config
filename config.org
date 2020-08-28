@@ -485,7 +485,7 @@ Fix company causing minibuffer region to disappear (e.g. lsp ask root dialogue).
 Flyspell can create a lot of lag in large buffers. Make it as lazy as possible.
 
 #+BEGIN_SRC emacs-lisp
-(after! flyspell (flyspell-lazy-mode 1))
+;; (after! flyspell (flyspell-lazy-mode 1))
 #+END_SRC
 
 ** Email configuration (mu4e)

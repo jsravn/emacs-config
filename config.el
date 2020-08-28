@@ -165,7 +165,7 @@
 ;; Completion:1 ends here
 
 ;; [[file:~/.config/doom/config.org::*Flyspell][Flyspell:1]]
-(after! flyspell (flyspell-lazy-mode 1))
+;; (after! flyspell (flyspell-lazy-mode 1))
 ;; Flyspell:1 ends here
 
 ;; [[file:~/.config/doom/config.org::*Configuration][Configuration:1]]
