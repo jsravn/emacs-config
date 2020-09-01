@@ -311,7 +311,7 @@ options.
        (popup
         +all
         +defaults)
-       (pretty-code
+       (ligatures
         +pragmata-pro)
        treemacs
        vc-gutter
@@ -339,7 +339,7 @@ options.
 
        :checkers
        syntax
-       spell
+       ;; spell
 
        :tools
        ansible

@@ -1,8 +1,8 @@
-;; [[file:~/.config/doom/config.org::*File variables][File variables:2]]
+;; [[file:/var/folders/61/m5p98vmx5gqfcbt5tz4wmhpm0000gn/T/config.org.WyKGtk::*File variables][File variables:2]]
 ;;; ~/.config/doom/init.el -*- lexical-binding: t; -*-
 ;; File variables:2 ends here
 
-;; [[file:~/.config/doom/config.org::*Enable modules (init.el)][Enable modules (init.el):1]]
+;; [[file:/var/folders/61/m5p98vmx5gqfcbt5tz4wmhpm0000gn/T/config.org.WyKGtk::*Enable modules (init.el)][Enable modules (init.el):1]]
 (doom!
        :completion
        (company
@@ -23,7 +23,7 @@
        (popup
         +all
         +defaults)
-       (pretty-code
+       (ligatures
         +pragmata-pro)
        treemacs
        vc-gutter
@@ -51,7 +51,7 @@
 
        :checkers
        syntax
-       spell
+       ;; spell
 
        :tools
        ansible
