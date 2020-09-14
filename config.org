@@ -12,7 +12,7 @@ I use [[https://github.com/hlissner/doom-emacs][doom-emacs]] as my core Emacs di
 - config.el :: User configuration.
 - packages.el :: Custom packages to load.
 
-=config.org= is what generates all of these, and is what you are viewing. It lives in my [[https://github.com/jsravn/dotfiles/tree/master/private_dot_config/doom][dotfiles]].
+=config.org= is what generates all of these, and is what you are viewing. It lives [[https://github.com/jsravn/emacs-config/][here]].
 
 * General configuration
 ** File variables
@@ -311,7 +311,7 @@ options.
        (popup
         +all
         +defaults)
-       (pretty-code
+       (ligatures
         +pragmata-pro)
        treemacs
        vc-gutter
@@ -339,7 +339,7 @@ options.
 
        :checkers
        syntax
-       spell
+       ;spell
 
        :tools
        ansible
