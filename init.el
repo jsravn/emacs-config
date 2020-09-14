@@ -1,8 +1,8 @@
-;; [[file:../../../../tmp/config.org.GuQd8l::*File variables][File variables:2]]
+;; [[file:/tmp/config.org.kw9qum::*File variables][File variables:2]]
 ;;; ~/.config/doom/init.el -*- lexical-binding: t; -*-
 ;; File variables:2 ends here
 
-;; [[file:../../../../tmp/config.org.GuQd8l::*Enable modules (init.el)][Enable modules (init.el):1]]
+;; [[file:/tmp/config.org.kw9qum::*Enable modules (init.el)][Enable modules (init.el):1]]
 (doom!
        :completion
        (company
