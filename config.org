@@ -182,7 +182,7 @@ Sensitive credentials are stored in a gpg encrypted auth file. I prefer to only 
 (setq auth-sources '("~/.authinfo.gpg"))
 #+END_SRC
 
-* Packages
+* Custom Packages
 This section defines the custom packages for =packages.el=.
 
 =packages.el= should not be byte-compiled.
@@ -199,71 +199,22 @@ This section defines the custom packages for =packages.el=.
 Use the ~package!~ macro for each package. Afterwards run ~doom refresh~ on the command line. Everything in this section
 goes into =packges.el=.
 
-*** atomic-chrome
-=atomic-chrome= provides integration with [[https://atom.io/packages/atomic-chrome][atomic chrome]] extension. This lets me use Emacs to edit browser text
-boxes! It's very handy for large Github comments.
-
 #+BEGIN_SRC emacs-lisp :tangle "packages.el"
-(package! atomic-chrome)
-#+END_SRC
-
-*** org-roam
-=org-roam= is included by default in doom. I like to use the latest version - so I pin it to a more recent one.
-
-#+BEGIN_SRC emacs-lisp :tangle "packages.el"
-(package! org-roam :pin "4af4d2e4d5f18422fe0f90d5d83fe4c10ef1a20f")
-#+END_SRC
-
-*** lsp-mode
-
-Use the latest LSP.
-
-#+BEGIN_SRC emacs-lisp :tangle "packages.el"
-(unpin! lsp-mode)
-#+END_SRC
-
-*** mu4e-alert
-
-Mail notifications. Used for ~doom-modeline-m4ue~.
-
-#+BEGIN_SRC emacs-lisp :tangle "packages.el"
-;(package! mu4e-alert)
-#+END_SRC
-
-*** org-msg
-
-Send HTML mail with org-mode. Better than the buggy/unsupported =org-mu4e-compose-mode=.
-
-#+BEGIN_SRC emacs-lisp :tangle "packages.el"
-(package! org-msg)
-#+END_SRC
-
-*** org-alert
-Used to generate system notifications from org agendas.
-
-#+BEGIN_SRC emacs-lisp :tangle "packages.el"
+;; custom packages
+(package! atomic-chrome)    ;; integration with the atomic chrome extension
 (package! org-alert)
-#+END_SRC
-
-***  caddyfile-mode
-
-https://github.com/Schnouki/caddyfile-mode
-
-#+BEGIN_SRC emacs-lisp :tangle "packages.el"
 (package! caddyfile-mode)
-#+END_SRC
-
-*** protobuf-mode
-
-#+BEGIN_SRC emacs-lisp
 (package! protobuf-mode)
+
+;; unpin these packages to use the latest always
+(unpin! org-roam)
+(unpin! lsp-mode)
 #+END_SRC
 
 ** Package configuration
 For configuring packages that are loaded in =packages.el=.
 
 *** atomic-chrome configuration
-Enable [[*atomic-chrome][atomic-chrome]] integration.
 
 #+BEGIN_SRC emacs-lisp
 (use-package! atomic-chrome
@@ -273,6 +224,7 @@ Enable [[*atomic-chrome][atomic-chrome]] integration.
         atomic-chrome-buffer-open-style 'frame)
   (atomic-chrome-start-server))
 #+END_SRC
+
 *** caddyfile-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -1101,7 +1053,7 @@ files.
 (after! org
   (setq
    org-refile-targets '(("~/Dropbox/Notes/todo.org" :maxlevel . 2)
-                        ("~/Dropbox/Notes/someday.org" :maxlevel . 1)
+                        ("~/Dropbox/Notes/someday.org" :maxlevel . 2)
                         ("~/Dropbox/Notes/tickler.org" :maxlevel . 2)
                         ("~/Dropbox/Notes/notes.org" :maxlevel . 2))))
 #+END_SRC
@@ -1362,4 +1314,9 @@ Add Kubernetes schemas.
                        "service.yaml"]
          lsp-yaml-schemas)
 (puthash "http://json.schemastore.org/kustomization" ["kustomization.yaml"] lsp-yaml-schemas)
+#+END_SRC
+** cuda
+
+#+BEGIN_SRC emacs-lisp
+(add-hook! cuda-mode (run-hooks 'prog-mode-hook))
 #+END_SRC
