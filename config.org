@@ -68,7 +68,7 @@ Maximize the frame when doom starts. I prefer it always opening up this way. Not
 tiling WM.
 
 #+BEGIN_SRC emacs-lisp
-(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 #+END_SRC
 
 ** Editor behavior
@@ -1320,3 +1320,11 @@ Add Kubernetes schemas.
 #+BEGIN_SRC emacs-lisp
 (add-hook! cuda-mode (run-hooks 'prog-mode-hook))
 #+END_SRC
+
+** cc
+
+Use the more standard 2 space indent for C mode.
+
+#+begin_src emacs-lisp
+(setq-hook! 'c-mode-hook tab-width 2)
+#+end_src
