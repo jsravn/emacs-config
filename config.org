@@ -54,6 +54,13 @@ Use the default doom-one theme, and the very nice [[https://www.fsd.it/shop/font
 
 #+END_SRC
 
+Keep the splash screen clean.
+
+#+begin_src emacs-lisp
+(setq fancy-splash-image (concat doom-private-dir "splash.png"))
+(remove-hook '+doom-dashboard-functions #'doom-dashboard-widget-shortmenu)
+#+end_src
+
 *** Mixed pitch mode
 Enable =mixed-pitch-mode= for some text modes. Also ensure it preserves the variable pitch height rather than inheriting from
 the default face.
