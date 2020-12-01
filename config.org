@@ -46,10 +46,10 @@ Use the default doom-one theme, and the very nice [[https://www.fsd.it/shop/font
 
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-one
-      doom-font (font-spec :family "PragmataPro Liga" :size 16)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 14)
-      doom-big-font (font-spec :family "PragmataPro Liga" :size 20)
-      doom-unicode-font (font-spec :family "Noto Color Emoji" :size 16)
+      doom-font (font-spec :family "PragmataPro Liga" :size 18)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16)
+      doom-big-font (font-spec :family "PragmataPro Liga" :size 22)
+      doom-unicode-font (font-spec :family "Noto Color Emoji" :size 18)
       +pretty-code-pragmata-pro-font-name "PragmataPro Liga")
 
 #+END_SRC
@@ -338,7 +338,7 @@ options.
         +lsp +pyenv)
        sh
        scheme
-       (yaml +lsp)
+       (yaml)
 
        :email
        mu4e
@@ -561,6 +561,7 @@ And tweak the LSP settings.
       lsp-signature-auto-activate t          ; Show signature of current function.
       lsp-signature-render-documentation nil ; Only show single line of function.
       lsp-enable-snippet nil                 ; Disable auto parameter insertions.
+      lsp-file-watch-threshold 99999         ; Set a much higher file watch limit than the default 1000.
       flycheck-check-syntax-automatically '(save idle-change new-line mode-enabled)) ; Restore lsp-mode flycheck behavior.
 #+END_SRC
 
