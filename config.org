@@ -89,6 +89,13 @@ Disable =ws-butler= mode in case it is causing LSP errors.
     (setq editorconfig-trim-whitespaces-mode nil))
 #+END_SRC
 
+Make whitespace-mode show more things.
+
+#+begin_src emacs-lisp
+(setq whitespace-style '(face indentation trailing lines-tail))
+(global-whitespace-mode t)
+#+end_src
+
 *** Deletion
 Delete files to the local Trash folder, e.g. =~/.local/share/Trash= on Linux.
 
