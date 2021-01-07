@@ -1,8 +1,8 @@
-;; [[file:/tmp/config.org.blYKC5::*File variables][File variables:2]]
+;; [[file:../../../../tmp/config.org.U9NkN6::*File variables][File variables:2]]
 ;;; ~/.config/doom/init.el -*- lexical-binding: t; -*-
 ;; File variables:2 ends here
 
-;; [[file:/tmp/config.org.blYKC5::*Enable modules (init.el)][Enable modules (init.el):1]]
+;; [[file:../../../../tmp/config.org.U9NkN6::*Enable modules (init.el)][Enable modules (init.el):1]]
 (doom!
        :completion
        (company

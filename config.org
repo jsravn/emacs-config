@@ -433,12 +433,15 @@ Just use pretty-code for the ligatures - so disable the symbol translation.
 (setq +pretty-code-symbols nil)
 #+END_SRC
 ** Completion
-Fix company causing minibuffer region to disappear (e.g. lsp ask root dialogue).
+Fix company causing minibuffer region to disappear (e.g. lsp ask root dialogue). Also add snippets to completion.
 
 #+BEGIN_SRC emacs-lisp
 (after! company
   (remove-hook 'evil-normal-state-entry-hook #'company-abort))
+
+(setq +lsp-company-backends '(:separate company-yasnippet company-capf))
 #+END_SRC
+
 ** Checkers configuration
 *** Flyspell
 Flyspell can create a lot of lag in large buffers. Make it as lazy as possible.
@@ -561,6 +564,7 @@ And tweak the LSP settings.
       lsp-signature-auto-activate t          ; Show signature of current function.
       lsp-signature-render-documentation nil ; Only show single line of function.
       lsp-enable-snippet nil                 ; Disable auto parameter insertions.
+      lsp-headerline-breadcrumb-enable nil   ; Disable header breadcrumbs, it's redundant w/ the modeline.
       lsp-file-watch-threshold 99999         ; Set a much higher file watch limit than the default 1000.
       flycheck-check-syntax-automatically '(save idle-change new-line mode-enabled)) ; Restore lsp-mode flycheck behavior.
 #+END_SRC
@@ -783,13 +787,13 @@ Let's make HTML look nicer. This is all taken from [[https://tecosaur.github.io/
               (doom-color 'cyan)
               (doom-color 'dark-cyan))
       "
-<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css'/>
-<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css'/>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/htmlize.css'/>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/readtheorg.css'/>
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
-<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js'></script>
-<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/lib/js/jquery.stickytableheaders.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/readtheorg/js/readtheorg.js'></script>
 
 <style>
    pre.src {
