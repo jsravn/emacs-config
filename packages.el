@@ -1,8 +1,8 @@
-;; [[file:../../../../tmp/config.org.9REwnS::*Custom Packages][Custom Packages:1]]
+;; [[file:../../../../tmp/config.org.8Xl6dj::*Custom Packages][Custom Packages:1]]
 ;; -*- no-byte-compile: t; -*-
 ;; Custom Packages:1 ends here
 
-;; [[file:../../../../tmp/config.org.9REwnS::*Package loading][Package loading:1]]
+;; [[file:../../../../tmp/config.org.8Xl6dj::*Package loading][Package loading:1]]
 ;; custom packages
 (package! atomic-chrome)    ;; integration with the atomic chrome extension
 (package! org-alert)

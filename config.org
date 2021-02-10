@@ -46,10 +46,10 @@ Use the default doom-one theme, and the very nice [[https://www.fsd.it/shop/font
 
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-one
-      doom-font (font-spec :family "PragmataPro Liga" :size 18)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 16)
-      doom-big-font (font-spec :family "PragmataPro Liga" :size 22)
-      doom-unicode-font (font-spec :family "Noto Color Emoji" :size 18)
+      doom-font (font-spec :family "PragmataPro Liga" :size 22)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 20)
+      doom-big-font (font-spec :family "PragmataPro Liga" :size 26)
+      doom-unicode-font (font-spec :family "Noto Color Emoji" :size 22)
       +pretty-code-pragmata-pro-font-name "PragmataPro Liga")
 
 #+END_SRC
@@ -116,7 +116,7 @@ obnoxious if done incorrectly, so I want it to only save when safe.
 First I use the built-in auto-save functionality to save the buffer after some idle time.
 
 #+BEGIN_SRC emacs-lisp
-(setq auto-save-visited-interval 30) ; Save after 30s of idle time.
+(setq auto-save-visited-interval 5) ; Save after 5s of idle time.
 (auto-save-visited-mode t)
 #+END_SRC
 
@@ -342,7 +342,7 @@ options.
         +roam
         +pretty)
        (python
-        +lsp +pyenv)
+        +lsp)
        sh
        scheme
        (yaml)
@@ -646,6 +646,12 @@ Disable showing tags in ref views - it slows them down substantially.
 * Languages
 This section configures language major modes.
 
+** Python
+
+#+begin_src emacs-lisp
+(setq lsp-python-ms-executable (executable-find "python-language-server"))
+#+end_src
+
 ** Golang
 Tweak the hover documentation of =gopls= so it shows more information when using ~+lookup/documentation~.
 
@@ -660,7 +666,7 @@ modify/adapt/use as you find useful.
 The most important thing is to tell org-mode where my org files are.
 
 #+BEGIN_SRC emacs-lisp
-(setq org-directory "~/Dropbox/Notes/")
+(setq org-directory "~/Notes/")
 #+END_SRC
 
 *** General settings
@@ -1071,10 +1077,10 @@ files.
 #+BEGIN_SRC emacs-lisp
 (after! org
   (setq
-   org-refile-targets '(("~/Dropbox/Notes/todo.org" :maxlevel . 2)
-                        ("~/Dropbox/Notes/someday.org" :maxlevel . 2)
-                        ("~/Dropbox/Notes/tickler.org" :maxlevel . 2)
-                        ("~/Dropbox/Notes/notes.org" :maxlevel . 2))))
+   org-refile-targets '(("~/Notes/todo.org" :maxlevel . 2)
+                        ("~/Notes/someday.org" :maxlevel . 2)
+                        ("~/Notes/tickler.org" :maxlevel . 2)
+                        ("~/Notes/notes.org" :maxlevel . 2))))
 #+END_SRC
 
 **** Habits
@@ -1111,16 +1117,16 @@ This is my all agenda function. It shows everything going on in my task system.
 (defun jsravn--all-agenda ()
   "Custom all agenda."
   `("A" "All agenda"
-    ((todo "" ((org-agenda-files '("~/Dropbox/Notes/inbox.org" "~/Dropbox/Notes/roam/inbox.org"))
+    ((todo "" ((org-agenda-files '("~/Notes/inbox.org" "~/Notes/roam/inbox.org"))
                (org-agenda-overriding-header "Inbox")))
-     (tags "-{.*}" ((org-agenda-files '("~/Dropbox/Notes/todo.org"
-                                        "~/Dropbox/Notes/tickler.org"
-                                        "~/Dropbox/Notes/someday.org"))
+     (tags "-{.*}" ((org-agenda-files '("~/Notes/todo.org"
+                                        "~/Notes/tickler.org"
+                                        "~/Notes/someday.org"))
                     (org-agenda-overriding-header "Untagged")))
      (agenda "" ((org-agenda-span 7)
                  (org-agenda-start-day "-1d")
-                 (org-agenda-files '("~/Dropbox/Notes/tickler.org"
-                                     "~/Dropbox/Notes/todo.org"))
+                 (org-agenda-files '("~/Notes/tickler.org"
+                                     "~/Notes/todo.org"))
                  (org-agenda-skip-function #'jsravn--skip-scheduled-if-in-todo)))
      ,(jsravn--tags-todo "@home" "Home")
      ,(jsravn--tags-todo "@work" "Work")
@@ -1140,8 +1146,8 @@ context, like =@home=.
     `(,key ,title
            ((agenda "" ((org-agenda-span 7)
                         (org-agenda-start-day "-1d")
-                        (org-agenda-files '("~/Dropbox/Notes/tickler.org"
-                                            "~/Dropbox/Notes/todo.org"))
+                        (org-agenda-files '("~/Notes/tickler.org"
+                                            "~/Notes/todo.org"))
                         (org-agenda-skip-function #'jsravn--skip-scheduled-if-in-todo)))
             ,(jsravn--tags-todo (concat tag "/!TODO") "Todo")
             ,(jsravn--tags-todo (concat tag "/!WAITING") "Waiting"))
@@ -1156,7 +1162,7 @@ This is a custom ~tags-todo~ view which only shows the first TODO in a subheadin
 #+BEGIN_SRC emacs-lisp
 (defun jsravn--tags-todo (tags header)
   "Customized tags-todo view which only shows the first TODO in a subheading."
-  `(tags-todo ,tags ((org-agenda-files '("~/Dropbox/Notes/todo.org"))
+  `(tags-todo ,tags ((org-agenda-files '("~/Notes/todo.org"))
                      (org-agenda-overriding-header ,header)
                      (org-agenda-skip-function #'jsravn--skip-all-siblings-but-first))))
 
