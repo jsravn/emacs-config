@@ -46,10 +46,10 @@ Use the default doom-one theme, and the very nice [[https://www.fsd.it/shop/font
 
 #+BEGIN_SRC emacs-lisp
 (setq doom-theme 'doom-one
-      doom-font (font-spec :family "PragmataPro Liga" :size 22)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 20)
-      doom-big-font (font-spec :family "PragmataPro Liga" :size 26)
-      doom-unicode-font (font-spec :family "Noto Color Emoji" :size 22)
+      doom-font (font-spec :family "PragmataPro Liga" :size 16)
+      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 14)
+      doom-big-font (font-spec :family "PragmataPro Liga" :size 20)
+      doom-unicode-font (font-spec :family "Noto Color Emoji" :size 16)
       +pretty-code-pragmata-pro-font-name "PragmataPro Liga")
 
 #+END_SRC
@@ -446,12 +446,12 @@ Just use pretty-code for the ligatures - so disable the symbol translation.
 (setq +pretty-code-symbols nil)
 #+END_SRC
 ** Completion
-Fix company causing minibuffer region to disappear (e.g. lsp ask root dialogue). Also add snippets to completion.
 
 #+BEGIN_SRC emacs-lisp
-(after! company
-  (remove-hook 'evil-normal-state-entry-hook #'company-abort))
+;; (after! company
+;;   (remove-hook 'evil-normal-state-entry-hook #'company-abort))
 
+(setq company-idle-delay 0.1)
 (setq +lsp-company-backends '(:separate company-yasnippet company-capf))
 #+END_SRC
 
