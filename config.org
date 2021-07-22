@@ -106,7 +106,7 @@ Exit immediately.
 Delete files to the local Trash folder, e.g. =~/.local/share/Trash= on Linux.
 
 #+BEGIN_SRC emacs-lisp
-(setq delete-by-moving-to-trash t)
+;(setq delete-by-moving-to-trash t)
 #+END_SRC
 
 Make undo more fine-grained.
@@ -221,13 +221,13 @@ goes into =packges.el=.
 
 #+BEGIN_SRC emacs-lisp :tangle "packages.el"
 ;; custom packages
-(package! atomic-chrome)    ;; integration with the atomic chrome extension
-(package! org-alert)
+;(package! atomic-chrome)    ;; integration with the atomic chrome extension
+;(package! org-alert)
 (package! caddyfile-mode)
 (package! protobuf-mode)
 
 ;; unpin these packages to use the latest always
-(unpin! org-roam)
+;(unpin! org-roam)
 (unpin! lsp-mode)
 #+END_SRC
 
@@ -283,8 +283,9 @@ options.
        (popup
         +all
         +defaults)
-       (ligatures
-        +pragmata-pro)
+       ligatures
+       ;; (ligatures
+       ;;  +pragmata-pro)
        treemacs
        vc-gutter
        vi-tilde-fringe
@@ -369,6 +370,13 @@ Set the search directories for projectile to auto-discovery projects.
 (setq projectile-project-search-path '("~/devel/" "~/sky" "~/gatech"))
 #+END_SRC
 
+Improve root guessing.
+
+#+begin_src emacs-lisp
+(after! projectile
+  (add-to-list 'projectile-project-root-files "go.mod"))
+#+end_src
+
 Clear the projectile cache when swapping branches in =magit= which will likely change the files in the project.
 
 #+BEGIN_SRC emacs-lisp
@@ -452,7 +460,7 @@ Just use pretty-code for the ligatures - so disable the symbol translation.
 ;;   (remove-hook 'evil-normal-state-entry-hook #'company-abort))
 
 (setq company-idle-delay 0.1)
-(setq +lsp-company-backends '(:separate company-yasnippet company-capf))
+(setq +lsp-company-backends '(:separate company-capf company-yasnippet))
 #+END_SRC
 
 ** Checkers configuration
@@ -645,8 +653,8 @@ Limit the number of topics that forge displays. I find the default a bit too lar
 Disable showing tags in ref views - it slows them down substantially.
 
 #+BEGIN_SRC emacs-lisp
-(after! magit-refs
-  (remove-hook 'magit-refs-sections-hook 'magit-insert-tags))
+;; (after! magit-refs
+;;   (remove-hook 'magit-refs-sections-hook 'magit-insert-tags))
 #+END_SRC
 
 * Languages

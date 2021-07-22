@@ -1,8 +1,8 @@
-;; [[file:../../../../tmp/config.org.ZRfssB::*File variables][File variables:2]]
+;; [[file:config.org::*File variables][File variables:2]]
 ;;; ~/.config/doom/init.el -*- lexical-binding: t; -*-
 ;; File variables:2 ends here
 
-;; [[file:../../../../tmp/config.org.ZRfssB::*Enable modules (init.el)][Enable modules (init.el):1]]
+;; [[file:config.org::*Enable modules (init.el)][Enable modules (init.el):1]]
 (doom!
        :completion
        (company
@@ -23,8 +23,9 @@
        (popup
         +all
         +defaults)
-       (ligatures
-        +pragmata-pro)
+       ligatures
+       ;; (ligatures
+       ;;  +pragmata-pro)
        treemacs
        vc-gutter
        vi-tilde-fringe
