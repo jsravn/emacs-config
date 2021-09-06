@@ -37,6 +37,9 @@
 (remove-hook 'doom-first-buffer-hook #'ws-butler-global-mode)
 (after! editorconfig
     (setq editorconfig-trim-whitespaces-mode nil))
+
+; Default doom threshold of 400 is too low in my experience.
+(after! so-long (setq so-long-threshold 4000))
 ;; Editor behavior:1 ends here
 
 ;; [[file:config.org::*Editor behavior][Editor behavior:2]]
@@ -182,7 +185,7 @@
 ;; (after! company
 ;;   (remove-hook 'evil-normal-state-entry-hook #'company-abort))
 
-(setq company-idle-delay 0.1)
+;(setq company-idle-delay 0.1)
 (setq +lsp-company-backends '(:separate company-capf company-yasnippet))
 ;; Completion:1 ends here
 

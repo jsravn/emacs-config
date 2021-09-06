@@ -87,6 +87,9 @@ Disable =ws-butler= mode in case it is causing LSP errors.
 (remove-hook 'doom-first-buffer-hook #'ws-butler-global-mode)
 (after! editorconfig
     (setq editorconfig-trim-whitespaces-mode nil))
+
+; Default doom threshold of 400 is too low in my experience.
+(after! so-long (setq so-long-threshold 4000))
 #+END_SRC
 
 Make whitespace-mode show more things.
@@ -228,7 +231,7 @@ goes into =packges.el=.
 
 ;; unpin these packages to use the latest always
 ;(unpin! org-roam)
-(unpin! lsp-mode)
+;(unpin! lsp-mode)
 #+END_SRC
 
 ** Package configuration
@@ -459,7 +462,7 @@ Just use pretty-code for the ligatures - so disable the symbol translation.
 ;; (after! company
 ;;   (remove-hook 'evil-normal-state-entry-hook #'company-abort))
 
-(setq company-idle-delay 0.1)
+;(setq company-idle-delay 0.1)
 (setq +lsp-company-backends '(:separate company-capf company-yasnippet))
 #+END_SRC
 

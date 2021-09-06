@@ -11,5 +11,5 @@
 
 ;; unpin these packages to use the latest always
 ;(unpin! org-roam)
-(unpin! lsp-mode)
+;(unpin! lsp-mode)
 ;; Package loading:1 ends here
