@@ -23,7 +23,7 @@
        (popup
         +all
         +defaults)
-       ligatures
+       ;;ligatures
        ;; (ligatures
        ;;  +pragmata-pro)
        treemacs
@@ -82,6 +82,7 @@
        (java +lsp)
        (javascript +lsp)
        markdown
+       (nim +lsp)
        nix
        (org
         +dragndrop

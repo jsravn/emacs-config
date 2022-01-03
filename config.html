@@ -3,14 +3,14 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-11-17 Tue 14:54 -->
+<!-- 2022-01-03 Mon 13:52 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Doom Emacs Configuration</title>
-<meta name="generator" content="Org mode" />
 <meta name="author" content="jsravn" />
-<style type="text/css">
- <!--/*--><![CDATA[/*><!--*/
+<meta name="generator" content="Org Mode" />
+<style>
+  #content { max-width: 60em; margin: auto; }
   .title  { text-align: center;
              margin-bottom: .2em; }
   .subtitle { text-align: center;
@@ -31,8 +31,9 @@
   #postamble p, #preamble p { font-size: 90%; margin: .2em; }
   p.verse { margin-left: 3%; }
   pre {
-    border: 1px solid #ccc;
-    box-shadow: 3px 3px 3px #eee;
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    background-color: #f2f2f2;
     padding: 8pt;
     font-family: monospace;
     overflow: auto;
@@ -41,21 +42,21 @@
   pre.src {
     position: relative;
     overflow: auto;
-    padding-top: 1.2em;
   }
   pre.src:before {
     display: none;
     position: absolute;
-    background-color: white;
-    top: -10px;
-    right: 10px;
+    top: -8px;
+    right: 12px;
     padding: 3px;
-    border: 1px solid black;
+    color: #555;
+    background-color: #f2f2f299;
   }
-  pre.src:hover:before { display: inline;}
+  pre.src:hover:before { display: inline; margin-top: 14px;}
   /* Languages per Org manual */
   pre.src-asymptote:before { content: 'Asymptote'; }
   pre.src-awk:before { content: 'Awk'; }
+  pre.src-authinfo::before { content: 'Authinfo'; }
   pre.src-C:before { content: 'C'; }
   /* pre.src-C++ doesn't work in CSS */
   pre.src-clojure:before { content: 'Clojure'; }
@@ -191,7 +192,6 @@
   .org-info-js_search-highlight
     { background-color: #ffff00; color: #000000; font-weight: bold; }
   .org-svg { width: 90%; }
-  /*]]>*/-->
 </style>
 <link rel='shortcut icon' type='image/png' href='https://www.gnu.org/software/emacs/favicon.png'>
 <!––tec/custom-head-start-->
@@ -224,13 +224,13 @@
       --theme-dark-cyan: #5699AF;
    }
 </style>
-<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css'/>
-<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css'/>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/htmlize.css'/>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/readtheorg.css'/>
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
 <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
-<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js'></script>
-<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/lib/js/jquery.stickytableheaders.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/readtheorg/js/readtheorg.js'></script>
 
 <style>
    pre.src {
@@ -377,169 +377,697 @@
    ::-webkit-scrollbar-thumb:hover { background:#888; }
 </style>
 <!––tec/custom-head-end-->
-<script type="text/javascript">
-// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
-<!--/*--><![CDATA[/*><!--*/
-     function CodeHighlightOn(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.add("code-highlighted");
-         target.classList.add("code-highlighted");
-       }
-     }
-     function CodeHighlightOff(elem, id)
-     {
-       var target = document.getElementById(id);
-       if(null != target) {
-         elem.classList.remove("code-highlighted");
-         target.classList.remove("code-highlighted");
-       }
-     }
-    /*]]>*///-->
-// @license-end
-</script>
+<!––tec/custom-head-start-->
+<style type="text/css">
+   :root {
+      --theme-bg: #282c34;
+      --theme-bg-alt: #21242b;
+      --theme-base0: #1B2229;
+      --theme-base1: #1c1f24;
+      --theme-base2: #202328;
+      --theme-base3: #23272e;
+      --theme-base4: #3f444a;
+      --theme-base5: #5B6268;
+      --theme-base6: #73797e;
+      --theme-base7: #9ca0a4;
+      --theme-base8: #DFDFDF;
+      --theme-fg: #bbc2cf;
+      --theme-fg-alt: #5B6268;
+      --theme-grey: #3f444a;
+      --theme-red: #ff6c6b;
+      --theme-orange: #da8548;
+      --theme-green: #98be65;
+      --theme-teal: #4db5bd;
+      --theme-yellow: #ECBE7B;
+      --theme-blue: #51afef;
+      --theme-dark-blue: #2257A0;
+      --theme-magenta: #c678dd;
+      --theme-violet: #a9a1e1;
+      --theme-cyan: #46D9FF;
+      --theme-dark-cyan: #5699AF;
+   }
+</style>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/htmlize.css'/>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/readtheorg.css'/>
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/lib/js/jquery.stickytableheaders.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/readtheorg/js/readtheorg.js'></script>
+
+<style>
+   pre.src {
+     background-color: var(--theme-bg);
+     color: var(--theme-fg);
+     scrollbar-color:#bbb6#9992;
+     scrollbar-width: thin;
+     margin: 0;
+     border: none;
+   }
+   div.org-src-container {
+     border-radius: 12px;
+     overflow: hidden;
+     margin-bottom: 24px;
+     margin-top: 1px;
+     border: 1px solid#e1e4e5;
+   }
+   pre.src::before {
+     background-color:#6666;
+     top: 8px;
+     border: none;
+     border-radius: 5px;
+     line-height: 1;
+     border: 2px solid var(--theme-bg);
+     opacity: 0;
+     transition: opacity 200ms;
+   }
+   pre.src:hover::before { opacity: 1; }
+   pre.src:active::before { opacity: 0; }
+
+   pre.example {
+     border-radius: 12px;
+     background: var(--theme-bg-alt);
+     color: var(--theme-fg);
+   }
+
+   code {
+     border-radius: 5px;
+     background:#e8e8e8;
+     font-size: 80%;
+   }
+
+   kbd {
+     display: inline-block;
+     padding: 3px 5px;
+     font: 80% SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+     line-height: normal;
+     line-height: 10px;
+     color:#444d56;
+     vertical-align: middle;
+     background-color:#fafbfc;
+     border: 1px solid#d1d5da;
+     border-radius: 3px;
+     box-shadow: inset 0 -1px 0#d1d5da;
+   }
+
+   table {
+     max-width: 100%;
+     overflow-x: auto;
+     display: block;
+     border-top: none;
+   }
+
+   a {
+       text-decoration: none;
+       background-image: linear-gradient(#d8dce9, #d8dce9);
+       background-position: 0% 100%;
+       background-repeat: no-repeat;
+       background-size: 0% 2px;
+       transition: background-size .3s;
+   }
+   #table-of-contents a {
+       background-image: none;
+   }
+   a:hover, a:focus {
+       background-size: 100% 2px;
+   }
+   a[href^='#'] { font-variant-numeric: oldstyle-nums; }
+   a[href^='#']:visited { color:#3091d1; }
+
+   li .checkbox {
+       display: inline-block;
+       width: 0.9em;
+       height: 0.9em;
+       border-radius: 3px;
+       margin: 3px;
+       top: 4px;
+       position: relative;
+   }
+   li.on > .checkbox { background: var(--theme-green); box-shadow: 0 0 2px var(--theme-green); }
+   li.trans > .checkbox { background: var(--theme-orange); box-shadow: 0 0 2px var(--theme-orange); }
+   li.off > .checkbox { background: var(--theme-red); box-shadow: 0 0 2px var(--theme-red); }
+   li.on > .checkbox::after {
+     content: '';
+     height: 0.45em;
+     width: 0.225em;
+     -webkit-transform-origin: left top;
+     transform-origin: left top;
+     transform: scaleX(-1) rotate(135deg);
+     border-right: 2.8px solid#fff;
+     border-top: 2.8px solid#fff;
+     opacity: 0.9;
+     left: 0.10em;
+     top: 0.45em;
+     position: absolute;
+   }
+   li.trans > .checkbox::after {
+       content: '';
+       font-weight: bold;
+       font-size: 1.6em;
+       position: absolute;
+       top: 0.23em;
+       left: 0.09em;
+       width: 0.35em;
+       height: 0.12em;
+       background:#fff;
+       opacity: 0.9;
+       border-radius: 0.1em;
+   }
+   li.off > .checkbox::after {
+    content: '✖';
+    color:#fff;
+    opacity: 0.9;
+    position: relative;
+    top: -0.40rem;
+    left: 0.17em;
+    font-size: 0.75em;
+  }
+
+   span.timestamp {
+       color: #003280;
+       background: #647CFF44;
+       border-radius: 3px;
+       line-height: 1.25;
+   }
+
+   #table-of-contents { overflow-y: auto; }
+   blockquote p { margin: 8px 0px 16px 0px; }
+   #postamble .date { color: var(--theme-green); }
+
+   ::-webkit-scrollbar { width: 10px; height: 8px; }
+   ::-webkit-scrollbar-track { background:#9992; }
+   ::-webkit-scrollbar-thumb { background:#ccc; border-radius: 10px; }
+   ::-webkit-scrollbar-thumb:hover { background:#888; }
+</style>
+<!––tec/custom-head-end-->
+<!––tec/custom-head-start-->
+<style type="text/css">
+   :root {
+      --theme-bg: #282c34;
+      --theme-bg-alt: #21242b;
+      --theme-base0: #1B2229;
+      --theme-base1: #1c1f24;
+      --theme-base2: #202328;
+      --theme-base3: #23272e;
+      --theme-base4: #3f444a;
+      --theme-base5: #5B6268;
+      --theme-base6: #73797e;
+      --theme-base7: #9ca0a4;
+      --theme-base8: #DFDFDF;
+      --theme-fg: #bbc2cf;
+      --theme-fg-alt: #5B6268;
+      --theme-grey: #3f444a;
+      --theme-red: #ff6c6b;
+      --theme-orange: #da8548;
+      --theme-green: #98be65;
+      --theme-teal: #4db5bd;
+      --theme-yellow: #ECBE7B;
+      --theme-blue: #51afef;
+      --theme-dark-blue: #2257A0;
+      --theme-magenta: #c678dd;
+      --theme-violet: #a9a1e1;
+      --theme-cyan: #46D9FF;
+      --theme-dark-cyan: #5699AF;
+   }
+</style>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/htmlize.css'/>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/readtheorg.css'/>
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/lib/js/jquery.stickytableheaders.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/readtheorg/js/readtheorg.js'></script>
+
+<style>
+   pre.src {
+     background-color: var(--theme-bg);
+     color: var(--theme-fg);
+     scrollbar-color:#bbb6#9992;
+     scrollbar-width: thin;
+     margin: 0;
+     border: none;
+   }
+   div.org-src-container {
+     border-radius: 12px;
+     overflow: hidden;
+     margin-bottom: 24px;
+     margin-top: 1px;
+     border: 1px solid#e1e4e5;
+   }
+   pre.src::before {
+     background-color:#6666;
+     top: 8px;
+     border: none;
+     border-radius: 5px;
+     line-height: 1;
+     border: 2px solid var(--theme-bg);
+     opacity: 0;
+     transition: opacity 200ms;
+   }
+   pre.src:hover::before { opacity: 1; }
+   pre.src:active::before { opacity: 0; }
+
+   pre.example {
+     border-radius: 12px;
+     background: var(--theme-bg-alt);
+     color: var(--theme-fg);
+   }
+
+   code {
+     border-radius: 5px;
+     background:#e8e8e8;
+     font-size: 80%;
+   }
+
+   kbd {
+     display: inline-block;
+     padding: 3px 5px;
+     font: 80% SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+     line-height: normal;
+     line-height: 10px;
+     color:#444d56;
+     vertical-align: middle;
+     background-color:#fafbfc;
+     border: 1px solid#d1d5da;
+     border-radius: 3px;
+     box-shadow: inset 0 -1px 0#d1d5da;
+   }
+
+   table {
+     max-width: 100%;
+     overflow-x: auto;
+     display: block;
+     border-top: none;
+   }
+
+   a {
+       text-decoration: none;
+       background-image: linear-gradient(#d8dce9, #d8dce9);
+       background-position: 0% 100%;
+       background-repeat: no-repeat;
+       background-size: 0% 2px;
+       transition: background-size .3s;
+   }
+   #table-of-contents a {
+       background-image: none;
+   }
+   a:hover, a:focus {
+       background-size: 100% 2px;
+   }
+   a[href^='#'] { font-variant-numeric: oldstyle-nums; }
+   a[href^='#']:visited { color:#3091d1; }
+
+   li .checkbox {
+       display: inline-block;
+       width: 0.9em;
+       height: 0.9em;
+       border-radius: 3px;
+       margin: 3px;
+       top: 4px;
+       position: relative;
+   }
+   li.on > .checkbox { background: var(--theme-green); box-shadow: 0 0 2px var(--theme-green); }
+   li.trans > .checkbox { background: var(--theme-orange); box-shadow: 0 0 2px var(--theme-orange); }
+   li.off > .checkbox { background: var(--theme-red); box-shadow: 0 0 2px var(--theme-red); }
+   li.on > .checkbox::after {
+     content: '';
+     height: 0.45em;
+     width: 0.225em;
+     -webkit-transform-origin: left top;
+     transform-origin: left top;
+     transform: scaleX(-1) rotate(135deg);
+     border-right: 2.8px solid#fff;
+     border-top: 2.8px solid#fff;
+     opacity: 0.9;
+     left: 0.10em;
+     top: 0.45em;
+     position: absolute;
+   }
+   li.trans > .checkbox::after {
+       content: '';
+       font-weight: bold;
+       font-size: 1.6em;
+       position: absolute;
+       top: 0.23em;
+       left: 0.09em;
+       width: 0.35em;
+       height: 0.12em;
+       background:#fff;
+       opacity: 0.9;
+       border-radius: 0.1em;
+   }
+   li.off > .checkbox::after {
+    content: '✖';
+    color:#fff;
+    opacity: 0.9;
+    position: relative;
+    top: -0.40rem;
+    left: 0.17em;
+    font-size: 0.75em;
+  }
+
+   span.timestamp {
+       color: #003280;
+       background: #647CFF44;
+       border-radius: 3px;
+       line-height: 1.25;
+   }
+
+   #table-of-contents { overflow-y: auto; }
+   blockquote p { margin: 8px 0px 16px 0px; }
+   #postamble .date { color: var(--theme-green); }
+
+   ::-webkit-scrollbar { width: 10px; height: 8px; }
+   ::-webkit-scrollbar-track { background:#9992; }
+   ::-webkit-scrollbar-thumb { background:#ccc; border-radius: 10px; }
+   ::-webkit-scrollbar-thumb:hover { background:#888; }
+</style>
+<!––tec/custom-head-end-->
+<!––tec/custom-head-start-->
+<style type="text/css">
+   :root {
+      --theme-bg: #282c34;
+      --theme-bg-alt: #21242b;
+      --theme-base0: #1B2229;
+      --theme-base1: #1c1f24;
+      --theme-base2: #202328;
+      --theme-base3: #23272e;
+      --theme-base4: #3f444a;
+      --theme-base5: #5B6268;
+      --theme-base6: #73797e;
+      --theme-base7: #9ca0a4;
+      --theme-base8: #DFDFDF;
+      --theme-fg: #bbc2cf;
+      --theme-fg-alt: #5B6268;
+      --theme-grey: #3f444a;
+      --theme-red: #ff6c6b;
+      --theme-orange: #da8548;
+      --theme-green: #98be65;
+      --theme-teal: #4db5bd;
+      --theme-yellow: #ECBE7B;
+      --theme-blue: #51afef;
+      --theme-dark-blue: #2257A0;
+      --theme-magenta: #c678dd;
+      --theme-violet: #a9a1e1;
+      --theme-cyan: #46D9FF;
+      --theme-dark-cyan: #5699AF;
+   }
+</style>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/htmlize.css'/>
+<link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/org/readtheorg/css/readtheorg.css'/>
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/lib/js/jquery.stickytableheaders.min.js'></script>
+<script type='text/javascript' src='https://fniessen.github.io/org-html-themes/org/readtheorg/js/readtheorg.js'></script>
+
+<style>
+   pre.src {
+     background-color: var(--theme-bg);
+     color: var(--theme-fg);
+     scrollbar-color:#bbb6#9992;
+     scrollbar-width: thin;
+     margin: 0;
+     border: none;
+   }
+   div.org-src-container {
+     border-radius: 12px;
+     overflow: hidden;
+     margin-bottom: 24px;
+     margin-top: 1px;
+     border: 1px solid#e1e4e5;
+   }
+   pre.src::before {
+     background-color:#6666;
+     top: 8px;
+     border: none;
+     border-radius: 5px;
+     line-height: 1;
+     border: 2px solid var(--theme-bg);
+     opacity: 0;
+     transition: opacity 200ms;
+   }
+   pre.src:hover::before { opacity: 1; }
+   pre.src:active::before { opacity: 0; }
+
+   pre.example {
+     border-radius: 12px;
+     background: var(--theme-bg-alt);
+     color: var(--theme-fg);
+   }
+
+   code {
+     border-radius: 5px;
+     background:#e8e8e8;
+     font-size: 80%;
+   }
+
+   kbd {
+     display: inline-block;
+     padding: 3px 5px;
+     font: 80% SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
+     line-height: normal;
+     line-height: 10px;
+     color:#444d56;
+     vertical-align: middle;
+     background-color:#fafbfc;
+     border: 1px solid#d1d5da;
+     border-radius: 3px;
+     box-shadow: inset 0 -1px 0#d1d5da;
+   }
+
+   table {
+     max-width: 100%;
+     overflow-x: auto;
+     display: block;
+     border-top: none;
+   }
+
+   a {
+       text-decoration: none;
+       background-image: linear-gradient(#d8dce9, #d8dce9);
+       background-position: 0% 100%;
+       background-repeat: no-repeat;
+       background-size: 0% 2px;
+       transition: background-size .3s;
+   }
+   #table-of-contents a {
+       background-image: none;
+   }
+   a:hover, a:focus {
+       background-size: 100% 2px;
+   }
+   a[href^='#'] { font-variant-numeric: oldstyle-nums; }
+   a[href^='#']:visited { color:#3091d1; }
+
+   li .checkbox {
+       display: inline-block;
+       width: 0.9em;
+       height: 0.9em;
+       border-radius: 3px;
+       margin: 3px;
+       top: 4px;
+       position: relative;
+   }
+   li.on > .checkbox { background: var(--theme-green); box-shadow: 0 0 2px var(--theme-green); }
+   li.trans > .checkbox { background: var(--theme-orange); box-shadow: 0 0 2px var(--theme-orange); }
+   li.off > .checkbox { background: var(--theme-red); box-shadow: 0 0 2px var(--theme-red); }
+   li.on > .checkbox::after {
+     content: '';
+     height: 0.45em;
+     width: 0.225em;
+     -webkit-transform-origin: left top;
+     transform-origin: left top;
+     transform: scaleX(-1) rotate(135deg);
+     border-right: 2.8px solid#fff;
+     border-top: 2.8px solid#fff;
+     opacity: 0.9;
+     left: 0.10em;
+     top: 0.45em;
+     position: absolute;
+   }
+   li.trans > .checkbox::after {
+       content: '';
+       font-weight: bold;
+       font-size: 1.6em;
+       position: absolute;
+       top: 0.23em;
+       left: 0.09em;
+       width: 0.35em;
+       height: 0.12em;
+       background:#fff;
+       opacity: 0.9;
+       border-radius: 0.1em;
+   }
+   li.off > .checkbox::after {
+    content: '✖';
+    color:#fff;
+    opacity: 0.9;
+    position: relative;
+    top: -0.40rem;
+    left: 0.17em;
+    font-size: 0.75em;
+  }
+
+   span.timestamp {
+       color: #003280;
+       background: #647CFF44;
+       border-radius: 3px;
+       line-height: 1.25;
+   }
+
+   #table-of-contents { overflow-y: auto; }
+   blockquote p { margin: 8px 0px 16px 0px; }
+   #postamble .date { color: var(--theme-green); }
+
+   ::-webkit-scrollbar { width: 10px; height: 8px; }
+   ::-webkit-scrollbar-track { background:#9992; }
+   ::-webkit-scrollbar-thumb { background:#ccc; border-radius: 10px; }
+   ::-webkit-scrollbar-thumb:hover { background:#888; }
+</style>
+<!––tec/custom-head-end-->
 </head>
 <body>
-<div id="content">
+<div id="content" class="content">
 <h1 class="title">Doom Emacs Configuration</h1>
-<div id="table-of-contents">
+<div id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
-<div id="text-table-of-contents">
+<div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org2ebe748">1. Intro</a></li>
-<li><a href="#org82525fd">2. General configuration</a>
+<li><a href="#orgf0078ab">1. Intro</a></li>
+<li><a href="#org5f03c21">2. General configuration</a>
 <ul>
-<li><a href="#orgbb03ec0">2.1. File variables</a></li>
-<li><a href="#org84cef11">2.2. Personal information</a></li>
-<li><a href="#org104b0f8">2.3. Visual Settings</a>
+<li><a href="#orgc67110d">2.1. File variables</a></li>
+<li><a href="#org334158f">2.2. Personal information</a></li>
+<li><a href="#orge2ccd7c">2.3. Visual Settings</a>
 <ul>
-<li><a href="#orgee5d49b">2.3.1. Theme</a></li>
-<li><a href="#org97f2394">2.3.2. Mixed pitch mode</a></li>
-<li><a href="#orgaefab6e">2.3.3. Maximize</a></li>
+<li><a href="#org3758bb6">2.3.1. Theme</a></li>
+<li><a href="#org029bf3b">2.3.2. Mixed pitch mode</a></li>
+<li><a href="#orgab483ff">2.3.3. Maximize</a></li>
 </ul>
 </li>
-<li><a href="#orgebe2fab">2.4. Editor behavior</a>
+<li><a href="#org67846aa">2.4. Editor behavior</a>
 <ul>
-<li><a href="#org934ec5d">2.4.1. Deletion</a></li>
-<li><a href="#org14db34e">2.4.2. Auto-save</a></li>
-<li><a href="#orga7aa4ad">2.4.3. Line wrapping</a></li>
-<li><a href="#org2b9e0ad">2.4.4. Window splitting</a></li>
-<li><a href="#org6fa7c34">2.4.5. Clipboard and Copy/Paste</a></li>
-<li><a href="#orgf51aed6">2.4.6. Which-key</a></li>
+<li><a href="#orgfe1fe95">2.4.1. Deletion</a></li>
+<li><a href="#org6e85458">2.4.2. Auto-save</a></li>
+<li><a href="#orgd2a2958">2.4.3. Line wrapping</a></li>
+<li><a href="#orgb446060">2.4.4. Window splitting</a></li>
+<li><a href="#org6887ef8">2.4.5. Clipboard and Copy/Paste</a></li>
+<li><a href="#orgeebb3cf">2.4.6. Which-key</a></li>
 </ul>
 </li>
-<li><a href="#org803f918">2.5. Authinfo</a></li>
+<li><a href="#orged023a1">2.5. Authinfo</a></li>
 </ul>
 </li>
-<li><a href="#orga730b59">3. Custom Packages</a>
+<li><a href="#org150a462">3. Custom Packages</a>
 <ul>
-<li><a href="#org7be1096">3.1. Package loading</a></li>
-<li><a href="#org0d6f695">3.2. Package configuration</a>
+<li><a href="#orgffc93ce">3.1. Package loading</a></li>
+<li><a href="#org6db4364">3.2. Package configuration</a>
 <ul>
-<li><a href="#org9fbf3e4">3.2.1. atomic-chrome configuration</a></li>
-<li><a href="#orgeb96561">3.2.2. caddyfile-mode</a></li>
+<li><a href="#org2c3d7aa">3.2.1. atomic-chrome configuration</a></li>
+<li><a href="#org56dc0ec">3.2.2. caddyfile-mode</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgdb818cd">4. Modules</a>
+<li><a href="#org1b744c8">4. Modules</a>
 <ul>
-<li><a href="#orgac3be53">4.1. Enable modules (init.el)</a></li>
-<li><a href="#org484942b">4.2. Core configuration</a>
+<li><a href="#orgb0dd169">4.1. Enable modules (init.el)</a></li>
+<li><a href="#org1e212d8">4.2. Core configuration</a>
 <ul>
-<li><a href="#orgac77838">4.2.1. Projects</a></li>
-<li><a href="#org3b901df">4.2.2. Smart parentheses</a></li>
-<li><a href="#orgbf0961d">4.2.3. Dired</a></li>
+<li><a href="#org7f79798">4.2.1. Projects</a></li>
+<li><a href="#org7de831f">4.2.2. Smart parentheses</a></li>
+<li><a href="#org047b9e2">4.2.3. Dired</a></li>
 </ul>
 </li>
-<li><a href="#org5042011">4.3. UI configuration</a>
+<li><a href="#org36e29e7">4.3. UI configuration</a>
 <ul>
-<li><a href="#orgae9b3fb">4.3.1. Workspaces</a></li>
-<li><a href="#org1eab908">4.3.2. Zen</a></li>
-<li><a href="#org6e111ff">4.3.3. Treemacs</a></li>
-<li><a href="#org48924b3">4.3.4. Pretty-code</a></li>
+<li><a href="#orge8fad37">4.3.1. Workspaces</a></li>
+<li><a href="#org7ef8505">4.3.2. Zen</a></li>
+<li><a href="#org842f61c">4.3.3. Treemacs</a></li>
+<li><a href="#orgfeb01a0">4.3.4. Pretty-code</a></li>
 </ul>
 </li>
-<li><a href="#orgbd7f941">4.4. Completion</a></li>
-<li><a href="#orgdc4d2e3">4.5. Checkers configuration</a>
+<li><a href="#org480b986">4.4. Completion</a></li>
+<li><a href="#orgf0a6cc8">4.5. Checkers configuration</a>
 <ul>
-<li><a href="#orgf7933cc">4.5.1. Flyspell</a></li>
+<li><a href="#org9a2eaab">4.5.1. Flyspell</a></li>
 </ul>
 </li>
-<li><a href="#orgfe33ab7">4.6. Email configuration (mu4e)</a>
+<li><a href="#org0173cd7">4.6. Email configuration (mu4e)</a>
 <ul>
 <li>
 <ul>
-<li><a href="#org51be591">4.6.0.1. Prerequisites</a></li>
-<li><a href="#org53914c6">4.6.0.2. Configuration</a></li>
+<li><a href="#org3b0a24e">4.6.0.1. Prerequisites</a></li>
+<li><a href="#org35b29f5">4.6.0.2. Configuration</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#org4b5eeca">4.7. Tools configuration</a>
+<li><a href="#org450c00c">4.7. Tools configuration</a>
 <ul>
-<li><a href="#orgbceabf2">4.7.1. Language Server Protocol (LSP)</a></li>
-<li><a href="#org71bd13d">4.7.2. Magit</a></li>
+<li><a href="#org7b40506">4.7.1. Language Server Protocol (LSP)</a></li>
+<li><a href="#orgafd9050">4.7.2. Magit</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orge8ed05c">5. Languages</a>
+<li><a href="#org994c9dd">5. Languages</a>
 <ul>
-<li><a href="#org7f56f50">5.1. Golang</a></li>
-<li><a href="#org4b7d684">5.2. Org Mode</a>
+<li><a href="#org46f81fe">5.1. Python</a></li>
+<li><a href="#org40fdce9">5.2. Golang</a></li>
+<li><a href="#org4a2ac43">5.3. Org Mode</a>
 <ul>
-<li><a href="#org1bb3251">5.2.1. General settings</a>
+<li><a href="#org8888ae1">5.3.1. General settings</a>
 <ul>
-<li><a href="#org2f66763">5.2.1.1. Editor</a></li>
-<li><a href="#org5a10098">5.2.1.2. Visuals</a></li>
-<li><a href="#orgbdc02c9">5.2.1.3. Archiving</a></li>
-<li><a href="#org68f6a6d">5.2.1.4. Download</a></li>
-<li><a href="#org1795bc7">5.2.1.5. Exporting (General)</a></li>
-<li><a href="#orgb91b4da">5.2.1.6. Exporting to HTML</a></li>
-<li><a href="#orgf99f488">5.2.1.7. Exporting to Beamer</a></li>
-<li><a href="#orgb00e866">5.2.1.8. Exporting to GFM</a></li>
+<li><a href="#org7f23163">5.3.1.1. Editor</a></li>
+<li><a href="#org23bea86">5.3.1.2. Visuals</a></li>
+<li><a href="#orgd603434">5.3.1.3. Archiving</a></li>
+<li><a href="#orgcdf2710">5.3.1.4. Download</a></li>
+<li><a href="#orgccbb8d5">5.3.1.5. Exporting (General)</a></li>
+<li><a href="#org4e8c679">5.3.1.6. Exporting to HTML</a></li>
+<li><a href="#orgab60775">5.3.1.7. Exporting to Beamer</a></li>
+<li><a href="#org82e4f16">5.3.1.8. Exporting to GFM</a></li>
 </ul>
 </li>
-<li><a href="#orgcdb8aa1">5.2.2. Task management</a>
+<li><a href="#org334b0ca">5.3.2. Task management</a>
 <ul>
-<li><a href="#org6f63af6">5.2.2.1. Capture templates</a></li>
-<li><a href="#orgb937d3f">5.2.2.2. Task settings</a></li>
-<li><a href="#org8f43f60">5.2.2.3. Contexts</a></li>
-<li><a href="#org5526898">5.2.2.4. Refile targets</a></li>
-<li><a href="#orge31a165">5.2.2.5. Habits</a></li>
-<li><a href="#org095e043">5.2.2.6. Custom Agendas</a>
+<li><a href="#orge24a28a">5.3.2.1. Capture templates</a></li>
+<li><a href="#orgd77ddca">5.3.2.2. Task settings</a></li>
+<li><a href="#org9478d1a">5.3.2.3. Contexts</a></li>
+<li><a href="#org9fc1652">5.3.2.4. Refile targets</a></li>
+<li><a href="#org5384cec">5.3.2.5. Habits</a></li>
+<li><a href="#org30e28fb">5.3.2.6. Custom Agendas</a>
 <ul>
-<li><a href="#orgb860953">5.2.2.6.1. All Agenda Function</a></li>
-<li><a href="#org1b6eaf9">5.2.2.6.2. Context Agenda Function</a></li>
-<li><a href="#org0329a0f">5.2.2.6.3. Agenda Support Functions</a></li>
+<li><a href="#org3669ff0">5.3.2.6.1. All Agenda Function</a></li>
+<li><a href="#org92595ff">5.3.2.6.2. Context Agenda Function</a></li>
+<li><a href="#org9413e4e">5.3.2.6.3. Agenda Support Functions</a></li>
 </ul>
 </li>
-<li><a href="#org5e0f916">5.2.2.7. Agenda Searches</a></li>
+<li><a href="#orgf2dde94">5.3.2.7. Agenda Searches</a></li>
 </ul>
 </li>
-<li><a href="#org69c95f2">5.2.3. Notes</a>
+<li><a href="#org89d5454">5.3.3. Notes</a>
 <ul>
-<li><a href="#org652bbd9">5.2.3.1. org-roam</a></li>
-<li><a href="#org376fdf5">5.2.3.2. org-journal</a></li>
+<li><a href="#org9c19013">5.3.3.1. org-roam</a></li>
+<li><a href="#orgf36bbba">5.3.3.2. org-journal</a></li>
 </ul>
 </li>
-<li><a href="#org2380358">5.2.4. Calendar</a></li>
-<li><a href="#orgc71bbb1">5.2.5. Alerts</a></li>
+<li><a href="#org7724e04">5.3.4. Calendar</a></li>
+<li><a href="#org1c7a76b">5.3.5. Alerts</a></li>
 </ul>
 </li>
-<li><a href="#org3b28c05">5.3. YAML</a></li>
-<li><a href="#org21acfcc">5.4. cuda</a></li>
-<li><a href="#orgf544702">5.5. cc</a></li>
+<li><a href="#org74f97b8">5.4. YAML</a></li>
+<li><a href="#org80846a2">5.5. cuda</a></li>
+<li><a href="#org4a41510">5.6. cc</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org2ebe748" class="outline-2">
-<h2 id="org2ebe748"><span class="section-number-2">1</span> Intro</h2>
+<div id="outline-container-orgf0078ab" class="outline-2">
+<h2 id="orgf0078ab"><span class="section-number-2">1.</span> Intro</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 This is my foray into the world of literate Emacs configuration. I think I may have finally lost it. But let&rsquo;s give it a
@@ -561,12 +1089,12 @@ I use <a href="https://github.com/hlissner/doom-emacs">doom-emacs</a> as my core
 </div>
 </div>
 
-<div id="outline-container-org82525fd" class="outline-2">
-<h2 id="org82525fd"><span class="section-number-2">2</span> General configuration</h2>
+<div id="outline-container-org5f03c21" class="outline-2">
+<h2 id="org5f03c21"><span class="section-number-2">2.</span> General configuration</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgbb03ec0" class="outline-3">
-<h3 id="orgbb03ec0"><span class="section-number-3">2.1</span> File variables</h3>
+<div id="outline-container-orgc67110d" class="outline-3">
+<h3 id="orgc67110d"><span class="section-number-3">2.1.</span> File variables</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 This configures the file variables for <kbd>config.el</kbd> and <kbd>init.el</kbd>. Apparently <a href="https://nullprogram.com/blog/2016/12/22/">enabling lexical binding</a> makes them faster to
@@ -585,8 +1113,8 @@ process.
 </div>
 </div>
 
-<div id="outline-container-org84cef11" class="outline-3">
-<h3 id="org84cef11"><span class="section-number-3">2.2</span> Personal information</h3>
+<div id="outline-container-org334158f" class="outline-3">
+<h3 id="org334158f"><span class="section-number-3">2.2.</span> Personal information</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 This contains various bits about myself that Emacs likes to use in various modules.
@@ -603,29 +1131,33 @@ This contains various bits about myself that Emacs likes to use in various modul
 </div>
 </div>
 
-<div id="outline-container-org104b0f8" class="outline-3">
-<h3 id="org104b0f8"><span class="section-number-3">2.3</span> Visual Settings</h3>
+<div id="outline-container-orge2ccd7c" class="outline-3">
+<h3 id="orge2ccd7c"><span class="section-number-3">2.3.</span> Visual Settings</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 This tweaks the visuals to my liking.
 </p>
 </div>
 
-<div id="outline-container-orgee5d49b" class="outline-4">
-<h4 id="orgee5d49b"><span class="section-number-4">2.3.1</span> Theme</h4>
+<div id="outline-container-org3758bb6" class="outline-4">
+<h4 id="org3758bb6"><span class="section-number-4">2.3.1.</span> Theme</h4>
 <div class="outline-text-4" id="text-2-3-1">
 <p>
 Use the default doom-one theme, and the very nice <a href="https://www.fsd.it/shop/fonts/pragmatapro/">PragmataPro</a> font.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">doom-theme</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">doom-one</span>
-      <span style="color: #dcaeea;">doom-font</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">font-spec</span> <span style="color: #c678dd;">:family</span> <span style="color: #98be65;">"PragmataPro Liga"</span> <span style="color: #c678dd;">:size</span> <span style="color: #da8548; font-weight: bold;">16</span><span style="color: #c678dd;">)</span>
-      <span style="color: #dcaeea;">doom-variable-pitch-font</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">font-spec</span> <span style="color: #c678dd;">:family</span> <span style="color: #98be65;">"DejaVu Sans"</span> <span style="color: #c678dd;">:size</span> <span style="color: #da8548; font-weight: bold;">14</span><span style="color: #c678dd;">)</span>
-      <span style="color: #dcaeea;">doom-big-font</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">font-spec</span> <span style="color: #c678dd;">:family</span> <span style="color: #98be65;">"PragmataPro Liga"</span> <span style="color: #c678dd;">:size</span> <span style="color: #da8548; font-weight: bold;">20</span><span style="color: #c678dd;">)</span>
-      <span style="color: #dcaeea;">doom-unicode-font</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">font-spec</span> <span style="color: #c678dd;">:family</span> <span style="color: #98be65;">"Noto Color Emoji"</span> <span style="color: #c678dd;">:size</span> <span style="color: #da8548; font-weight: bold;">16</span><span style="color: #c678dd;">)</span>
-      +pretty-code-pragmata-pro-font-name <span style="color: #98be65;">"PragmataPro Liga"</span><span style="color: #51afef;">)</span>
-
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">letrec</span> <span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span>base
+          <span style="color: #5B6268;">; </span><span style="color: #5B6268;">adjust font size based on system</span>
+          <span style="color: #a9a1e1;">(</span><span style="color: #51afef;">cond</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">equal</span> <span style="color: #98be65;">"loki"</span> <span style="color: #98be65;">(</span><span style="color: #dcaeea;">system-name</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span> <span style="color: #da8548; font-weight: bold;">8</span><span style="color: #51afef;">)</span>
+                 <span style="color: #51afef;">(</span>t <span style="color: #da8548; font-weight: bold;">0</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">doom-theme</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">doom-one</span>
+        <span style="color: #dcaeea;">doom-font</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">font-spec</span> <span style="color: #c678dd;">:family</span> <span style="color: #98be65;">"PragmataPro Liga"</span> <span style="color: #c678dd;">:size</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">+</span> base <span style="color: #da8548; font-weight: bold;">16</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
+        <span style="color: #dcaeea;">doom-variable-pitch-font</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">font-spec</span> <span style="color: #c678dd;">:family</span> <span style="color: #98be65;">"DejaVu Sans"</span> <span style="color: #c678dd;">:size</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">+</span> base <span style="color: #da8548; font-weight: bold;">14</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
+        <span style="color: #dcaeea;">doom-big-font</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">font-spec</span> <span style="color: #c678dd;">:family</span> <span style="color: #98be65;">"PragmataPro Liga"</span> <span style="color: #c678dd;">:size</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">+</span> base <span style="color: #da8548; font-weight: bold;">20</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
+        <span style="color: #dcaeea;">doom-unicode-font</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">font-spec</span> <span style="color: #c678dd;">:family</span> <span style="color: #98be65;">"Noto Color Emoji"</span> <span style="color: #c678dd;">:size</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">+</span> base <span style="color: #da8548; font-weight: bold;">16</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
+        +pretty-code-pragmata-pro-font-name <span style="color: #98be65;">"PragmataPro Liga"</span><span style="color: #c678dd;">)</span>
+  <span style="color: #51afef;">)</span>
 </pre>
 </div>
 
@@ -635,14 +1167,14 @@ Keep the splash screen clean.
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">fancy-splash-image</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">doom-private-dir</span> <span style="color: #98be65;">"splash.png"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-<span style="color: #51afef;">(</span><span style="color: #c678dd;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">+doom-dashboard-functions</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">doom-dashboard-widget-shortmenu</span><span style="color: #51afef;">)</span>
+<span style="color: #51afef;">(</span><span style="color: #a9a1e1;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">+doom-dashboard-functions</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">doom-dashboard-widget-shortmenu</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org97f2394" class="outline-4">
-<h4 id="org97f2394"><span class="section-number-4">2.3.2</span> Mixed pitch mode</h4>
+<div id="outline-container-org029bf3b" class="outline-4">
+<h4 id="org029bf3b"><span class="section-number-4">2.3.2.</span> Mixed pitch mode</h4>
 <div class="outline-text-4" id="text-2-3-2">
 <p>
 Enable <kbd>mixed-pitch-mode</kbd> for some text modes. Also ensure it preserves the variable pitch height rather than inheriting from
@@ -657,8 +1189,8 @@ the default face.
 </div>
 </div>
 
-<div id="outline-container-orgaefab6e" class="outline-4">
-<h4 id="orgaefab6e"><span class="section-number-4">2.3.3</span> Maximize</h4>
+<div id="outline-container-orgab483ff" class="outline-4">
+<h4 id="orgab483ff"><span class="section-number-4">2.3.3.</span> Maximize</h4>
 <div class="outline-text-4" id="text-2-3-3">
 <p>
 Maximize the frame when doom starts. I prefer it always opening up this way. Note this has no real effect if using a
@@ -673,8 +1205,8 @@ tiling WM.
 </div>
 </div>
 
-<div id="outline-container-orgebe2fab" class="outline-3">
-<h3 id="orgebe2fab"><span class="section-number-3">2.4</span> Editor behavior</h3>
+<div id="outline-container-org67846aa" class="outline-3">
+<h3 id="org67846aa"><span class="section-number-3">2.4.</span> Editor behavior</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 This tweaks the general editor behavior to my liking.
@@ -685,22 +1217,44 @@ Disable <kbd>ws-butler</kbd> mode in case it is causing LSP errors.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #c678dd;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">doom-first-buffer-hook</span> <span style="color: #51afef;">#'</span><span style="color: #dcaeea;">ws-butler-global-mode</span><span style="color: #51afef;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #a9a1e1;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">doom-first-buffer-hook</span> <span style="color: #51afef;">#'</span><span style="color: #dcaeea;">ws-butler-global-mode</span><span style="color: #51afef;">)</span>
 <span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> editorconfig
     <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">editorconfig-trim-whitespaces-mode</span> nil<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+
+<span style="color: #5B6268;">; </span><span style="color: #5B6268;">Default doom threshold of 400 is too low in my experience.</span>
+<span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> so-long <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">so-long-threshold</span> <span style="color: #da8548; font-weight: bold;">4000</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+</pre>
+</div>
+
+<p>
+Make whitespace-mode show more things.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">whitespace-style</span> <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span>face indentation trailing lines-tail<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+<span style="color: #51afef;">(</span><span style="color: #dcaeea;">global-whitespace-mode</span> t<span style="color: #51afef;">)</span>
+</pre>
+</div>
+
+<p>
+Exit immediately.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">confirm-kill-emacs</span> nil<span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org934ec5d" class="outline-4">
-<h4 id="org934ec5d"><span class="section-number-4">2.4.1</span> Deletion</h4>
+<div id="outline-container-orgfe1fe95" class="outline-4">
+<h4 id="orgfe1fe95"><span class="section-number-4">2.4.1.</span> Deletion</h4>
 <div class="outline-text-4" id="text-2-4-1">
 <p>
 Delete files to the local Trash folder, e.g. <kbd>~/.local/share/Trash</kbd> on Linux.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">delete-by-moving-to-trash</span> t<span style="color: #51afef;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #5B6268;">;</span><span style="color: #5B6268;">(setq delete-by-moving-to-trash t)</span>
 </pre>
 </div>
 
@@ -715,8 +1269,8 @@ Make undo more fine-grained.
 </div>
 </div>
 
-<div id="outline-container-org14db34e" class="outline-4">
-<h4 id="org14db34e"><span class="section-number-4">2.4.2</span> Auto-save</h4>
+<div id="outline-container-org6e85458" class="outline-4">
+<h4 id="org6e85458"><span class="section-number-4">2.4.2.</span> Auto-save</h4>
 <div class="outline-text-4" id="text-2-4-2">
 <p>
 I want Emacs to auto-save files I&rsquo;m working on to avoid the tedium of manual saving all the time. Auto save can be
@@ -728,7 +1282,7 @@ First I use the built-in auto-save functionality to save the buffer after some i
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">auto-save-visited-interval</span> <span style="color: #da8548; font-weight: bold;">30</span><span style="color: #51afef;">)</span> <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Save after 30s of idle time.</span>
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">auto-save-visited-interval</span> <span style="color: #da8548; font-weight: bold;">5</span><span style="color: #51afef;">)</span> <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Save after 5s of idle time.</span>
 <span style="color: #51afef;">(</span><span style="color: #dcaeea;">auto-save-visited-mode</span> t<span style="color: #51afef;">)</span>
 </pre>
 </div>
@@ -741,16 +1295,16 @@ when interacting with popups, I only save when swapping between file buffers and
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">add-hook!</span> <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span><span style="color: #dcaeea;">doom-switch-buffer-hook</span>
              <span style="color: #dcaeea;">doom-switch-window-hook</span><span style="color: #c678dd;">)</span>
-  <span style="color: #c678dd;">(</span><span style="color: #51afef;">if</span> <span style="color: #98be65;">(</span><span style="color: #dcaeea;">buffer-file-name</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">save-some-buffers</span> t<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span> <span style="color: #5B6268;">; </span><span style="color: #5B6268;">avoid saving when switching to a non-file buffer</span>
+  <span style="color: #c678dd;">(</span><span style="color: #51afef;">if</span> <span style="color: #98be65;">(</span><span style="color: #dcaeea;">buffer-file-name</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">save-some-buffers</span> t<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span> <span style="color: #5B6268;">; </span><span style="color: #5B6268;">avoid saving when switching to a non-file buffer</span>
 <span style="color: #51afef;">(</span><span style="color: #51afef;">add-function</span> <span style="color: #c678dd;">:after</span> <span style="color: #dcaeea;">after-focus-change-function</span>
-              <span style="color: #c678dd;">(</span><span style="color: #51afef;">lambda</span> <span style="color: #98be65;">()</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">save-some-buffers</span> t<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #51afef;">lambda</span> <span style="color: #98be65;">()</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">save-some-buffers</span> t<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orga7aa4ad" class="outline-4">
-<h4 id="orga7aa4ad"><span class="section-number-4">2.4.3</span> Line wrapping</h4>
+<div id="outline-container-orgd2a2958" class="outline-4">
+<h4 id="orgd2a2958"><span class="section-number-4">2.4.3.</span> Line wrapping</h4>
 <div class="outline-text-4" id="text-2-4-3">
 <p>
 Fill column primarily affects how Emacs breaks lines in <code>auto-fill-mode</code>. The default is 80. I set it to 120 which is a
@@ -779,8 +1333,8 @@ this for now as I&rsquo;ve come to like auto-fill mode as the default.</span>
 </div>
 </div>
 
-<div id="outline-container-org2b9e0ad" class="outline-4">
-<h4 id="org2b9e0ad"><span class="section-number-4">2.4.4</span> Window splitting</h4>
+<div id="outline-container-orgb446060" class="outline-4">
+<h4 id="orgb446060"><span class="section-number-4">2.4.4.</span> Window splitting</h4>
 <div class="outline-text-4" id="text-2-4-4">
 <p>
 These changes makes window splitting a bit nicer.
@@ -808,8 +1362,8 @@ I increase it to make Emacs more conservative.
 </div>
 </div>
 
-<div id="outline-container-org6fa7c34" class="outline-4">
-<h4 id="org6fa7c34"><span class="section-number-4">2.4.5</span> Clipboard and Copy/Paste</h4>
+<div id="outline-container-org6887ef8" class="outline-4">
+<h4 id="org6887ef8"><span class="section-number-4">2.4.5.</span> Clipboard and Copy/Paste</h4>
 <div class="outline-text-4" id="text-2-4-5">
 <p>
 I want to integrate Emacs with the system clipboard. All copy/paste goes into and takes from the system clipboard. This allows
@@ -832,8 +1386,8 @@ And allow pasting from system clipboard with the typical Linux <kbd>C-S-v</kbd> 
 </div>
 </div>
 </div>
-<div id="outline-container-orgf51aed6" class="outline-4">
-<h4 id="orgf51aed6"><span class="section-number-4">2.4.6</span> Which-key</h4>
+<div id="outline-container-orgeebb3cf" class="outline-4">
+<h4 id="orgeebb3cf"><span class="section-number-4">2.4.6.</span> Which-key</h4>
 <div class="outline-text-4" id="text-2-4-6">
 <p>
 Reduce the popup delay for <kbd>which-key</kbd>.
@@ -847,8 +1401,8 @@ Reduce the popup delay for <kbd>which-key</kbd>.
 </div>
 </div>
 
-<div id="outline-container-org803f918" class="outline-3">
-<h3 id="org803f918"><span class="section-number-3">2.5</span> Authinfo</h3>
+<div id="outline-container-orged023a1" class="outline-3">
+<h3 id="orged023a1"><span class="section-number-3">2.5.</span> Authinfo</h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
 Sensitive credentials are stored in a gpg encrypted auth file. I prefer to only use <kbd>~/.authinfo.gpg</kbd>, rather than doom&rsquo;s default of <kbd>~/.emacs.d/.local/etc/authinfo.gpg</kbd> .
@@ -862,8 +1416,8 @@ Sensitive credentials are stored in a gpg encrypted auth file. I prefer to only 
 </div>
 </div>
 
-<div id="outline-container-orga730b59" class="outline-2">
-<h2 id="orga730b59"><span class="section-number-2">3</span> Custom Packages</h2>
+<div id="outline-container-org150a462" class="outline-2">
+<h2 id="org150a462"><span class="section-number-2">3.</span> Custom Packages</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 This section defines the custom packages for <kbd>packages.el</kbd>.
@@ -879,8 +1433,8 @@ This section defines the custom packages for <kbd>packages.el</kbd>.
 </div>
 </div>
 
-<div id="outline-container-org7be1096" class="outline-3">
-<h3 id="org7be1096"><span class="section-number-3">3.1</span> Package loading</h3>
+<div id="outline-container-orgffc93ce" class="outline-3">
+<h3 id="orgffc93ce"><span class="section-number-3">3.1.</span> Package loading</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 Use the <code>package!</code> macro for each package. Afterwards run <code>doom refresh</code> on the command line. Everything in this section
@@ -889,29 +1443,31 @@ goes into <kbd>packges.el</kbd>.
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #5B6268;">;; </span><span style="color: #5B6268;">custom packages</span>
-<span style="color: #51afef;">(</span><span style="color: #51afef;">package!</span> atomic-chrome<span style="color: #51afef;">)</span>    <span style="color: #5B6268;">;; </span><span style="color: #5B6268;">integration with the atomic chrome extension</span>
-<span style="color: #51afef;">(</span><span style="color: #51afef;">package!</span> org-alert<span style="color: #51afef;">)</span>
+<span style="color: #5B6268;">;</span><span style="color: #5B6268;">(package! atomic-chrome)    ;; integration with the atomic chrome extension</span>
+<span style="color: #5B6268;">;</span><span style="color: #5B6268;">(package! org-alert)</span>
 <span style="color: #51afef;">(</span><span style="color: #51afef;">package!</span> caddyfile-mode<span style="color: #51afef;">)</span>
 <span style="color: #51afef;">(</span><span style="color: #51afef;">package!</span> protobuf-mode<span style="color: #51afef;">)</span>
 
 <span style="color: #5B6268;">;; </span><span style="color: #5B6268;">unpin these packages to use the latest always</span>
-<span style="color: #51afef;">(</span><span style="color: #51afef;">unpin!</span> org-roam<span style="color: #51afef;">)</span>
-<span style="color: #51afef;">(</span><span style="color: #51afef;">unpin!</span> lsp-mode<span style="color: #51afef;">)</span>
+<span style="color: #51afef;">(</span><span style="color: #51afef;">unpin!</span> nim-mode<span style="color: #51afef;">)</span>
+<span style="color: #5B6268;">;</span><span style="color: #5B6268;">(unpin! org-roam)</span>
+<span style="color: #5B6268;">;</span><span style="color: #5B6268;">(unpin! lsp-mode)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org0d6f695" class="outline-3">
-<h3 id="org0d6f695"><span class="section-number-3">3.2</span> Package configuration</h3>
+
+<div id="outline-container-org6db4364" class="outline-3">
+<h3 id="org6db4364"><span class="section-number-3">3.2.</span> Package configuration</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 For configuring packages that are loaded in <kbd>packages.el</kbd>.
 </p>
 </div>
 
-<div id="outline-container-org9fbf3e4" class="outline-4">
-<h4 id="org9fbf3e4"><span class="section-number-4">3.2.1</span> atomic-chrome configuration</h4>
+<div id="outline-container-org2c3d7aa" class="outline-4">
+<h4 id="org2c3d7aa"><span class="section-number-4">3.2.1.</span> atomic-chrome configuration</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">use-package!</span> atomic-chrome
@@ -925,8 +1481,8 @@ For configuring packages that are loaded in <kbd>packages.el</kbd>.
 </div>
 </div>
 
-<div id="outline-container-orgeb96561" class="outline-4">
-<h4 id="orgeb96561"><span class="section-number-4">3.2.2</span> caddyfile-mode</h4>
+<div id="outline-container-org56dc0ec" class="outline-4">
+<h4 id="org56dc0ec"><span class="section-number-4">3.2.2.</span> caddyfile-mode</h4>
 <div class="outline-text-4" id="text-3-2-2">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">use-package</span> caddyfile-mode
@@ -940,16 +1496,16 @@ For configuring packages that are loaded in <kbd>packages.el</kbd>.
 </div>
 </div>
 
-<div id="outline-container-orgdb818cd" class="outline-2">
-<h2 id="orgdb818cd"><span class="section-number-2">4</span> Modules</h2>
+<div id="outline-container-org1b744c8" class="outline-2">
+<h2 id="org1b744c8"><span class="section-number-2">4.</span> Modules</h2>
 <div class="outline-text-2" id="text-4">
 <p>
-This section configures the doom modules. Languages have their own <a href="#orge8ed05c">dedicated section</a>.
+This section configures the doom modules. Languages have their own <a href="#org994c9dd">dedicated section</a>.
 </p>
 </div>
 
-<div id="outline-container-orgac3be53" class="outline-3">
-<h3 id="orgac3be53"><span class="section-number-3">4.1</span> Enable modules (init.el)</h3>
+<div id="outline-container-orgb0dd169" class="outline-3">
+<h3 id="orgb0dd169"><span class="section-number-3">4.1.</span> Enable modules (init.el)</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 This section generates <kbd>init.el</kbd> and is where I enable the doom modules I want. See <a href="https://github.com/hlissner/doom-emacs/blob/develop/init.example.el">init.example.el</a> for all possible
@@ -977,8 +1533,9 @@ options.
        <span style="color: #c678dd;">(</span>popup
         +all
         +defaults<span style="color: #c678dd;">)</span>
-       <span style="color: #c678dd;">(</span>ligatures
-        +pragmata-pro<span style="color: #c678dd;">)</span>
+       <span style="color: #5B6268;">;;</span><span style="color: #5B6268;">ligatures</span>
+       <span style="color: #5B6268;">;; </span><span style="color: #5B6268;">(ligatures</span>
+       <span style="color: #5B6268;">;;  </span><span style="color: #5B6268;">+pragmata-pro)</span>
        treemacs
        vc-gutter
        vi-tilde-fringe
@@ -1035,6 +1592,7 @@ options.
        <span style="color: #c678dd;">(</span>java +lsp<span style="color: #c678dd;">)</span>
        <span style="color: #c678dd;">(</span>javascript +lsp<span style="color: #c678dd;">)</span>
        markdown
+       <span style="color: #c678dd;">(</span>nim +lsp<span style="color: #c678dd;">)</span>
        nix
        <span style="color: #c678dd;">(</span>org
         +dragndrop
@@ -1042,10 +1600,10 @@ options.
         +roam
         +pretty<span style="color: #c678dd;">)</span>
        <span style="color: #c678dd;">(</span>python
-        +lsp +pyenv<span style="color: #c678dd;">)</span>
+        +lsp<span style="color: #c678dd;">)</span>
        sh
        scheme
-       <span style="color: #c678dd;">(</span>yaml +lsp<span style="color: #c678dd;">)</span>
+       <span style="color: #c678dd;">(</span>yaml<span style="color: #c678dd;">)</span>
 
        <span style="color: #c678dd;">:email</span>
        mu4e
@@ -1058,12 +1616,12 @@ options.
 </div>
 </div>
 
-<div id="outline-container-org484942b" class="outline-3">
-<h3 id="org484942b"><span class="section-number-3">4.2</span> Core configuration</h3>
+<div id="outline-container-org1e212d8" class="outline-3">
+<h3 id="org1e212d8"><span class="section-number-3">4.2.</span> Core configuration</h3>
 <div class="outline-text-3" id="text-4-2">
 </div>
-<div id="outline-container-orgac77838" class="outline-4">
-<h4 id="orgac77838"><span class="section-number-4">4.2.1</span> Projects</h4>
+<div id="outline-container-org7f79798" class="outline-4">
+<h4 id="org7f79798"><span class="section-number-4">4.2.1.</span> Projects</h4>
 <div class="outline-text-4" id="text-4-2-1">
 <p>
 Set the search directories for projectile to auto-discovery projects.
@@ -1075,23 +1633,33 @@ Set the search directories for projectile to auto-discovery projects.
 </div>
 
 <p>
+Improve root guessing.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> projectile
+  <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">add-to-list</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">projectile-project-root-files</span> <span style="color: #98be65;">"go.mod"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+</pre>
+</div>
+
+<p>
 Clear the projectile cache when swapping branches in <kbd>magit</kbd> which will likely change the files in the project.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">defun</span> <span style="color: #c678dd;">+private/projectile-invalidate-cache</span> <span style="color: #c678dd;">(</span><span style="color: #ECBE7B;">&amp;rest</span> _args<span style="color: #c678dd;">)</span>
   <span style="color: #c678dd;">(</span><span style="color: #c678dd;">projectile-invalidate-cache</span> nil<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-<span style="color: #51afef;">(</span><span style="color: #c678dd;">advice-add</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">magit-checkout</span>
+<span style="color: #51afef;">(</span><span style="color: #a9a1e1;">advice-add</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">magit-checkout</span>
             <span style="color: #c678dd;">:after</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">+private/projectile-invalidate-cache</span><span style="color: #51afef;">)</span>
-<span style="color: #51afef;">(</span><span style="color: #c678dd;">advice-add</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">magit-branch-and-checkout</span>
+<span style="color: #51afef;">(</span><span style="color: #a9a1e1;">advice-add</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">magit-branch-and-checkout</span>
             <span style="color: #c678dd;">:after</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">+private/projectile-invalidate-cache</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org3b901df" class="outline-4">
-<h4 id="org3b901df"><span class="section-number-4">4.2.2</span> Smart parentheses</h4>
+<div id="outline-container-org7de831f" class="outline-4">
+<h4 id="org7de831f"><span class="section-number-4">4.2.2.</span> Smart parentheses</h4>
 <div class="outline-text-4" id="text-4-2-2">
 <p>
 Add convenient global binding for jumping outside of parenthesis. This replaces the default binding of <code>upcase-word</code>,
@@ -1106,27 +1674,27 @@ which I have never used.
 </div>
 </div>
 
-<div id="outline-container-orgbf0961d" class="outline-4">
-<h4 id="orgbf0961d"><span class="section-number-4">4.2.3</span> Dired</h4>
+<div id="outline-container-org047b9e2" class="outline-4">
+<h4 id="org047b9e2"><span class="section-number-4">4.2.3.</span> Dired</h4>
 <div class="outline-text-4" id="text-4-2-3">
 <p>
 Disable evil things in dired so we get dired keybindings.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #c678dd;">add-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">dired-mode-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">turn-off-evil-snipe-mode</span><span style="color: #51afef;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #a9a1e1;">add-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">dired-mode-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">turn-off-evil-snipe-mode</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org5042011" class="outline-3">
-<h3 id="org5042011"><span class="section-number-3">4.3</span> UI configuration</h3>
+<div id="outline-container-org36e29e7" class="outline-3">
+<h3 id="org36e29e7"><span class="section-number-3">4.3.</span> UI configuration</h3>
 <div class="outline-text-3" id="text-4-3">
 </div>
-<div id="outline-container-orgae9b3fb" class="outline-4">
-<h4 id="orgae9b3fb"><span class="section-number-4">4.3.1</span> Workspaces</h4>
+<div id="outline-container-orge8fad37" class="outline-4">
+<h4 id="orge8fad37"><span class="section-number-4">4.3.1.</span> Workspaces</h4>
 <div class="outline-text-4" id="text-4-3-1">
 <p>
 By default doom loads a project into the main workspace if it&rsquo;s empty. I don&rsquo;t like this behavior - I prefer to reserve
@@ -1153,8 +1721,8 @@ Add <kbd>SPC TAB ,</kbd> to switch to the last workspace, similar to switching t
 </div>
 </div>
 
-<div id="outline-container-org1eab908" class="outline-4">
-<h4 id="org1eab908"><span class="section-number-4">4.3.2</span> Zen</h4>
+<div id="outline-container-org7ef8505" class="outline-4">
+<h4 id="org7ef8505"><span class="section-number-4">4.3.2.</span> Zen</h4>
 <div class="outline-text-4" id="text-4-3-2">
 <p>
 Get rid of the change in font. I use zen mode for code, so I want to keep my normal font. Also enable the mode-line, and
@@ -1172,8 +1740,8 @@ set a width more appropriate for a modern screen size.
 </div>
 </div>
 
-<div id="outline-container-org6e111ff" class="outline-4">
-<h4 id="org6e111ff"><span class="section-number-4">4.3.3</span> Treemacs</h4>
+<div id="outline-container-org842f61c" class="outline-4">
+<h4 id="org842f61c"><span class="section-number-4">4.3.3.</span> Treemacs</h4>
 <div class="outline-text-4" id="text-4-3-3">
 <p>
 Enable follow-mode so the treemacs cursor follows the buffer file. Also increase the default width to show more stuff.
@@ -1188,8 +1756,8 @@ Enable follow-mode so the treemacs cursor follows the buffer file. Also increase
 </div>
 </div>
 
-<div id="outline-container-org48924b3" class="outline-4">
-<h4 id="org48924b3"><span class="section-number-4">4.3.4</span> Pretty-code</h4>
+<div id="outline-container-orgfeb01a0" class="outline-4">
+<h4 id="orgfeb01a0"><span class="section-number-4">4.3.4.</span> Pretty-code</h4>
 <div class="outline-text-4" id="text-4-3-4">
 <p>
 Just use pretty-code for the ligatures - so disable the symbol translation.
@@ -1202,26 +1770,26 @@ Just use pretty-code for the ligatures - so disable the symbol translation.
 </div>
 </div>
 </div>
-<div id="outline-container-orgbd7f941" class="outline-3">
-<h3 id="orgbd7f941"><span class="section-number-3">4.4</span> Completion</h3>
+<div id="outline-container-org480b986" class="outline-3">
+<h3 id="org480b986"><span class="section-number-3">4.4.</span> Completion</h3>
 <div class="outline-text-3" id="text-4-4">
-<p>
-Fix company causing minibuffer region to disappear (e.g. lsp ask root dialogue).
-</p>
-
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> company
-  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">evil-normal-state-entry-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">company-abort</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #5B6268;">;; </span><span style="color: #5B6268;">(after! company</span>
+<span style="color: #5B6268;">;;   </span><span style="color: #5B6268;">(remove-hook 'evil-normal-state-entry-hook #'company-abort))</span>
+
+<span style="color: #5B6268;">;</span><span style="color: #5B6268;">(setq company-idle-delay 0.1)</span>
+<span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">+lsp-company-backends</span> <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span><span style="color: #c678dd;">:separate</span> company-capf company-yasnippet<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgdc4d2e3" class="outline-3">
-<h3 id="orgdc4d2e3"><span class="section-number-3">4.5</span> Checkers configuration</h3>
+
+<div id="outline-container-orgf0a6cc8" class="outline-3">
+<h3 id="orgf0a6cc8"><span class="section-number-3">4.5.</span> Checkers configuration</h3>
 <div class="outline-text-3" id="text-4-5">
 </div>
-<div id="outline-container-orgf7933cc" class="outline-4">
-<h4 id="orgf7933cc"><span class="section-number-4">4.5.1</span> Flyspell</h4>
+<div id="outline-container-org9a2eaab" class="outline-4">
+<h4 id="org9a2eaab"><span class="section-number-4">4.5.1.</span> Flyspell</h4>
 <div class="outline-text-4" id="text-4-5-1">
 <p>
 Flyspell can create a lot of lag in large buffers. Make it as lazy as possible.
@@ -1235,16 +1803,16 @@ Flyspell can create a lot of lag in large buffers. Make it as lazy as possible.
 </div>
 </div>
 
-<div id="outline-container-orgfe33ab7" class="outline-3">
-<h3 id="orgfe33ab7"><span class="section-number-3">4.6</span> Email configuration (mu4e)</h3>
+<div id="outline-container-org0173cd7" class="outline-3">
+<h3 id="org0173cd7"><span class="section-number-3">4.6.</span> Email configuration (mu4e)</h3>
 <div class="outline-text-3" id="text-4-6">
 <p>
 I am experimenting with <kbd>mu4e</kbd> for my email configuration. I&rsquo;m using it with mbsync as the backend for syncing emails. Note as of 1.4, the root maildir is set via the <code>mu init</code> command so it is unnecessary to set it.
 </p>
 </div>
 
-<div id="outline-container-org51be591" class="outline-5">
-<h5 id="org51be591"><span class="section-number-5">4.6.0.1</span> Prerequisites</h5>
+<div id="outline-container-org3b0a24e" class="outline-5">
+<h5 id="org3b0a24e"><span class="section-number-5">4.6.0.1.</span> Prerequisites</h5>
 <div class="outline-text-5" id="text-4-6-0-1">
 <p>
 First run mbsync for the first time to download all mail. Then set up <kbd>mu</kbd>:
@@ -1258,8 +1826,8 @@ mu init --maildir ~/Mail --my-address james@r-vn.org
 </div>
 </div>
 
-<div id="outline-container-org53914c6" class="outline-5">
-<h5 id="org53914c6"><span class="section-number-5">4.6.0.2</span> Configuration</h5>
+<div id="outline-container-org35b29f5" class="outline-5">
+<h5 id="org35b29f5"><span class="section-number-5">4.6.0.2.</span> Configuration</h5>
 <div class="outline-text-5" id="text-4-6-0-2">
 <p>
 First, use doom&rsquo;s handy function for setting up an <a href="https://www.djcbsoftware.nl/code/mu/mu4e/Contexts.html#Contexts">mu4e context</a>.
@@ -1274,10 +1842,10 @@ First, use doom&rsquo;s handy function for setting up an <a href="https://www.dj
    <span style="color: #98be65;">(</span>mu4e-refile-folder     . <span style="color: #98be65;">"/r-vn.org/Archive"</span><span style="color: #98be65;">)</span>
    <span style="color: #98be65;">(</span>smtpmail-smtp-user     . <span style="color: #98be65;">"james@r-vn.org"</span><span style="color: #98be65;">)</span>
    <span style="color: #98be65;">(</span>mu4e-maildir-shortcuts .
-                           <span style="color: #51afef;">(</span><span style="color: #c678dd;">(</span><span style="color: #c678dd;">:maildir</span> <span style="color: #98be65;">"/r-vn.org/INBOX"</span>   <span style="color: #c678dd;">:key</span> ?i<span style="color: #c678dd;">)</span>
-                            <span style="color: #c678dd;">(</span><span style="color: #c678dd;">:maildir</span> <span style="color: #98be65;">"/r-vn.org/Archive"</span> <span style="color: #c678dd;">:key</span> ?a<span style="color: #c678dd;">)</span>
-                            <span style="color: #c678dd;">(</span><span style="color: #c678dd;">:maildir</span> <span style="color: #98be65;">"/r-vn.org/Trash"</span>   <span style="color: #c678dd;">:key</span> ?t<span style="color: #c678dd;">)</span>
-                            <span style="color: #c678dd;">(</span><span style="color: #c678dd;">:maildir</span> <span style="color: #98be65;">"/r-vn.org/Sent"</span>    <span style="color: #c678dd;">:key</span> ?s<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
+                           <span style="color: #a9a1e1;">(</span><span style="color: #51afef;">(</span><span style="color: #c678dd;">:maildir</span> <span style="color: #98be65;">"/r-vn.org/INBOX"</span>   <span style="color: #c678dd;">:key</span> ?i<span style="color: #51afef;">)</span>
+                            <span style="color: #51afef;">(</span><span style="color: #c678dd;">:maildir</span> <span style="color: #98be65;">"/r-vn.org/Archive"</span> <span style="color: #c678dd;">:key</span> ?a<span style="color: #51afef;">)</span>
+                            <span style="color: #51afef;">(</span><span style="color: #c678dd;">:maildir</span> <span style="color: #98be65;">"/r-vn.org/Trash"</span>   <span style="color: #c678dd;">:key</span> ?t<span style="color: #51afef;">)</span>
+                            <span style="color: #51afef;">(</span><span style="color: #c678dd;">:maildir</span> <span style="color: #98be65;">"/r-vn.org/Sent"</span>    <span style="color: #c678dd;">:key</span> ?s<span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
    <span style="color: #98be65;">(</span>smtpmail-smtp-server . <span style="color: #98be65;">"smtp.fastmail.com"</span><span style="color: #98be65;">)</span>
    <span style="color: #98be65;">(</span>smtpmail-stream-type . ssl<span style="color: #98be65;">)</span>
    <span style="color: #98be65;">(</span>smtpmail-smtp-service . <span style="color: #da8548; font-weight: bold;">465</span><span style="color: #98be65;">)</span>
@@ -1295,10 +1863,10 @@ Tweak the general configuration.
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span> mu4e-attachment-dir <span style="color: #98be65;">"~/Downloads"</span>   <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Attachments in standard place.</span>
         mu4e-headers-include-related nil    <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Only show messages which match the current filter.</span>
         mu4e-headers-fields                 <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Header columns.</span>
-        <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #51afef;">(</span><span style="color: #c678dd;">:human-date</span> . <span style="color: #da8548; font-weight: bold;">12</span><span style="color: #51afef;">)</span>
-          <span style="color: #51afef;">(</span><span style="color: #c678dd;">:flags</span> . <span style="color: #da8548; font-weight: bold;">6</span><span style="color: #51afef;">)</span>
-          <span style="color: #51afef;">(</span><span style="color: #c678dd;">:from</span> . <span style="color: #da8548; font-weight: bold;">25</span><span style="color: #51afef;">)</span>
-          <span style="color: #51afef;">(</span><span style="color: #c678dd;">:subject</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
+        <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">:human-date</span> . <span style="color: #da8548; font-weight: bold;">12</span><span style="color: #a9a1e1;">)</span>
+          <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">:flags</span> . <span style="color: #da8548; font-weight: bold;">6</span><span style="color: #a9a1e1;">)</span>
+          <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">:from</span> . <span style="color: #da8548; font-weight: bold;">25</span><span style="color: #a9a1e1;">)</span>
+          <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">:subject</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
         mu4e-update-interval <span style="color: #da8548; font-weight: bold;">300</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>          <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Check for mail every 5 minutes.</span>
 </pre>
 </div>
@@ -1308,11 +1876,11 @@ Compose mails with <kbd>org-msg</kbd>.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #c678dd;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">mu4e-compose-mode-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">org-mu4e-compose-org-mode</span><span style="color: #51afef;">)</span> <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Don't use org-mu4e.</span>
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #a9a1e1;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">mu4e-compose-mode-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">org-mu4e-compose-org-mode</span><span style="color: #51afef;">)</span> <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Don't use org-mu4e.</span>
 
 <span style="color: #51afef;">(</span><span style="color: #51afef;">use-package</span> org-msg
   <span style="color: #c678dd;">:after</span> <span style="color: #c678dd;">(</span>org mu4e<span style="color: #c678dd;">)</span>
-  <span style="color: #c678dd;">:hook</span> <span style="color: #c678dd;">(</span>mu4e-main-mode . <span style="color: #dcaeea;">org-msg-mode</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">:hook</span> <span style="color: #c678dd;">(</span>mu4e-main-mode . org-msg-mode<span style="color: #c678dd;">)</span>
   <span style="color: #c678dd;">:config</span>
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span> org-msg-options <span style="color: #98be65;">"html-postamble:nil H:5 num:nil ^:{} toc:nil author:nil email:nil \\n:t"</span>
               org-msg-startup <span style="color: #98be65;">"hidestars indent inlineimages"</span>
@@ -1366,12 +1934,12 @@ Set up mu4e-alert for notifications in the modeline.
 </div>
 </div>
 
-<div id="outline-container-org4b5eeca" class="outline-3">
-<h3 id="org4b5eeca"><span class="section-number-3">4.7</span> Tools configuration</h3>
+<div id="outline-container-org450c00c" class="outline-3">
+<h3 id="org450c00c"><span class="section-number-3">4.7.</span> Tools configuration</h3>
 <div class="outline-text-3" id="text-4-7">
 </div>
-<div id="outline-container-orgbceabf2" class="outline-4">
-<h4 id="orgbceabf2"><span class="section-number-4">4.7.1</span> Language Server Protocol (LSP)</h4>
+<div id="outline-container-org7b40506" class="outline-4">
+<h4 id="org7b40506"><span class="section-number-4">4.7.1.</span> Language Server Protocol (LSP)</h4>
 <div class="outline-text-4" id="text-4-7-1">
 <p>
 Add some useful binds.
@@ -1394,6 +1962,8 @@ And tweak the LSP settings.
       lsp-signature-auto-activate t          <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Show signature of current function.</span>
       lsp-signature-render-documentation nil <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Only show single line of function.</span>
       lsp-enable-snippet nil                 <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Disable auto parameter insertions.</span>
+      lsp-headerline-breadcrumb-enable nil   <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Disable header breadcrumbs, it's redundant w/ the modeline.</span>
+      lsp-file-watch-threshold <span style="color: #da8548; font-weight: bold;">99999</span>         <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Set a much higher file watch limit than the default 1000.</span>
       <span style="color: #dcaeea;">flycheck-check-syntax-automatically</span> <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span>save idle-change new-line mode-enabled<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span> <span style="color: #5B6268;">; </span><span style="color: #5B6268;">Restore lsp-mode flycheck behavior.</span>
 </pre>
 </div>
@@ -1453,8 +2023,8 @@ Debug <kbd>onChange</kbd> events. Enable only when needed.
 </div>
 </div>
 
-<div id="outline-container-org71bd13d" class="outline-4">
-<h4 id="org71bd13d"><span class="section-number-4">4.7.2</span> Magit</h4>
+<div id="outline-container-orgafd9050" class="outline-4">
+<h4 id="orgafd9050"><span class="section-number-4">4.7.2.</span> Magit</h4>
 <div class="outline-text-4" id="text-4-7-2">
 <p>
 Prefer offering remote branches when prompting for a branch selection.
@@ -1479,8 +2049,8 @@ Disable showing tags in ref views - it slows them down substantially.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> magit-refs
-  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">magit-refs-sections-hook</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">magit-insert-tags</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #5B6268;">;; </span><span style="color: #5B6268;">(after! magit-refs</span>
+<span style="color: #5B6268;">;;   </span><span style="color: #5B6268;">(remove-hook 'magit-refs-sections-hook 'magit-insert-tags))</span>
 </pre>
 </div>
 </div>
@@ -1488,17 +2058,27 @@ Disable showing tags in ref views - it slows them down substantially.
 </div>
 </div>
 
-<div id="outline-container-orge8ed05c" class="outline-2">
-<h2 id="orge8ed05c"><span class="section-number-2">5</span> Languages</h2>
+<div id="outline-container-org994c9dd" class="outline-2">
+<h2 id="org994c9dd"><span class="section-number-2">5.</span> Languages</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 This section configures language major modes.
 </p>
 </div>
 
-<div id="outline-container-org7f56f50" class="outline-3">
-<h3 id="org7f56f50"><span class="section-number-3">5.1</span> Golang</h3>
+<div id="outline-container-org46f81fe" class="outline-3">
+<h3 id="org46f81fe"><span class="section-number-3">5.1.</span> Python</h3>
 <div class="outline-text-3" id="text-5-1">
+<div class="org-src-container">
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> lsp-python-ms-executable <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">executable-find</span> <span style="color: #98be65;">"python-language-server"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org40fdce9" class="outline-3">
+<h3 id="org40fdce9"><span class="section-number-3">5.2.</span> Golang</h3>
+<div class="outline-text-3" id="text-5-2">
 <p>
 Tweak the hover documentation of <kbd>gopls</kbd> so it shows more information when using <code>+lookup/documentation</code>.
 </p>
@@ -1510,9 +2090,9 @@ Tweak the hover documentation of <kbd>gopls</kbd> so it shows more information w
 </div>
 </div>
 
-<div id="outline-container-org4b7d684" class="outline-3">
-<h3 id="org4b7d684"><span class="section-number-3">5.2</span> Org Mode</h3>
-<div class="outline-text-3" id="text-5-2">
+<div id="outline-container-org4a2ac43" class="outline-3">
+<h3 id="org4a2ac43"><span class="section-number-3">5.3.</span> Org Mode</h3>
+<div class="outline-text-3" id="text-5-3">
 <p>
 This section tweaks <kbd>org-mode</kbd> to my own specific needs and workflow. There is a lot of custom stuff here, so
 modify/adapt/use as you find useful.
@@ -1523,22 +2103,22 @@ The most important thing is to tell org-mode where my org files are.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"~/Dropbox/Notes/"</span><span style="color: #51afef;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"~/Notes/"</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 
-<div id="outline-container-org1bb3251" class="outline-4">
-<h4 id="org1bb3251"><span class="section-number-4">5.2.1</span> General settings</h4>
-<div class="outline-text-4" id="text-5-2-1">
+<div id="outline-container-org8888ae1" class="outline-4">
+<h4 id="org8888ae1"><span class="section-number-4">5.3.1.</span> General settings</h4>
+<div class="outline-text-4" id="text-5-3-1">
 <p>
 General settings for org-mode interaction.
 </p>
 </div>
 
-<div id="outline-container-org2f66763" class="outline-5">
-<h5 id="org2f66763"><span class="section-number-5">5.2.1.1</span> Editor</h5>
-<div class="outline-text-5" id="text-5-2-1-1">
+<div id="outline-container-org7f23163" class="outline-5">
+<h5 id="org7f23163"><span class="section-number-5">5.3.1.1.</span> Editor</h5>
+<div class="outline-text-5" id="text-5-3-1-1">
 <p>
 Allow <code>imenu</code> to nest fully in org-mode to quickly jump to any heading.
 </p>
@@ -1550,9 +2130,9 @@ Allow <code>imenu</code> to nest fully in org-mode to quickly jump to any headin
 </div>
 </div>
 
-<div id="outline-container-org5a10098" class="outline-5">
-<h5 id="org5a10098"><span class="section-number-5">5.2.1.2</span> Visuals</h5>
-<div class="outline-text-5" id="text-5-2-1-2">
+<div id="outline-container-org23bea86" class="outline-5">
+<h5 id="org23bea86"><span class="section-number-5">5.3.1.2.</span> Visuals</h5>
+<div class="outline-text-5" id="text-5-3-1-2">
 <p>
 Make headings appear larger.
 </p>
@@ -1584,9 +2164,9 @@ Make org-mode symbols look nicer than the defaults. Shamelessly stolen from
 </div>
 </div>
 
-<div id="outline-container-orgbdc02c9" class="outline-5">
-<h5 id="orgbdc02c9"><span class="section-number-5">5.2.1.3</span> Archiving</h5>
-<div class="outline-text-5" id="text-5-2-1-3">
+<div id="outline-container-orgd603434" class="outline-5">
+<h5 id="orgd603434"><span class="section-number-5">5.3.1.3.</span> Archiving</h5>
+<div class="outline-text-5" id="text-5-3-1-3">
 <p>
 I prefer to archive tasks into a sub-folder. Also, I want to keep any inherited tags so information is not lost, as I
 frequently archive sub-trees.
@@ -1600,9 +2180,9 @@ frequently archive sub-trees.
 </div>
 </div>
 
-<div id="outline-container-org68f6a6d" class="outline-5">
-<h5 id="org68f6a6d"><span class="section-number-5">5.2.1.4</span> Download</h5>
-<div class="outline-text-5" id="text-5-2-1-4">
+<div id="outline-container-orgcdf2710" class="outline-5">
+<h5 id="orgcdf2710"><span class="section-number-5">5.3.1.4.</span> Download</h5>
+<div class="outline-text-5" id="text-5-3-1-4">
 <p>
 <kbd>org-download</kbd> makes it easy to download images directly into org files.
 </p>
@@ -1614,15 +2194,15 @@ I configure it to use my preferred capture method depending on OS.
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> org-download
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span> org-download-screenshot-method
-        <span style="color: #98be65;">(</span><span style="color: #51afef;">cond</span> <span style="color: #51afef;">(</span><span style="color: #dcaeea;">IS-MAC</span> <span style="color: #98be65;">"screencapture -i %s"</span><span style="color: #51afef;">)</span>
-              <span style="color: #51afef;">(</span><span style="color: #dcaeea;">IS-LINUX</span> <span style="color: #98be65;">"~/.config/sway/capture.sh %s"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+        <span style="color: #98be65;">(</span><span style="color: #51afef;">cond</span> <span style="color: #a9a1e1;">(</span><span style="color: #dcaeea;">IS-MAC</span> <span style="color: #98be65;">"screencapture -i %s"</span><span style="color: #a9a1e1;">)</span>
+              <span style="color: #a9a1e1;">(</span><span style="color: #dcaeea;">IS-LINUX</span> <span style="color: #98be65;">"~/.config/sway/capture.sh %s"</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-org1795bc7" class="outline-5">
-<h5 id="org1795bc7"><span class="section-number-5">5.2.1.5</span> Exporting (General)</h5>
-<div class="outline-text-5" id="text-5-2-1-5">
+<div id="outline-container-orgccbb8d5" class="outline-5">
+<h5 id="orgccbb8d5"><span class="section-number-5">5.3.1.5.</span> Exporting (General)</h5>
+<div class="outline-text-5" id="text-5-3-1-5">
 <p>
 Export more than the default 2 levels. I want all the levels!
 </p>
@@ -1634,9 +2214,9 @@ Export more than the default 2 levels. I want all the levels!
 </div>
 </div>
 
-<div id="outline-container-orgb91b4da" class="outline-5">
-<h5 id="orgb91b4da"><span class="section-number-5">5.2.1.6</span> Exporting to HTML</h5>
-<div class="outline-text-5" id="text-5-2-1-6">
+<div id="outline-container-org4e8c679" class="outline-5">
+<h5 id="org4e8c679"><span class="section-number-5">5.3.1.6.</span> Exporting to HTML</h5>
+<div class="outline-text-5" id="text-5-3-1-6">
 <p>
 Let&rsquo;s make HTML look nicer. This is all taken from <a href="https://tecosaur.github.io/emacs-config/config.html#OrgModeVisuals">tecosaur&rsquo;s org-mode config</a>, which is based on <a href="https://github.com/fniessen/org-html-themes">fniessen/org-html-themes</a>.
 </p>
@@ -1648,11 +2228,11 @@ Let&rsquo;s make HTML look nicer. This is all taken from <a href="https://tecosa
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">when</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">eq</span> exporter <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">html</span><span style="color: #98be65;">)</span>
     <span style="color: #98be65;">(</span><span style="color: #51afef;">setq</span>
      <span style="color: #dcaeea;">org-html-head-extra</span>
-     <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">concat</span>
-      <span style="color: #c678dd;">(</span><span style="color: #51afef;">if</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">s-contains-p</span> <span style="color: #98be65;">"&lt;!&#8211;&#8211;tec/custom-head-start--&gt;"</span> <span style="color: #dcaeea;">org-html-head-extra</span><span style="color: #98be65;">)</span>
-          <span style="color: #98be65;">(</span><span style="color: #c678dd;">s-replace-regexp</span> <span style="color: #98be65;">"&lt;!&#8211;&#8211;tec/custom-head-start--&gt;.*&lt;!&#8211;&#8211;tec/custom-head-end--&gt;"</span> <span style="color: #98be65;">""</span> <span style="color: #dcaeea;">org-html-head-extra</span><span style="color: #98be65;">)</span>
-        <span style="color: #dcaeea;">org-html-head-extra</span><span style="color: #c678dd;">)</span>
-      <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">format</span> <span style="color: #98be65;">"&lt;!&#8211;&#8211;tec/custom-head-start--&gt;</span>
+     <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">concat</span>
+      <span style="color: #51afef;">(</span><span style="color: #51afef;">if</span> <span style="color: #c678dd;">(</span><span style="color: #c678dd;">s-contains-p</span> <span style="color: #98be65;">"&lt;!&#8211;&#8211;tec/custom-head-start--&gt;"</span> <span style="color: #dcaeea;">org-html-head-extra</span><span style="color: #c678dd;">)</span>
+          <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">s-replace-regexp</span> <span style="color: #98be65;">"&lt;!&#8211;&#8211;tec/custom-head-start--&gt;.*&lt;!&#8211;&#8211;tec/custom-head-end--&gt;"</span> <span style="color: #98be65;">""</span> <span style="color: #dcaeea;">org-html-head-extra</span><span style="color: #c678dd;">)</span>
+        <span style="color: #dcaeea;">org-html-head-extra</span><span style="color: #51afef;">)</span>
+      <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">format</span> <span style="color: #98be65;">"&lt;!&#8211;&#8211;tec/custom-head-start--&gt;</span>
 <span style="color: #98be65;">&lt;style type=\"text/css\"&gt;</span>
 <span style="color: #98be65;">   :root {</span>
 <span style="color: #98be65;">      --theme-bg: %s;</span>
@@ -1682,39 +2262,39 @@ Let&rsquo;s make HTML look nicer. This is all taken from <a href="https://tecosa
 <span style="color: #98be65;">      --theme-dark-cyan: %s;</span>
 <span style="color: #98be65;">   }</span>
 <span style="color: #98be65;">&lt;/style&gt;"</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">bg</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">bg-alt</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base0</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base1</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base2</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base3</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base4</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base5</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base6</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base7</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base8</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">fg</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">fg-alt</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">grey</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">red</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">orange</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">green</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">teal</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">yellow</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">blue</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">dark-blue</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">magenta</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">violet</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">cyan</span><span style="color: #98be65;">)</span>
-              <span style="color: #98be65;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">dark-cyan</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">bg</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">bg-alt</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base0</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base1</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base2</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base3</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base4</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base5</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base6</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base7</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">base8</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">fg</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">fg-alt</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">grey</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">red</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">orange</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">green</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">teal</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">yellow</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">blue</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">dark-blue</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">magenta</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">violet</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">cyan</span><span style="color: #c678dd;">)</span>
+              <span style="color: #c678dd;">(</span><span style="color: #c678dd;">doom-color</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">dark-cyan</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
       <span style="color: #98be65;">"</span>
-<span style="color: #98be65;">&lt;link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/styles/readtheorg/css/htmlize.css'/&gt;</span>
-<span style="color: #98be65;">&lt;link rel='stylesheet' type='text/css' href='https://fniessen.github.io/org-html-themes/styles/readtheorg/css/readtheorg.css'/&gt;</span>
+<span style="color: #98be65;">&lt;link rel='</span><span style="color: #a9a1e1;">stylesheet</span><span style="color: #98be65;">' type='</span><span style="color: #a9a1e1;">text/css</span><span style="color: #98be65;">' href='</span><span style="color: #a9a1e1;">https://fniessen.github.io/org-html-themes/org/readtheorg/css/htmlize.css</span><span style="color: #98be65;">'/&gt;</span>
+<span style="color: #98be65;">&lt;link rel='</span><span style="color: #a9a1e1;">stylesheet</span><span style="color: #98be65;">' type='</span><span style="color: #a9a1e1;">text/css</span><span style="color: #98be65;">' href='</span><span style="color: #a9a1e1;">https://fniessen.github.io/org-html-themes/org/readtheorg/css/readtheorg.css</span><span style="color: #98be65;">'/&gt;</span>
 
-<span style="color: #98be65;">&lt;script src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'&gt;&lt;/script&gt;</span>
-<span style="color: #98be65;">&lt;script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js'&gt;&lt;/script&gt;</span>
-<span style="color: #98be65;">&lt;script type='text/javascript' src='https://fniessen.github.io/org-html-themes/styles/lib/js/jquery.stickytableheaders.min.js'&gt;&lt;/script&gt;</span>
-<span style="color: #98be65;">&lt;script type='text/javascript' src='https://fniessen.github.io/org-html-themes/styles/readtheorg/js/readtheorg.js'&gt;&lt;/script&gt;</span>
+<span style="color: #98be65;">&lt;script src='</span><span style="color: #a9a1e1;">https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js</span><span style="color: #98be65;">'&gt;&lt;/script&gt;</span>
+<span style="color: #98be65;">&lt;script src='</span><span style="color: #a9a1e1;">https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js</span><span style="color: #98be65;">'&gt;&lt;/script&gt;</span>
+<span style="color: #98be65;">&lt;script type='</span><span style="color: #a9a1e1;">text/javascript</span><span style="color: #98be65;">' src='</span><span style="color: #a9a1e1;">https://fniessen.github.io/org-html-themes/org/lib/js/jquery.stickytableheaders.min.js</span><span style="color: #98be65;">'&gt;&lt;/script&gt;</span>
+<span style="color: #98be65;">&lt;script type='</span><span style="color: #a9a1e1;">text/javascript</span><span style="color: #98be65;">' src='</span><span style="color: #a9a1e1;">https://fniessen.github.io/org-html-themes/org/readtheorg/js/readtheorg.js</span><span style="color: #98be65;">'&gt;&lt;/script&gt;</span>
 
 <span style="color: #98be65;">&lt;style&gt;</span>
 <span style="color: #98be65;">   pre.src {</span>
@@ -1835,7 +2415,7 @@ Let&rsquo;s make HTML look nicer. This is all taken from <a href="https://tecosa
 <span style="color: #98be65;">       border-radius: 0.1em;</span>
 <span style="color: #98be65;">   }</span>
 <span style="color: #98be65;">   li.off &gt; .checkbox::after {</span>
-<span style="color: #98be65;">    content: '&#10006;';</span>
+<span style="color: #98be65;">    content: '</span><span style="color: #a9a1e1;">&#10006;</span><span style="color: #98be65;">';</span>
 <span style="color: #98be65;">    color:#fff;</span>
 <span style="color: #98be65;">    opacity: 0.9;</span>
 <span style="color: #98be65;">    position: relative;</span>
@@ -1862,9 +2442,9 @@ Let&rsquo;s make HTML look nicer. This is all taken from <a href="https://tecosa
 <span style="color: #98be65;">&lt;/style&gt;</span>
 <span style="color: #98be65;">&lt;!&#8211;&#8211;tec/custom-head-end--&gt;</span>
 <span style="color: #98be65;">"</span>
-      <span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+      <span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 
-<span style="color: #51afef;">(</span><span style="color: #c678dd;">add-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">org-export-before-processing-hook</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">jsravn--org-inline-css-hook</span><span style="color: #51afef;">)</span>
+<span style="color: #51afef;">(</span><span style="color: #a9a1e1;">add-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">org-export-before-processing-hook</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">jsravn--org-inline-css-hook</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 
@@ -1891,18 +2471,18 @@ And use nicer check boxes. <span class="underline">This doesn&rsquo;t work.</spa
 <pre class="src src-emacs-lisp"><span style="color: #5B6268;">;; </span><span style="color: #5B6268;">(after! org</span>
 <span style="color: #5B6268;">;;   </span><span style="color: #5B6268;">(appendq! org-html-checkbox-types</span>
 <span style="color: #5B6268;">;;             </span><span style="color: #5B6268;">'((html-span .</span>
-<span style="color: #5B6268;">;;                          </span><span style="color: #5B6268;">((on . "&lt;span class='checkbox'&gt;&lt;/span&gt;")</span>
-<span style="color: #5B6268;">;;                           </span><span style="color: #5B6268;">(off . "&lt;span class='checkbox'&gt;&lt;/span&gt;")</span>
-<span style="color: #5B6268;">;;                           </span><span style="color: #5B6268;">(trans . "&lt;span class='checkbox'&gt;&lt;/span&gt;")))))</span>
+<span style="color: #5B6268;">;;                          </span><span style="color: #5B6268;">((on . "&lt;span class='</span><span style="color: #a9a1e1;">checkbox</span><span style="color: #5B6268;">'&gt;&lt;/span&gt;")</span>
+<span style="color: #5B6268;">;;                           </span><span style="color: #5B6268;">(off . "&lt;span class='</span><span style="color: #a9a1e1;">checkbox</span><span style="color: #5B6268;">'&gt;&lt;/span&gt;")</span>
+<span style="color: #5B6268;">;;                           </span><span style="color: #5B6268;">(trans . "&lt;span class='</span><span style="color: #a9a1e1;">checkbox</span><span style="color: #5B6268;">'&gt;&lt;/span&gt;")))))</span>
 <span style="color: #5B6268;">;;   </span><span style="color: #5B6268;">(setq org-html-checkbox-type 'html-span))</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orgf99f488" class="outline-5">
-<h5 id="orgf99f488"><span class="section-number-5">5.2.1.7</span> Exporting to Beamer</h5>
-<div class="outline-text-5" id="text-5-2-1-7">
+<div id="outline-container-orgab60775" class="outline-5">
+<h5 id="orgab60775"><span class="section-number-5">5.3.1.7.</span> Exporting to Beamer</h5>
+<div class="outline-text-5" id="text-5-3-1-7">
 <p>
 Use a different theme.
 </p>
@@ -1923,15 +2503,15 @@ And divide presentation into subheadings.
 </div>
 </div>
 
-<div id="outline-container-orgb00e866" class="outline-5">
-<h5 id="orgb00e866"><span class="section-number-5">5.2.1.8</span> Exporting to GFM</h5>
-<div class="outline-text-5" id="text-5-2-1-8">
+<div id="outline-container-org82e4f16" class="outline-5">
+<h5 id="org82e4f16"><span class="section-number-5">5.3.1.8.</span> Exporting to GFM</h5>
+<div class="outline-text-5" id="text-5-3-1-8">
 <p>
 GFM exports to markdown. Let&rsquo;s enable it.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #c678dd;">eval-after-load</span> <span style="color: #98be65;">"org"</span>
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #a9a1e1;">eval-after-load</span> <span style="color: #98be65;">"org"</span>
   <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span><span style="color: #51afef;">require</span> <span style="color: #51afef;">'</span><span style="color: #a9a1e1;">ox-gfm</span> nil t<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
@@ -1939,9 +2519,9 @@ GFM exports to markdown. Let&rsquo;s enable it.
 </div>
 </div>
 
-<div id="outline-container-orgcdb8aa1" class="outline-4">
-<h4 id="orgcdb8aa1"><span class="section-number-4">5.2.2</span> Task management</h4>
-<div class="outline-text-4" id="text-5-2-2">
+<div id="outline-container-org334b0ca" class="outline-4">
+<h4 id="org334b0ca"><span class="section-number-4">5.3.2.</span> Task management</h4>
+<div class="outline-text-4" id="text-5-3-2">
 <p>
 I follow my own take on GTD for task management. The task management is independent of notes, and the task files are kept
 in the main <code>org-directory</code>. The files are:
@@ -1982,9 +2562,9 @@ My high level task process then is:
 </ol>
 </div>
 
-<div id="outline-container-org6f63af6" class="outline-5">
-<h5 id="org6f63af6"><span class="section-number-5">5.2.2.1</span> Capture templates</h5>
-<div class="outline-text-5" id="text-5-2-2-1">
+<div id="outline-container-orge24a28a" class="outline-5">
+<h5 id="orge24a28a"><span class="section-number-5">5.3.2.1.</span> Capture templates</h5>
+<div class="outline-text-5" id="text-5-3-2-1">
 <p>
 These are my custom templates for capturing new tasks quickly to the inbox.
 </p>
@@ -1992,25 +2572,25 @@ These are my custom templates for capturing new tasks quickly to the inbox.
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> org
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">org-capture-templates</span>
-        <span style="color: #51afef;">`</span><span style="color: #98be65;">(</span><span style="color: #51afef;">(</span><span style="color: #98be65;">"t"</span> <span style="color: #98be65;">"Todo [inbox]"</span> entry
-           <span style="color: #c678dd;">(</span>file ,<span style="color: #98be65;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"inbox.org"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
-           <span style="color: #98be65;">"* </span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #98be65;"> %i%?"</span><span style="color: #51afef;">)</span>
-          <span style="color: #51afef;">(</span><span style="color: #98be65;">"e"</span> <span style="color: #98be65;">"Event [inbox]"</span> entry
-           <span style="color: #c678dd;">(</span>file ,<span style="color: #98be65;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"inbox.org"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
-           <span style="color: #98be65;">"* %i%? \n %U"</span><span style="color: #51afef;">)</span>
-          <span style="color: #51afef;">(</span><span style="color: #98be65;">"n"</span> <span style="color: #98be65;">"Note [inbox]"</span> entry
-           <span style="color: #c678dd;">(</span>file ,<span style="color: #98be65;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"inbox.org"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
-           <span style="color: #98be65;">"* %?"</span><span style="color: #51afef;">)</span>
-          <span style="color: #51afef;">(</span><span style="color: #98be65;">"s"</span> <span style="color: #98be65;">"Shopping [todo]"</span> checkitem
-           <span style="color: #c678dd;">(</span>file+olp ,<span style="color: #98be65;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"someday.org"</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">"Home"</span> <span style="color: #98be65;">"Shopping"</span><span style="color: #c678dd;">)</span>
-           <span style="color: #98be65;">"- [ ] %?"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+        <span style="color: #51afef;">`</span><span style="color: #98be65;">(</span><span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"t"</span> <span style="color: #98be65;">"Todo [inbox]"</span> entry
+           <span style="color: #51afef;">(</span>file ,<span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"inbox.org"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+           <span style="color: #98be65;">"* </span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #98be65;"> %i%?"</span><span style="color: #a9a1e1;">)</span>
+          <span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"e"</span> <span style="color: #98be65;">"Event [inbox]"</span> entry
+           <span style="color: #51afef;">(</span>file ,<span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"inbox.org"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+           <span style="color: #98be65;">"* %i%? \n %U"</span><span style="color: #a9a1e1;">)</span>
+          <span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"n"</span> <span style="color: #98be65;">"Note [inbox]"</span> entry
+           <span style="color: #51afef;">(</span>file ,<span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"inbox.org"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+           <span style="color: #98be65;">"* %?"</span><span style="color: #a9a1e1;">)</span>
+          <span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"s"</span> <span style="color: #98be65;">"Shopping [todo]"</span> checkitem
+           <span style="color: #51afef;">(</span>file+olp ,<span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #dcaeea;">org-directory</span> <span style="color: #98be65;">"someday.org"</span><span style="color: #c678dd;">)</span> <span style="color: #98be65;">"Shopping"</span><span style="color: #51afef;">)</span>
+           <span style="color: #98be65;">"- [ ] %?"</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
-<div id="outline-container-orgb937d3f" class="outline-5">
-<h5 id="orgb937d3f"><span class="section-number-5">5.2.2.2</span> Task settings</h5>
-<div class="outline-text-5" id="text-5-2-2-2">
+<div id="outline-container-orgd77ddca" class="outline-5">
+<h5 id="orgd77ddca"><span class="section-number-5">5.3.2.2.</span> Task settings</h5>
+<div class="outline-text-5" id="text-5-3-2-2">
 <p>
 Define the <kbd>TODO</kbd> states and also mark complete items with the current time.
 </p>
@@ -2018,16 +2598,16 @@ Define the <kbd>TODO</kbd> states and also mark complete items with the current 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> org
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span>
-   <span style="color: #dcaeea;">org-todo-keywords</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #51afef;">(</span>sequence <span style="color: #98be65;">"</span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #98be65;">(t)"</span> <span style="color: #98be65;">"WAITING(w)"</span> <span style="color: #98be65;">"|"</span> <span style="color: #98be65;">"DONE(d)"</span> <span style="color: #98be65;">"CANCELLED(c)"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
+   <span style="color: #dcaeea;">org-todo-keywords</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #a9a1e1;">(</span>sequence <span style="color: #98be65;">"</span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #98be65;">(t)"</span> <span style="color: #98be65;">"WAITING(w)"</span> <span style="color: #98be65;">"|"</span> <span style="color: #98be65;">"DONE(d)"</span> <span style="color: #98be65;">"CANCELLED(c)"</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
    <span style="color: #dcaeea;">org-log-done</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">time</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org8f43f60" class="outline-5">
-<h5 id="org8f43f60"><span class="section-number-5">5.2.2.3</span> Contexts</h5>
-<div class="outline-text-5" id="text-5-2-2-3">
+<div id="outline-container-org9478d1a" class="outline-5">
+<h5 id="org9478d1a"><span class="section-number-5">5.3.2.3.</span> Contexts</h5>
+<div class="outline-text-5" id="text-5-3-2-3">
 <p>
 I use tags to primarily set contexts, following the GTD process. I have <kbd>@work</kbd>, <kbd>@home</kbd>, and <kbd>@omscs</kbd>. I configure
 tag selection, <kbd>C-c C-c</kbd>, to quickly pick one of these contexts.
@@ -2036,16 +2616,16 @@ tag selection, <kbd>C-c C-c</kbd>, to quickly pick one of these contexts.
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> org
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span>
-   <span style="color: #dcaeea;">org-tag-alist</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #51afef;">(</span><span style="color: #98be65;">"@work"</span> . ?w<span style="color: #51afef;">)</span> <span style="color: #51afef;">(</span><span style="color: #98be65;">"@home"</span> . ?h<span style="color: #51afef;">)</span> <span style="color: #51afef;">(</span><span style="color: #98be65;">"@omscs"</span> . ?o<span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
+   <span style="color: #dcaeea;">org-tag-alist</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"@work"</span> . ?w<span style="color: #a9a1e1;">)</span> <span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"@home"</span> . ?h<span style="color: #a9a1e1;">)</span> <span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"@omscs"</span> . ?o<span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
    <span style="color: #dcaeea;">org-fast-tag-selection-single-key</span> t<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org5526898" class="outline-5">
-<h5 id="org5526898"><span class="section-number-5">5.2.2.4</span> Refile targets</h5>
-<div class="outline-text-5" id="text-5-2-2-4">
+<div id="outline-container-org9fc1652" class="outline-5">
+<h5 id="org9fc1652"><span class="section-number-5">5.3.2.4.</span> Refile targets</h5>
+<div class="outline-text-5" id="text-5-3-2-4">
 <p>
 Define targets for potential refile. This is part of my GTD system and allows quickly moving tasks between the core task
 files.
@@ -2054,18 +2634,18 @@ files.
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> org
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span>
-   <span style="color: #dcaeea;">org-refile-targets</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #51afef;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/todo.org"</span> <span style="color: #c678dd;">:maxlevel</span> . <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #51afef;">)</span>
-                        <span style="color: #51afef;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/someday.org"</span> <span style="color: #c678dd;">:maxlevel</span> . <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #51afef;">)</span>
-                        <span style="color: #51afef;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/tickler.org"</span> <span style="color: #c678dd;">:maxlevel</span> . <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #51afef;">)</span>
-                        <span style="color: #51afef;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/notes.org"</span> <span style="color: #c678dd;">:maxlevel</span> . <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+   <span style="color: #dcaeea;">org-refile-targets</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"~/Notes/todo.org"</span> <span style="color: #c678dd;">:maxlevel</span> . <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #a9a1e1;">)</span>
+                        <span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"~/Notes/someday.org"</span> <span style="color: #c678dd;">:maxlevel</span> . <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #a9a1e1;">)</span>
+                        <span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"~/Notes/tickler.org"</span> <span style="color: #c678dd;">:maxlevel</span> . <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #a9a1e1;">)</span>
+                        <span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"~/Notes/notes.org"</span> <span style="color: #c678dd;">:maxlevel</span> . <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-orge31a165" class="outline-5">
-<h5 id="orge31a165"><span class="section-number-5">5.2.2.5</span> Habits</h5>
-<div class="outline-text-5" id="text-5-2-2-5">
+<div id="outline-container-org5384cec" class="outline-5">
+<h5 id="org5384cec"><span class="section-number-5">5.3.2.5.</span> Habits</h5>
+<div class="outline-text-5" id="text-5-3-2-5">
 <p>
 Enable org-habit to allow special scheduled items for helping me create habits. To use, create a recurring <kbd>SCHEDULED</kbd> item with
 the <kbd>STYLE</kbd> property (<kbd>C-x C-p</kbd>) set to <kbd>habit</kbd>.  See <a href="https://orgmode.org/manual/Tracking-your-habits.html">Tracking your habits</a> for more details.
@@ -2073,15 +2653,15 @@ the <kbd>STYLE</kbd> property (<kbd>C-x C-p</kbd>) set to <kbd>habit</kbd>.  See
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> org
-  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">add-to-list</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">org-modules</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">org-habit</span> t<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">add-to-list</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">org-modules</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">org-habit</span> t<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org095e043" class="outline-5">
-<h5 id="org095e043"><span class="section-number-5">5.2.2.6</span> Custom Agendas</h5>
-<div class="outline-text-5" id="text-5-2-2-6">
+<div id="outline-container-org30e28fb" class="outline-5">
+<h5 id="org30e28fb"><span class="section-number-5">5.3.2.6.</span> Custom Agendas</h5>
+<div class="outline-text-5" id="text-5-3-2-6">
 <p>
 The agendas are my central view on tasks. There are separate subsections for each agenda view, defined as a function.
 </p>
@@ -2089,10 +2669,10 @@ The agendas are my central view on tasks. There are separate subsections for eac
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> org
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">org-agenda-custom-commands</span>
-        <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">list</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--all-agenda</span><span style="color: #51afef;">)</span>
-              <span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--agenda</span> <span style="color: #98be65;">"home"</span><span style="color: #51afef;">)</span>
-              <span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--agenda</span> <span style="color: #98be65;">"work"</span><span style="color: #51afef;">)</span>
-              <span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--agenda</span> <span style="color: #98be65;">"omscs"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+        <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">list</span> <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">jsravn--all-agenda</span><span style="color: #a9a1e1;">)</span>
+              <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">jsravn--agenda</span> <span style="color: #98be65;">"home"</span><span style="color: #a9a1e1;">)</span>
+              <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">jsravn--agenda</span> <span style="color: #98be65;">"work"</span><span style="color: #a9a1e1;">)</span>
+              <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">jsravn--agenda</span> <span style="color: #98be65;">"omscs"</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 
@@ -2106,9 +2686,9 @@ Also, give me two weeks warning of impending deadlines.
 </div>
 </div>
 
-<div id="outline-container-orgb860953" class="outline-6">
-<h6 id="orgb860953"><span class="section-number-6">5.2.2.6.1</span> All Agenda Function</h6>
-<div class="outline-text-6" id="text-5-2-2-6-1">
+<div id="outline-container-org3669ff0" class="outline-6">
+<h6 id="org3669ff0"><span class="section-number-6">5.3.2.6.1.</span> All Agenda Function</h6>
+<div class="outline-text-6" id="text-5-3-2-6-1">
 <p>
 This is my all agenda function. It shows everything going on in my task system.
 </p>
@@ -2117,56 +2697,56 @@ This is my all agenda function. It shows everything going on in my task system.
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">defun</span> <span style="color: #c678dd;">jsravn--all-agenda</span> <span style="color: #c678dd;">()</span>
   <span style="color: #83898d;">"Custom all agenda."</span>
   <span style="color: #51afef;">`</span><span style="color: #c678dd;">(</span><span style="color: #98be65;">"A"</span> <span style="color: #98be65;">"All agenda"</span>
-    <span style="color: #98be65;">(</span><span style="color: #51afef;">(</span>todo <span style="color: #98be65;">""</span> <span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #51afef;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/inbox.org"</span> <span style="color: #98be65;">"~/Dropbox/Notes/roam/inbox.org"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
-               <span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-overriding-header</span> <span style="color: #98be65;">"Inbox"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-     <span style="color: #51afef;">(</span>tags <span style="color: #98be65;">"-{.*}"</span> <span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #51afef;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/todo.org"</span>
-                                        <span style="color: #98be65;">"~/Dropbox/Notes/tickler.org"</span>
-                                        <span style="color: #98be65;">"~/Dropbox/Notes/someday.org"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
-                    <span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-overriding-header</span> <span style="color: #98be65;">"Untagged"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-     <span style="color: #51afef;">(</span>agenda <span style="color: #98be65;">""</span> <span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-span</span> <span style="color: #da8548; font-weight: bold;">7</span><span style="color: #98be65;">)</span>
-                 <span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-start-day</span> <span style="color: #98be65;">"-1d"</span><span style="color: #98be65;">)</span>
-                 <span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #51afef;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/tickler.org"</span>
-                                     <span style="color: #98be65;">"~/Dropbox/Notes/todo.org"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
-                 <span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-skip-function</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--skip-scheduled-if-in-todo</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-     ,<span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #98be65;">"@home"</span> <span style="color: #98be65;">"Home"</span><span style="color: #51afef;">)</span>
-     ,<span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #98be65;">"@work"</span> <span style="color: #98be65;">"Work"</span><span style="color: #51afef;">)</span>
-     ,<span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #98be65;">"@omscs"</span> <span style="color: #98be65;">"OMSCS"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+    <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">(</span>todo <span style="color: #98be65;">""</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #98be65;">"~/Notes/inbox.org"</span> <span style="color: #98be65;">"~/Notes/roam/inbox.org"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+               <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-overriding-header</span> <span style="color: #98be65;">"Inbox"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+     <span style="color: #a9a1e1;">(</span>tags <span style="color: #98be65;">"-{.*}"</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #98be65;">"~/Notes/todo.org"</span>
+                                        <span style="color: #98be65;">"~/Notes/tickler.org"</span>
+                                        <span style="color: #98be65;">"~/Notes/someday.org"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+                    <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-overriding-header</span> <span style="color: #98be65;">"Untagged"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+     <span style="color: #a9a1e1;">(</span>agenda <span style="color: #98be65;">""</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-span</span> <span style="color: #da8548; font-weight: bold;">7</span><span style="color: #c678dd;">)</span>
+                 <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-start-day</span> <span style="color: #98be65;">"-1d"</span><span style="color: #c678dd;">)</span>
+                 <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span><span style="color: #98be65;">"~/Notes/tickler.org"</span>
+                                     <span style="color: #98be65;">"~/Notes/todo.org"</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+                 <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-skip-function</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--skip-scheduled-if-in-todo</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+     ,<span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #98be65;">"@home"</span> <span style="color: #98be65;">"Home"</span><span style="color: #a9a1e1;">)</span>
+     ,<span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #98be65;">"@work"</span> <span style="color: #98be65;">"Work"</span><span style="color: #a9a1e1;">)</span>
+     ,<span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #98be65;">"@omscs"</span> <span style="color: #98be65;">"OMSCS"</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org1b6eaf9" class="outline-6">
-<h6 id="org1b6eaf9"><span class="section-number-6">5.2.2.6.2</span> Context Agenda Function</h6>
-<div class="outline-text-6" id="text-5-2-2-6-2">
+<div id="outline-container-org92595ff" class="outline-6">
+<h6 id="org92595ff"><span class="section-number-6">5.3.2.6.2.</span> Context Agenda Function</h6>
+<div class="outline-text-6" id="text-5-3-2-6-2">
 <p>
-This is my per-context agenda function. It is a slimmed down version of the <a href="#orgb860953">All Agenda Function</a> that scopes to a
+This is my per-context agenda function. It is a slimmed down version of the <a href="#org3669ff0">All Agenda Function</a> that scopes to a
 context, like <kbd>@home</kbd>.
 </p>
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">defun</span> <span style="color: #c678dd;">jsravn--agenda</span> <span style="color: #c678dd;">(</span>scope<span style="color: #c678dd;">)</span>
   <span style="color: #83898d;">"Custom scoped agenda."</span>
-  <span style="color: #c678dd;">(</span><span style="color: #51afef;">let</span> <span style="color: #98be65;">(</span><span style="color: #51afef;">(</span>key <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">substring</span> scope <span style="color: #da8548; font-weight: bold;">0</span> <span style="color: #da8548; font-weight: bold;">1</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-        <span style="color: #51afef;">(</span>title <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">upcase-initials</span> scope<span style="color: #98be65;">)</span> <span style="color: #98be65;">"agenda"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-        <span style="color: #51afef;">(</span>tag <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #98be65;">"@"</span> scope<span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #51afef;">let</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">(</span>key <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">substring</span> scope <span style="color: #da8548; font-weight: bold;">0</span> <span style="color: #da8548; font-weight: bold;">1</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+        <span style="color: #a9a1e1;">(</span>title <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">upcase-initials</span> scope<span style="color: #c678dd;">)</span> <span style="color: #98be65;">"agenda"</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+        <span style="color: #a9a1e1;">(</span>tag <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #98be65;">"@"</span> scope<span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
     <span style="color: #51afef;">`</span><span style="color: #98be65;">(</span>,key ,title
-           <span style="color: #51afef;">(</span><span style="color: #c678dd;">(</span>agenda <span style="color: #98be65;">""</span> <span style="color: #98be65;">(</span><span style="color: #51afef;">(</span><span style="color: #dcaeea;">org-agenda-span</span> <span style="color: #da8548; font-weight: bold;">7</span><span style="color: #51afef;">)</span>
-                        <span style="color: #51afef;">(</span><span style="color: #dcaeea;">org-agenda-start-day</span> <span style="color: #98be65;">"-1d"</span><span style="color: #51afef;">)</span>
-                        <span style="color: #51afef;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/tickler.org"</span>
-                                            <span style="color: #98be65;">"~/Dropbox/Notes/todo.org"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-                        <span style="color: #51afef;">(</span><span style="color: #dcaeea;">org-agenda-skip-function</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--skip-scheduled-if-in-todo</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
-            ,<span style="color: #c678dd;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">concat</span> tag <span style="color: #98be65;">"/!</span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #98be65;">"</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">"Todo"</span><span style="color: #c678dd;">)</span>
-            ,<span style="color: #c678dd;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">concat</span> tag <span style="color: #98be65;">"/!WAITING"</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">"Waiting"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-           <span style="color: #51afef;">(</span><span style="color: #c678dd;">(</span><span style="color: #dcaeea;">org-agenda-tag-filter-preset</span> <span style="color: #51afef;">'</span><span style="color: #98be65;">(</span>,<span style="color: #51afef;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #98be65;">"+"</span> tag<span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+           <span style="color: #a9a1e1;">(</span><span style="color: #51afef;">(</span>agenda <span style="color: #98be65;">""</span> <span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-span</span> <span style="color: #da8548; font-weight: bold;">7</span><span style="color: #98be65;">)</span>
+                        <span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-start-day</span> <span style="color: #98be65;">"-1d"</span><span style="color: #98be65;">)</span>
+                        <span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #a9a1e1;">(</span><span style="color: #98be65;">"~/Notes/tickler.org"</span>
+                                            <span style="color: #98be65;">"~/Notes/todo.org"</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
+                        <span style="color: #98be65;">(</span><span style="color: #dcaeea;">org-agenda-skip-function</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--skip-scheduled-if-in-todo</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+            ,<span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> tag <span style="color: #98be65;">"/!</span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #98be65;">"</span><span style="color: #c678dd;">)</span> <span style="color: #98be65;">"Todo"</span><span style="color: #51afef;">)</span>
+            ,<span style="color: #51afef;">(</span><span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">concat</span> tag <span style="color: #98be65;">"/!WAITING"</span><span style="color: #c678dd;">)</span> <span style="color: #98be65;">"Waiting"</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+           <span style="color: #a9a1e1;">(</span><span style="color: #51afef;">(</span><span style="color: #dcaeea;">org-agenda-tag-filter-preset</span> <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span>,<span style="color: #98be65;">(</span><span style="color: #a9a1e1;">concat</span> <span style="color: #98be65;">"+"</span> tag<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org0329a0f" class="outline-6">
-<h6 id="org0329a0f"><span class="section-number-6">5.2.2.6.3</span> Agenda Support Functions</h6>
-<div class="outline-text-6" id="text-5-2-2-6-3">
+<div id="outline-container-org9413e4e" class="outline-6">
+<h6 id="org9413e4e"><span class="section-number-6">5.3.2.6.3.</span> Agenda Support Functions</h6>
+<div class="outline-text-6" id="text-5-3-2-6-3">
 <p>
 I have a few support functions for the agendas.
 </p>
@@ -2178,20 +2758,20 @@ This is a custom <code>tags-todo</code> view which only shows the first TODO in 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">defun</span> <span style="color: #c678dd;">jsravn--tags-todo</span> <span style="color: #c678dd;">(</span>tags header<span style="color: #c678dd;">)</span>
   <span style="color: #83898d;">"Customized tags-todo view which only shows the first </span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #83898d;"> in a subheading."</span>
-  <span style="color: #51afef;">`</span><span style="color: #c678dd;">(</span>tags-todo ,tags <span style="color: #98be65;">(</span><span style="color: #51afef;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span><span style="color: #98be65;">"~/Dropbox/Notes/todo.org"</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-                     <span style="color: #51afef;">(</span><span style="color: #dcaeea;">org-agenda-overriding-header</span> ,header<span style="color: #51afef;">)</span>
-                     <span style="color: #51afef;">(</span><span style="color: #dcaeea;">org-agenda-skip-function</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--skip-all-siblings-but-first</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+  <span style="color: #51afef;">`</span><span style="color: #c678dd;">(</span>tags-todo ,tags <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">(</span><span style="color: #dcaeea;">org-agenda-files</span> <span style="color: #51afef;">'</span><span style="color: #51afef;">(</span><span style="color: #98be65;">"~/Notes/todo.org"</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+                     <span style="color: #a9a1e1;">(</span><span style="color: #dcaeea;">org-agenda-overriding-header</span> ,header<span style="color: #a9a1e1;">)</span>
+                     <span style="color: #a9a1e1;">(</span><span style="color: #dcaeea;">org-agenda-skip-function</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--skip-all-siblings-but-first</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 
 <span style="color: #51afef;">(</span><span style="color: #51afef;">defun</span> <span style="color: #c678dd;">jsravn--skip-all-siblings-but-first</span> <span style="color: #c678dd;">()</span>
   <span style="color: #83898d;">"Skip all but the first non-done entry that is inside a subheading."</span>
-  <span style="color: #c678dd;">(</span><span style="color: #51afef;">when</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">&gt;</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">car</span> <span style="color: #c678dd;">(</span><span style="color: #c678dd;">org-heading-components</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span> <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #98be65;">)</span>
-    <span style="color: #98be65;">(</span><span style="color: #51afef;">let</span> <span style="color: #51afef;">(</span>should-skip-entry<span style="color: #51afef;">)</span>
-      <span style="color: #51afef;">(</span><span style="color: #51afef;">save-excursion</span>
-        <span style="color: #c678dd;">(</span><span style="color: #51afef;">while</span> <span style="color: #98be65;">(</span><span style="color: #51afef;">and</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">not</span> should-skip-entry<span style="color: #51afef;">)</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">org-goto-sibling</span> t<span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
-          <span style="color: #98be65;">(</span><span style="color: #51afef;">when</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">string=</span> <span style="color: #98be65;">"</span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #98be65;">"</span> <span style="color: #c678dd;">(</span><span style="color: #c678dd;">org-get-todo-state</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-            <span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> should-skip-entry t<span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-      <span style="color: #51afef;">(</span><span style="color: #51afef;">when</span> should-skip-entry
-        <span style="color: #c678dd;">(</span><span style="color: #51afef;">or</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">outline-next-heading</span><span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">goto-char</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">point-max</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #51afef;">when</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">&gt;</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">car</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">org-heading-components</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span> <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #98be65;">)</span>
+    <span style="color: #98be65;">(</span><span style="color: #51afef;">let</span> <span style="color: #a9a1e1;">(</span>should-skip-entry<span style="color: #a9a1e1;">)</span>
+      <span style="color: #a9a1e1;">(</span><span style="color: #51afef;">save-excursion</span>
+        <span style="color: #51afef;">(</span><span style="color: #51afef;">while</span> <span style="color: #c678dd;">(</span><span style="color: #51afef;">and</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">not</span> should-skip-entry<span style="color: #98be65;">)</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">org-goto-sibling</span> t<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span>
+          <span style="color: #c678dd;">(</span><span style="color: #51afef;">when</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">string=</span> <span style="color: #98be65;">"</span><span style="color: #ECBE7B; font-weight: bold;">TODO</span><span style="color: #98be65;">"</span> <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">org-get-todo-state</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
+            <span style="color: #98be65;">(</span><span style="color: #51afef;">setq</span> should-skip-entry t<span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+      <span style="color: #a9a1e1;">(</span><span style="color: #51afef;">when</span> should-skip-entry
+        <span style="color: #51afef;">(</span><span style="color: #51afef;">or</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">outline-next-heading</span><span style="color: #c678dd;">)</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">goto-char</span> <span style="color: #98be65;">(</span><span style="color: #a9a1e1;">point-max</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 
@@ -2202,18 +2782,18 @@ This a custom filter that skips any <kbd>SCHEDULED</kbd> items which have alread
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">defun</span> <span style="color: #c678dd;">jsravn--skip-scheduled-if-in-todo</span> <span style="color: #c678dd;">()</span>
   <span style="color: #83898d;">"Skip scheduled items that have been moved to todo.org."</span>
-  <span style="color: #c678dd;">(</span><span style="color: #51afef;">when</span> <span style="color: #98be65;">(</span><span style="color: #51afef;">and</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">string=</span> <span style="color: #98be65;">"todo.org"</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">file-name-nondirectory</span> <span style="color: #98be65;">(</span><span style="color: #dcaeea;">buffer-file-name</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
-             <span style="color: #51afef;">(</span><span style="color: #c678dd;">org-entry-get</span> nil <span style="color: #98be65;">"SCHEDULED"</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span>
-    <span style="color: #98be65;">(</span><span style="color: #51afef;">or</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">outline-next-heading</span><span style="color: #51afef;">)</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">goto-char</span> <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">point-max</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #51afef;">when</span> <span style="color: #98be65;">(</span><span style="color: #51afef;">and</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">string=</span> <span style="color: #98be65;">"todo.org"</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">file-name-nondirectory</span> <span style="color: #c678dd;">(</span><span style="color: #dcaeea;">buffer-file-name</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span>
+             <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">org-entry-get</span> nil <span style="color: #98be65;">"SCHEDULED"</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span>
+    <span style="color: #98be65;">(</span><span style="color: #51afef;">or</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">outline-next-heading</span><span style="color: #a9a1e1;">)</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">goto-char</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">point-max</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org5e0f916" class="outline-5">
-<h5 id="org5e0f916"><span class="section-number-5">5.2.2.7</span> Agenda Searches</h5>
-<div class="outline-text-5" id="text-5-2-2-7">
+<div id="outline-container-orgf2dde94" class="outline-5">
+<h5 id="orgf2dde94"><span class="section-number-5">5.3.2.7.</span> Agenda Searches</h5>
+<div class="outline-text-5" id="text-5-3-2-7">
 <p>
 Agenda search is usually accessed via <kbd>SPC o A s</kbd> and allows quick searching of all task files.
 </p>
@@ -2240,17 +2820,17 @@ as a single phrase. A single phrase can be forced by enclosing in quotations.
 </div>
 </div>
 
-<div id="outline-container-org69c95f2" class="outline-4">
-<h4 id="org69c95f2"><span class="section-number-4">5.2.3</span> Notes</h4>
-<div class="outline-text-4" id="text-5-2-3">
+<div id="outline-container-org89d5454" class="outline-4">
+<h4 id="org89d5454"><span class="section-number-4">5.3.3.</span> Notes</h4>
+<div class="outline-text-4" id="text-5-3-3">
 <p>
 I use org-roam, deft, and org-journal to manage my notes.
 </p>
 </div>
 
-<div id="outline-container-org652bbd9" class="outline-5">
-<h5 id="org652bbd9"><span class="section-number-5">5.2.3.1</span> org-roam</h5>
-<div class="outline-text-5" id="text-5-2-3-1">
+<div id="outline-container-org9c19013" class="outline-5">
+<h5 id="org9c19013"><span class="section-number-5">5.3.3.1.</span> org-roam</h5>
+<div class="outline-text-5" id="text-5-3-3-1">
 <p>
 I use <a href="https://org-roam.readthedocs.io/en/master/">org-roam</a> to organize my notes. <kbd>org-roam</kbd> is scoped to a single folder which contains all the org files that roam
 should create metadata for. I prefer to keep my notes separate from my task system, so I put this into a dedicated
@@ -2269,7 +2849,7 @@ outside of orgmode such as on a mobile device.
 
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq</span> <span style="color: #dcaeea;">org-roam-capture-templates</span>
-      <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #98be65;">"d"</span> <span style="color: #98be65;">"default"</span> plain <span style="color: #51afef;">(</span><span style="color: #51afef;">function</span> org-roam-capture--get-point<span style="color: #51afef;">)</span>
+      <span style="color: #51afef;">'</span><span style="color: #c678dd;">(</span><span style="color: #98be65;">(</span><span style="color: #98be65;">"d"</span> <span style="color: #98be65;">"default"</span> plain <span style="color: #a9a1e1;">(</span><span style="color: #51afef;">function</span> org-roam-capture--get-point<span style="color: #a9a1e1;">)</span>
          <span style="color: #98be65;">"%?"</span>
          <span style="color: #c678dd;">:file-name</span> <span style="color: #98be65;">"${slug}"</span>
          <span style="color: #c678dd;">:head</span> <span style="color: #98be65;">"#+TITLE: ${title}\n"</span>
@@ -2303,22 +2883,22 @@ And I want the org-roam buffer to open automatically when I visit a roam file.
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">defun</span> <span style="color: #c678dd;">jsravn--open-org-roam</span> <span style="color: #c678dd;">()</span>
   <span style="color: #83898d;">"Called by `</span><span style="color: #a9a1e1;">org-mode-hook</span><span style="color: #83898d;">' to call `</span><span style="color: #a9a1e1;">org-roam</span><span style="color: #83898d;">' if the current buffer is a roam file."</span>
-  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">window-configuration-change-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--open-org-roam</span><span style="color: #c678dd;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">remove-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">window-configuration-change-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--open-org-roam</span><span style="color: #c678dd;">)</span>
   <span style="color: #c678dd;">(</span><span style="color: #51afef;">when</span> <span style="color: #98be65;">(</span><span style="color: #c678dd;">org-roam--org-roam-file-p</span><span style="color: #98be65;">)</span>
-    <span style="color: #98be65;">(</span><span style="color: #51afef;">unless</span> <span style="color: #51afef;">(</span><span style="color: #a9a1e1;">eq</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">visible</span> <span style="color: #c678dd;">(</span><span style="color: #c678dd;">org-roam--current-visibility</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">org-roam</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+    <span style="color: #98be65;">(</span><span style="color: #51afef;">unless</span> <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">eq</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">visible</span> <span style="color: #51afef;">(</span><span style="color: #c678dd;">org-roam--current-visibility</span><span style="color: #51afef;">)</span><span style="color: #a9a1e1;">)</span> <span style="color: #a9a1e1;">(</span><span style="color: #c678dd;">org-roam</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 
 <span style="color: #51afef;">(</span><span style="color: #51afef;">after!</span> org-roam
-  <span style="color: #c678dd;">(</span><span style="color: #c678dd;">add-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">org-mode-hook</span>
-            <span style="color: #98be65;">(</span><span style="color: #51afef;">lambda</span> <span style="color: #51afef;">()</span>
-              <span style="color: #51afef;">(</span><span style="color: #c678dd;">add-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">window-configuration-change-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--open-org-roam</span><span style="color: #51afef;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
+  <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">add-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">org-mode-hook</span>
+            <span style="color: #98be65;">(</span><span style="color: #51afef;">lambda</span> <span style="color: #a9a1e1;">()</span>
+              <span style="color: #a9a1e1;">(</span><span style="color: #a9a1e1;">add-hook</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">window-configuration-change-hook</span> <span style="color: #51afef;">#'</span><span style="color: #ECBE7B;">jsravn--open-org-roam</span><span style="color: #a9a1e1;">)</span><span style="color: #98be65;">)</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
 </div>
 
-<div id="outline-container-org376fdf5" class="outline-5">
-<h5 id="org376fdf5"><span class="section-number-5">5.2.3.2</span> org-journal</h5>
-<div class="outline-text-5" id="text-5-2-3-2">
+<div id="outline-container-orgf36bbba" class="outline-5">
+<h5 id="orgf36bbba"><span class="section-number-5">5.3.3.2.</span> org-journal</h5>
+<div class="outline-text-5" id="text-5-3-3-2">
 <p>
 Set up org-journal to integrate with org-roam.
 </p>
@@ -2335,9 +2915,9 @@ Set up org-journal to integrate with org-roam.
 </div>
 </div>
 
-<div id="outline-container-org2380358" class="outline-4">
-<h4 id="org2380358"><span class="section-number-4">5.2.4</span> Calendar</h4>
-<div class="outline-text-4" id="text-5-2-4">
+<div id="outline-container-org7724e04" class="outline-4">
+<h4 id="org7724e04"><span class="section-number-4">5.3.4.</span> Calendar</h4>
+<div class="outline-text-4" id="text-5-3-4">
 <p>
 I am experimenting with <kbd>org-caldav</kbd> to sync my org files with calendars. Much of this is taken from <a href="https://www.reddit.com/r/orgmode/comments/8rl8ep/making_orgcaldav_useable/">this reddit post</a>.
 Unfortunately it&rsquo;s very slow and blocks Emacs completely while syncing. It also doesn&rsquo;t support recurring events.
@@ -2382,9 +2962,9 @@ Unfortunately it&rsquo;s very slow and blocks Emacs completely while syncing. It
 </div>
 </div>
 </div>
-<div id="outline-container-orgc71bbb1" class="outline-4">
-<h4 id="orgc71bbb1"><span class="section-number-4">5.2.5</span> Alerts</h4>
-<div class="outline-text-4" id="text-5-2-5">
+<div id="outline-container-org1c7a76b" class="outline-4">
+<h4 id="org1c7a76b"><span class="section-number-4">5.3.5.</span> Alerts</h4>
+<div class="outline-text-4" id="text-5-3-5">
 <p>
 Experiment using <kbd>org-alert</kbd> to get notified of impending deadlines. <span class="underline">Not working</span>
 </p>
@@ -2404,9 +2984,9 @@ Experiment using <kbd>org-alert</kbd> to get notified of impending deadlines. <s
 </div>
 </div>
 
-<div id="outline-container-org3b28c05" class="outline-3">
-<h3 id="org3b28c05"><span class="section-number-3">5.3</span> YAML</h3>
-<div class="outline-text-3" id="text-5-3">
+<div id="outline-container-org74f97b8" class="outline-3">
+<h3 id="org74f97b8"><span class="section-number-3">5.4.</span> YAML</h3>
+<div class="outline-text-3" id="text-5-4">
 <p>
 Add Kubernetes schemas.
 </p>
@@ -2430,9 +3010,9 @@ Add Kubernetes schemas.
 </div>
 </div>
 </div>
-<div id="outline-container-org21acfcc" class="outline-3">
-<h3 id="org21acfcc"><span class="section-number-3">5.4</span> cuda</h3>
-<div class="outline-text-3" id="text-5-4">
+<div id="outline-container-org80846a2" class="outline-3">
+<h3 id="org80846a2"><span class="section-number-3">5.5.</span> cuda</h3>
+<div class="outline-text-3" id="text-5-5">
 <div class="org-src-container">
 <pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">add-hook!</span> cuda-mode <span style="color: #c678dd;">(</span><span style="color: #a9a1e1;">run-hooks</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">prog-mode-hook</span><span style="color: #c678dd;">)</span><span style="color: #51afef;">)</span>
 </pre>
@@ -2440,15 +3020,15 @@ Add Kubernetes schemas.
 </div>
 </div>
 
-<div id="outline-container-orgf544702" class="outline-3">
-<h3 id="orgf544702"><span class="section-number-3">5.5</span> cc</h3>
-<div class="outline-text-3" id="text-5-5">
+<div id="outline-container-org4a41510" class="outline-3">
+<h3 id="org4a41510"><span class="section-number-3">5.6.</span> cc</h3>
+<div class="outline-text-3" id="text-5-6">
 <p>
 Use the more standard 2 space indent for C mode.
 </p>
 
 <div class="org-src-container">
-<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq-hook!</span> <span style="color: #51afef;">'</span><span style="color: #ECBE7B;">c-mode-hook</span> <span style="color: #dcaeea;">tab-width</span> <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #51afef;">)</span>
+<pre class="src src-emacs-lisp"><span style="color: #51afef;">(</span><span style="color: #51afef;">setq-hook!</span> <span style="color: #51afef;">'</span><span style="color: #dcaeea;">c-mode-hook</span> <span style="color: #dcaeea;">tab-width</span> <span style="color: #da8548; font-weight: bold;">2</span><span style="color: #51afef;">)</span>
 </pre>
 </div>
 </div>
@@ -2457,7 +3037,7 @@ Use the more standard 2 space indent for C mode.
 </div>
 <div id="postamble" class="status">
 <p class="author">Author: jsravn</p>
-<p class="date">Created: 2020-11-17 Tue 14:54</p>
+<p class="date">Created: 2022-01-03 Mon 13:52</p>
 </div>
 </body>
 </html>

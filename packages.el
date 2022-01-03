@@ -10,6 +10,7 @@
 (package! protobuf-mode)
 
 ;; unpin these packages to use the latest always
+(unpin! nim-mode)
 ;(unpin! org-roam)
 ;(unpin! lsp-mode)
 ;; Package loading:1 ends here

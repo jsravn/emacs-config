@@ -11,12 +11,17 @@
 ;; Personal information:1 ends here
 
 ;; [[file:config.org::*Theme][Theme:1]]
-(setq doom-theme 'doom-one
-      doom-font (font-spec :family "PragmataPro Liga" :size 16)
-      doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size 14)
-      doom-big-font (font-spec :family "PragmataPro Liga" :size 20)
-      doom-unicode-font (font-spec :family "Noto Color Emoji" :size 16)
-      +pretty-code-pragmata-pro-font-name "PragmataPro Liga")
+(letrec ((base
+          ; adjust font size based on system
+          (cond ((equal "loki" (system-name)) 8)
+                 (t 0))))
+  (setq doom-theme 'doom-one
+        doom-font (font-spec :family "PragmataPro Liga" :size (+ base 16))
+        doom-variable-pitch-font (font-spec :family "DejaVu Sans" :size (+ base 14))
+        doom-big-font (font-spec :family "PragmataPro Liga" :size (+ base 20))
+        doom-unicode-font (font-spec :family "Noto Color Emoji" :size (+ base 16))
+        +pretty-code-pragmata-pro-font-name "PragmataPro Liga")
+  )
 ;; Theme:1 ends here
 
 ;; [[file:config.org::*Theme][Theme:2]]
