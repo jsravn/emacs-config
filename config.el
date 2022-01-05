@@ -115,12 +115,12 @@
 ;; Authinfo:1 ends here
 
 ;; [[file:config.org::*atomic-chrome configuration][atomic-chrome configuration:1]]
-(use-package! atomic-chrome
-  :after-call focus-out-hook
-  :config
-  (setq atomic-chrome-default-major-mode 'markdown-mode
-        atomic-chrome-buffer-open-style 'frame)
-  (atomic-chrome-start-server))
+;; (use-package! atomic-chrome
+;;   :after-call focus-out-hook
+;;   :config
+;;   (setq atomic-chrome-default-major-mode 'markdown-mode
+;;         atomic-chrome-buffer-open-style 'frame)
+;;   (atomic-chrome-start-server))
 ;; atomic-chrome configuration:1 ends here
 
 ;; [[file:config.org::*caddyfile-mode][caddyfile-mode:1]]

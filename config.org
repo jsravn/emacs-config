@@ -246,12 +246,12 @@ For configuring packages that are loaded in =packages.el=.
 *** atomic-chrome configuration
 
 #+BEGIN_SRC emacs-lisp
-(use-package! atomic-chrome
-  :after-call focus-out-hook
-  :config
-  (setq atomic-chrome-default-major-mode 'markdown-mode
-        atomic-chrome-buffer-open-style 'frame)
-  (atomic-chrome-start-server))
+;; (use-package! atomic-chrome
+;;   :after-call focus-out-hook
+;;   :config
+;;   (setq atomic-chrome-default-major-mode 'markdown-mode
+;;         atomic-chrome-buffer-open-style 'frame)
+;;   (atomic-chrome-start-server))
 #+END_SRC
 
 *** caddyfile-mode
