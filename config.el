@@ -114,15 +114,6 @@
 (setq auth-sources '("~/.authinfo.gpg"))
 ;; Authinfo:1 ends here
 
-;; [[file:config.org::*atomic-chrome configuration][atomic-chrome configuration:1]]
-;; (use-package! atomic-chrome
-;;   :after-call focus-out-hook
-;;   :config
-;;   (setq atomic-chrome-default-major-mode 'markdown-mode
-;;         atomic-chrome-buffer-open-style 'frame)
-;;   (atomic-chrome-start-server))
-;; atomic-chrome configuration:1 ends here
-
 ;; [[file:config.org::*caddyfile-mode][caddyfile-mode:1]]
 (use-package caddyfile-mode
   :mode (("Caddyfile\\'" . caddyfile-mode)
@@ -152,10 +143,6 @@
 (map!
  :ni "M-u"   #'sp-up-sexp)
 ;; Smart parentheses:1 ends here
-
-;; [[file:config.org::*Dired][Dired:1]]
-(add-hook 'dired-mode-hook #'turn-off-evil-snipe-mode)
-;; Dired:1 ends here
 
 ;; [[file:config.org::*Workspaces][Workspaces:1]]
 (setq +workspaces-on-switch-project-behavior t)
@@ -193,10 +180,6 @@
 ;(setq company-idle-delay 0.1)
 (setq +lsp-company-backends '(:separate company-capf company-yasnippet))
 ;; Completion:1 ends here
-
-;; [[file:config.org::*Flyspell][Flyspell:1]]
-;; (after! flyspell (flyspell-lazy-mode 1))
-;; Flyspell:1 ends here
 
 ;; [[file:config.org::*Configuration][Configuration:1]]
 (set-email-account!
@@ -261,14 +244,6 @@ Kind regards,
 ;; [[file:config.org::*Configuration][Configuration:5]]
 (setq shr-color-visible-luminance-min 80)
 ;; Configuration:5 ends here
-
-;; [[file:config.org::*Configuration][Configuration:6]]
-;; (setq doom-modeline-mu4e t)
-;; (use-package! mu4e-alert
-;;   :after mu4e
-;;   :config
-;;   (mu4e-alert-enable-mode-line-display))
-;; Configuration:6 ends here
 
 ;; [[file:config.org::*Language Server Protocol (LSP)][Language Server Protocol (LSP):1]]
 (map! :leader
@@ -336,11 +311,6 @@ Kind regards,
 ;; [[file:config.org::*Magit][Magit:2]]
 (setq forge-topic-list-limit '(30 . 6))
 ;; Magit:2 ends here
-
-;; [[file:config.org::*Magit][Magit:3]]
-;; (after! magit-refs
-;;   (remove-hook 'magit-refs-sections-hook 'magit-insert-tags))
-;; Magit:3 ends here
 
 ;; [[file:config.org::*Python][Python:1]]
 (setq lsp-python-ms-executable (executable-find "python-language-server"))
@@ -822,53 +792,6 @@ Kind regards,
       org-journal-time-prefix "* "
       org-journal-dir org-roam-directory)
 ;; org-journal:1 ends here
-
-;; [[file:config.org::*Calendar][Calendar:1]]
-;; (use-package! org-caldav
-;;   :after org
-;;   :init
-;;   ;; Configure my calendars.
-;;   (setq org-caldav-url "https://caldav.fastmail.com/dav/calendars/user/james@r-vn.org"
-;;         org-caldav-calendars
-;;         `((:calendar-id "0a220cb3-0ee8-49a9-af76-15c60bde70da"
-;;            :files ,(list (concat org-directory "cal-personal.org"))
-;;            :inbox ,(concat org-directory "cal-personal.org"))
-;;           (:calendar-id "071a3712-0213-4dac-a421-a79dc1760517"
-;;            :files ,(list (concat org-directory "cal-family.org"))
-;;            :inbox ,(concat org-directory "cal-family.org"))
-;;           (:calendar-id "4a92bcb6-a731-418c-89a3-97b86c0c51e5"
-;;            :files ,(list (concat org-directory "cal-holidayuk.org"))
-;;            :inbox ,(concat org-directory "cal-holidayuk.org"))))
-
-;;   ;; Configure caldav.
-;;   (let ((caldav-dir (concat org-directory ".org-caldav/")))
-;;     (setq org-caldav-backup-file (concat caldav-dir "org-caldav-backup.org")
-;;           org-caldav-save-directory caldav-dir
-;;           org-caldav-show-sync-results nil))
-
-;;   :config
-;;   ;; Configure icalendar.
-;;   (setq org-icalendar-alarm-time 1
-;;         org-icalendar-include-todo t
-;;         org-icalendar-timezone "Europe/London"
-;;         org-icalendar-use-deadline '(event-if-todo event-if-not-todo todo-due)
-;;         org-icalendar-use-scheduled '(todo-start event-if-todo event-if-not-todo))
-
-;;   (map! :map org-mode-map
-;;         :localleader
-;;         :desc "Sync calendars" "C" #'org-caldav-sync))
-;; Calendar:1 ends here
-
-;; [[file:config.org::*Alerts][Alerts:1]]
-;; (use-package! org-alert
-;;   :after org
-;;   :init
-;;   (setq alert-default-style 'libnotify                  ; Use system notifications.
-;;         org-alert-headline-regexp "\\(Deadline:.+\\)"   ; Only notify for deadlines.
-;;         org-alert-interval 7200)                        ; Check/alert bihourly.
-;;   :config
-;;   (add-hook 'emacs-startup-hook #'org-alert-enable))
-;; Alerts:1 ends here
 
 ;; [[file:config.org::*YAML][YAML:1]]
 (setq lsp-yaml-schemas (make-hash-table))

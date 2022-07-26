@@ -228,31 +228,12 @@ goes into =packges.el=.
 
 #+BEGIN_SRC emacs-lisp :tangle "packages.el"
 ;; custom packages
-;(package! atomic-chrome)    ;; integration with the atomic chrome extension
-;(package! org-alert)
-(package! caddyfile-mode)
-(package! protobuf-mode)
-
 ;; unpin these packages to use the latest always
-(unpin! nim-mode)
-;(unpin! org-roam)
-;(unpin! lsp-mode)
 #+END_SRC
 
 
 ** Package configuration
 For configuring packages that are loaded in =packages.el=.
-
-*** atomic-chrome configuration
-
-#+BEGIN_SRC emacs-lisp
-;; (use-package! atomic-chrome
-;;   :after-call focus-out-hook
-;;   :config
-;;   (setq atomic-chrome-default-major-mode 'markdown-mode
-;;         atomic-chrome-buffer-open-style 'frame)
-;;   (atomic-chrome-start-server))
-#+END_SRC
 
 *** caddyfile-mode
 
@@ -277,8 +258,6 @@ options.
        (company
         +childframe)
        (ivy
-        ;+fuzzy     ;; very slow on large projects, so disabled
-        +prescient  ;; alternative to +fuzzy, faster but less pretty
         +icons)
 
        :ui
@@ -292,9 +271,6 @@ options.
        (popup
         +all
         +defaults)
-       ;;ligatures
-       ;; (ligatures
-       ;;  +pragmata-pro)
        treemacs
        vc-gutter
        vi-tilde-fringe
@@ -321,12 +297,10 @@ options.
 
        :checkers
        syntax
-       ;spell
 
        :tools
        ansible
        docker
-       ;(debugger +lsp)
        direnv
        editorconfig
        (eval
@@ -350,13 +324,14 @@ options.
        (go +lsp)
        (java +lsp)
        (javascript +lsp)
+       latex
        markdown
        (nim +lsp)
        nix
        (org
         +dragndrop
         +journal
-        +roam
+        +roam2
         +pretty)
        (python
         +lsp)
@@ -406,14 +381,6 @@ which I have never used.
 #+BEGIN_SRC emacs-lisp
 (map!
  :ni "M-u"   #'sp-up-sexp)
-#+END_SRC
-
-*** Dired
-
-Disable evil things in dired so we get dired keybindings.
-
-#+BEGIN_SRC emacs-lisp
-(add-hook 'dired-mode-hook #'turn-off-evil-snipe-mode)
 #+END_SRC
 
 ** UI configuration
@@ -473,13 +440,6 @@ Just use pretty-code for the ligatures - so disable the symbol translation.
 (setq +lsp-company-backends '(:separate company-capf company-yasnippet))
 #+END_SRC
 
-** Checkers configuration
-*** Flyspell
-Flyspell can create a lot of lag in large buffers. Make it as lazy as possible.
-
-#+BEGIN_SRC emacs-lisp
-;; (after! flyspell (flyspell-lazy-mode 1))
-#+END_SRC
 
 ** Email configuration (mu4e)
 I am experimenting with =mu4e= for my email configuration. I'm using it with mbsync as the backend for syncing emails. Note as of 1.4, the root maildir is set via the ~mu init~ command so it is unnecessary to set it.
@@ -567,16 +527,6 @@ Bind mail to =SPC o m=.
 (setq shr-color-visible-luminance-min 80)
 #+END_SRC
 
-Set up mu4e-alert for notifications in the modeline.
-
-#+BEGIN_SRC emacs-lisp
-;; (setq doom-modeline-mu4e t)
-;; (use-package! mu4e-alert
-;;   :after mu4e
-;;   :config
-;;   (mu4e-alert-enable-mode-line-display))
-#+END_SRC
-
 ** Tools configuration
 *** Language Server Protocol (LSP)
 Add some useful binds.
@@ -658,13 +608,6 @@ Limit the number of topics that forge displays. I find the default a bit too lar
 
 #+BEGIN_SRC emacs-lisp
 (setq forge-topic-list-limit '(30 . 6))
-#+END_SRC
-
-Disable showing tags in ref views - it slows them down substantially.
-
-#+BEGIN_SRC emacs-lisp
-;; (after! magit-refs
-;;   (remove-hook 'magit-refs-sections-hook 'magit-insert-tags))
 #+END_SRC
 
 * Languages
@@ -1289,60 +1232,6 @@ Set up org-journal to integrate with org-roam.
       org-journal-file-format "%Y-%m-%d.org"
       org-journal-time-prefix "* "
       org-journal-dir org-roam-directory)
-#+END_SRC
-
-*** Calendar
-I am experimenting with =org-caldav= to sync my org files with calendars. Much of this is taken from [[https://www.reddit.com/r/orgmode/comments/8rl8ep/making_orgcaldav_useable/][this reddit post]].
-Unfortunately it's very slow and blocks Emacs completely while syncing. It also doesn't support recurring events.
-
-#+BEGIN_SRC emacs-lisp
-;; (use-package! org-caldav
-;;   :after org
-;;   :init
-;;   ;; Configure my calendars.
-;;   (setq org-caldav-url "https://caldav.fastmail.com/dav/calendars/user/james@r-vn.org"
-;;         org-caldav-calendars
-;;         `((:calendar-id "0a220cb3-0ee8-49a9-af76-15c60bde70da"
-;;            :files ,(list (concat org-directory "cal-personal.org"))
-;;            :inbox ,(concat org-directory "cal-personal.org"))
-;;           (:calendar-id "071a3712-0213-4dac-a421-a79dc1760517"
-;;            :files ,(list (concat org-directory "cal-family.org"))
-;;            :inbox ,(concat org-directory "cal-family.org"))
-;;           (:calendar-id "4a92bcb6-a731-418c-89a3-97b86c0c51e5"
-;;            :files ,(list (concat org-directory "cal-holidayuk.org"))
-;;            :inbox ,(concat org-directory "cal-holidayuk.org"))))
-
-;;   ;; Configure caldav.
-;;   (let ((caldav-dir (concat org-directory ".org-caldav/")))
-;;     (setq org-caldav-backup-file (concat caldav-dir "org-caldav-backup.org")
-;;           org-caldav-save-directory caldav-dir
-;;           org-caldav-show-sync-results nil))
-
-;;   :config
-;;   ;; Configure icalendar.
-;;   (setq org-icalendar-alarm-time 1
-;;         org-icalendar-include-todo t
-;;         org-icalendar-timezone "Europe/London"
-;;         org-icalendar-use-deadline '(event-if-todo event-if-not-todo todo-due)
-;;         org-icalendar-use-scheduled '(todo-start event-if-todo event-if-not-todo))
-
-;;   (map! :map org-mode-map
-;;         :localleader
-;;         :desc "Sync calendars" "C" #'org-caldav-sync))
-
-#+END_SRC
-*** Alerts
-Experiment using =org-alert= to get notified of impending deadlines. _Not working_
-
-#+BEGIN_SRC emacs-lisp
-;; (use-package! org-alert
-;;   :after org
-;;   :init
-;;   (setq alert-default-style 'libnotify                  ; Use system notifications.
-;;         org-alert-headline-regexp "\\(Deadline:.+\\)"   ; Only notify for deadlines.
-;;         org-alert-interval 7200)                        ; Check/alert bihourly.
-;;   :config
-;;   (add-hook 'emacs-startup-hook #'org-alert-enable))
 #+END_SRC
 
 ** YAML

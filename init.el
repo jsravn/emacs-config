@@ -8,8 +8,6 @@
        (company
         +childframe)
        (ivy
-        ;+fuzzy     ;; very slow on large projects, so disabled
-        +prescient  ;; alternative to +fuzzy, faster but less pretty
         +icons)
 
        :ui
@@ -23,9 +21,6 @@
        (popup
         +all
         +defaults)
-       ;;ligatures
-       ;; (ligatures
-       ;;  +pragmata-pro)
        treemacs
        vc-gutter
        vi-tilde-fringe
@@ -52,12 +47,10 @@
 
        :checkers
        syntax
-       ;spell
 
        :tools
        ansible
        docker
-       ;(debugger +lsp)
        direnv
        editorconfig
        (eval
@@ -81,13 +74,14 @@
        (go +lsp)
        (java +lsp)
        (javascript +lsp)
+       latex
        markdown
        (nim +lsp)
        nix
        (org
         +dragndrop
         +journal
-        +roam
+        +roam2
         +pretty)
        (python
         +lsp)
