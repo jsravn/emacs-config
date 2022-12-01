@@ -47,7 +47,7 @@ Use the default doom-one theme, and the very nice [[https://www.fsd.it/shop/font
 #+BEGIN_SRC emacs-lisp
 (letrec ((base
           ; adjust font size based on system
-          (cond ((equal "loki" (system-name)) 8)
+          (cond ((equal "loki" (system-name)) 6)
                  (t 0))))
   (setq doom-theme 'doom-one
         doom-font (font-spec :family "PragmataPro Liga" :size (+ base 16))
@@ -228,6 +228,11 @@ goes into =packges.el=.
 
 #+BEGIN_SRC emacs-lisp :tangle "packages.el"
 ;; custom packages
+;(package! atomic-chrome)    ;; integration with the atomic chrome extension
+;(package! org-alert)
+;(package! caddyfile-mode)
+(package! protobuf-mode)
+
 ;; unpin these packages to use the latest always
 #+END_SRC
 

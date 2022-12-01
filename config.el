@@ -13,7 +13,7 @@
 ;; [[file:config.org::*Theme][Theme:1]]
 (letrec ((base
           ; adjust font size based on system
-          (cond ((equal "loki" (system-name)) 8)
+          (cond ((equal "loki" (system-name)) 6)
                  (t 0))))
   (setq doom-theme 'doom-one
         doom-font (font-spec :family "PragmataPro Liga" :size (+ base 16))
